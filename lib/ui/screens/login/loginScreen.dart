@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/ui/home/homeScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -33,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: Container(
-                height: 200,
+                height: 100,
                 width: 350,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -64,7 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(10)
                             )
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(BottomNavScreen());
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

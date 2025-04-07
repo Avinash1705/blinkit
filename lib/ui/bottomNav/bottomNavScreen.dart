@@ -15,12 +15,12 @@ class BottomNavScreen extends StatefulWidget {
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  int currentIndex = 2;
+  int currentIndex = 0;
   List<Widget> pages = [
     HomeScreen(),
+    Category(),
     CartScreen(),
     PrintScreen(),
-    Category(),
   ];
 
   @override
@@ -36,11 +36,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               icon: UiHelper.CustomImage(img: "home 1.png"), label: "Home"),
           BottomNavigationBarItem(
               icon: UiHelper.CustomImage(img: "shopping-bag 1.png"),
-              label: "Home"),
+              label: "Category"),
           BottomNavigationBarItem(
-              icon: UiHelper.CustomImage(img: "category 1.png"), label: "Home"),
+              icon: UiHelper.CustomImage(img: "category 1.png"), label: "Cart"),
           BottomNavigationBarItem(
-              icon: UiHelper.CustomImage(img: "printer 1.png"), label: "Home"),
+              icon: UiHelper.CustomImage(img: "printer 1.png"), label: "Print"),
         ],
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
