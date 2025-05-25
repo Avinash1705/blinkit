@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
+import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/home/homeScreen.dart';
@@ -10,10 +11,16 @@ import 'dependency/dependency.dart';
 
 void main() {
   init();
-  runApp(ChangeNotifierProvider(
-    create: (BuildContext context) => CartController(),
-    child: MyApp(),
-  ));
+  // runApp(ChangeNotifierProvider(
+  //   create: (BuildContext context) {
+  //     return CartController()
+  //   },
+  //   child: MyApp(),
+  // ));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => CartController()),
+    ChangeNotifierProvider(create: (a) => AddressController()),
+  ],child: MyApp(),));
 }
 
 class MyApp extends StatelessWidget {

@@ -1,16 +1,16 @@
-
-
 import 'package:flutter/cupertino.dart';
 
 import '../model/cartModel.dart';
 
-class CartController with  ChangeNotifier{
-
+class CartController with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
-  Map<String ,CartItem> get items => _items;
-  int get itemCount => _items.length;
+  Map<String, CartItem> get items => _items;
 
+  int get itemCount => _items.length;
+  double _totalCost = 0;
+
+  double get totalCost =>_totalCost;
 
   double get totalAmount {
     double total = 0.0;
@@ -20,15 +20,16 @@ class CartController with  ChangeNotifier{
     });
     return total;
   }
+
   //added from homescreen so need all fields
-  void addItem(String productId, String title,String img, double price) {
+  void addItem(String productId, String title, String img, double price) {
     print("cart scree model prodId${productId}");
     if (_items.containsKey(productId)) {
       print("cart scree model prodId same ${productId}");
       _items.update(
         productId,
-            (existing) => CartItem(
-              productId: productId,
+        (existing) => CartItem(
+          productId: productId,
           title: existing.title,
           img: existing.img,
           quantity: existing.quantity + 1,
@@ -38,8 +39,8 @@ class CartController with  ChangeNotifier{
     } else {
       _items.putIfAbsent(
         productId,
-            () => CartItem(
-              productId: DateTime.now().toString(),
+        () => CartItem(
+          productId: DateTime.now().toString(),
           title: title,
           img: img,
           quantity: 1,
@@ -55,11 +56,16 @@ class CartController with  ChangeNotifier{
     notifyListeners();
   }
 
-//add remove from + and -
-  void addItemInCart(int id){
-
+  void totalCartCost() {
+    for (int i = 0; i < _items.length; i++) {
+      _totalCost +=
+          _items.values.toList()[i].quantity * _items.values.toList()[i].price;
+    }
+    // return _totalCost;
   }
 
+//add remove from + and -
+  void addItemInCart(int id) {}
 
   void clear() {
     _items = {};

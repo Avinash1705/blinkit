@@ -285,7 +285,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Row(
                                     children: [
                                       UiHelper.CustomText(
-                                          text: "₹ ${Random().nextInt(10)}",
+                                          // text: "₹ ${Random().nextInt(10)}",
+                                          text: "₹ ${categroy[index]["price"].toString()}",
                                           color: Color(0xff000000),
                                           fontWeight: FontWeight.bold,
                                           fontsize: 15),
@@ -293,21 +294,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 10,
                                       ),
                                       UiHelper.CustomButton(() {
-                                        print("cart home ${categroy[index]["id"].toString()}");
                                         cartController.addItem(
                                             categroy[index]["id"].toString(),
                                             categroy[index]["text"].toString(),
                                             categroy[index]["img"].toString(),
-                                            22);
+                                            double.parse(categroy[index]["price"].toString()));
 
                                         Get.snackbar(
                                             22.toString(),
                                             "Item added");
                                       }),
-                                      ElevatedButton(onPressed: (){
-                                        print("cart remove home ${categroy[index]["id"].toString()}");
-                                        cartController.removeItem(categroy[index]["id"].toString());
-                                      }, child: Text("remove"))
                                     ],
                                   ),
                                 ],
