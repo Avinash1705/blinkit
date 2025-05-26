@@ -32,8 +32,6 @@ class _AddressInputFormState extends State<AddressInputForm> {
     TextInputType inputType,
     String? Function(String?) validator,
   ) {
-    var addressController = Provider.of<AddressController>(context);
-    addressController.saveAddress(address);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
@@ -62,7 +60,9 @@ class _AddressInputFormState extends State<AddressInputForm> {
     var addressController = Provider.of<AddressController>(context);
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(onTap:()=>Get.off(BottomNavScreen()),child: Icon(Icons.arrow_back)),
+        leading: InkWell(
+            onTap: () => Get.off(BottomNavScreen()),
+            child: Icon(Icons.arrow_back)),
         title: UiHelper.CustomText(
             text: "Address",
             color: Colors.black,
@@ -122,11 +122,11 @@ class _AddressInputFormState extends State<AddressInputForm> {
                     print("onsubmit${address}");
                     address = "avi test address222";
                     addressController.saveAddress(address);
-                    Get.bottomSheet(
-                        Container(
-                          color: Colors.green,
-                        ),
-                        enterBottomSheetDuration: Duration(milliseconds: 900));
+                    // Get.bottomSheet(
+                    //     Container(
+                    //       color: Colors.green,
+                    //     ),
+                    //     enterBottomSheetDuration: Duration(milliseconds: 900));
                   },
                   icon: Icon(Icons.check_circle_outline),
                   label: Text("Save Address"),

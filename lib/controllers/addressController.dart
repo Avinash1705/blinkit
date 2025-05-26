@@ -7,7 +7,7 @@ class AddressController extends ChangeNotifier {
 
   void saveAddress(String address) {
     _address = address;
-    address = "avi test address";
+    // address = "avi test address";
     print("addressMow $address");
     notifyListeners();
   }
