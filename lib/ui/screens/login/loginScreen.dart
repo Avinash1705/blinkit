@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/home/homeScreen.dart';
+import 'package:swiggy/ui/print/printScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -70,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                             ),
                             onPressed: () {
-                              Get.to(BottomNavScreen());
+                              Get.to(PrintScreen());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

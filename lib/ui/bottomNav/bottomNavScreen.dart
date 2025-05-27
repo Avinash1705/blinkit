@@ -8,21 +8,26 @@ import '../home/homeScreen.dart';
 import '../print/printScreen.dart';
 
 class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key});
+  int index;
+   BottomNavScreen({required this.index,super.key});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
-  int currentIndex = 0;
+  late int currentIndex ;
   List<Widget> pages = [
     HomeScreen(),
     Category(),
     CartScreen(),
     PrintScreen(),
   ];
-
+@override
+  void initState() {
+   currentIndex = widget.index;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

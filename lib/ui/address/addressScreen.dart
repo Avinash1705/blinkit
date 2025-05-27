@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+// import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
@@ -24,6 +27,10 @@ class _AddressInputFormState extends State<AddressInputForm> {
   final _city = TextEditingController();
   final _pincode = TextEditingController();
   var address = "intial save";
+  // var addressBox = GetStorage();
+  // Obtain shared preferences.
+
+
 
   Widget _buildField(
     String label,
@@ -55,13 +62,32 @@ class _AddressInputFormState extends State<AddressInputForm> {
     );
   }
 
+  Widget toast = Container(
+    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(25.0),
+      color: Colors.greenAccent,
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.check),
+        SizedBox(
+          width: 12.0,
+        ),
+        Text("This is a Custom Toast"),
+      ],
+    ),
+  );
+
+
   @override
   Widget build(BuildContext context) {
     var addressController = Provider.of<AddressController>(context);
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-            onTap: () => Get.off(BottomNavScreen()),
+            onTap: () => Get.off(BottomNavScreen(index: 3,)),
             child: Icon(Icons.arrow_back)),
         title: UiHelper.CustomText(
             text: "Address",
@@ -119,14 +145,20 @@ class _AddressInputFormState extends State<AddressInputForm> {
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
-                    print("onsubmit${address}");
-                    address = "avi test address222";
+                    // print("onsubmit ${address}");
+                    address = "${_street.text} - ${_city.text} - ${_pincode.text} ";
+                    if(address.isEmpty) address = "Update Address" ;
+                    // addressBox.write("addressKey", address);
                     addressController.saveAddress(address);
-                    // Get.bottomSheet(
-                    //     Container(
-                    //       color: Colors.green,
-                    //     ),
-                    //     enterBottomSheetDuration: Duration(milliseconds: 900));
+
+                    InteractiveToast.slide(context,
+                        title: Text("Updated"),
+                        toastSetting: SlidingToastSetting(
+                          toastAlignment: Alignment.bottomCenter,
+                        ));
+                    Future.delayed(Duration(seconds: 1), () {
+                      Get.back();
+                    });
                   },
                   icon: Icon(Icons.check_circle_outline),
                   label: Text("Save Address"),

@@ -2,12 +2,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/ui/address/addressScreen.dart';
-
+import 'package:swiggy/ui/orderPlacedScreen.dart';
 import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
+import '../bottomNav/bottomNavScreen.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
+  @override
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  String localAddress = '';
+
+  // void loadPrefs() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     localAddress = prefs.getString('addressKey') ?? 'No data found';
+  //   });
+  // }
+  //
+  // @override
+  // Future<void> initState() async {
+  //   super.initState();
+  //  WidgetsBinding.instance.addPostFrameCallback((_){
+  //    // loadPrefs();
+  //  });
+  // }
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
@@ -56,6 +79,9 @@ class CheckoutScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Navigate to checkout page
+                  // print("checkoutClicked ${3}");
+                  // Get.off(BottomNavScreen(index: 3));
+                  Get.off(OrderPlacedScreen());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
