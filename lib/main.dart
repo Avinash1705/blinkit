@@ -4,13 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
-import 'package:swiggy/ui/home/homeScreen.dart';
-import 'package:swiggy/ui/screens/login/loginScreen.dart';
-import 'package:swiggy/ui/screens/splash/splashScreen.dart';
+import 'controllers/printController.dart';
 import 'dependency/dependency.dart';
 
 void main() {
   init();
+
   // runApp(ChangeNotifierProvider(
   //   create: (BuildContext context) {
   //     return CartController()
@@ -20,6 +19,7 @@ void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartController()),
     ChangeNotifierProvider(create: (a) => AddressController()),
+    ChangeNotifierProvider(create: (a) => Printcontroller()),
   ],child: MyApp(),));
 }
 

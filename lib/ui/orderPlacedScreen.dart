@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
+import 'package:swiggy/controllers/cartController.dart';
+import 'package:swiggy/controllers/printController.dart';
+import 'package:swiggy/model/cartModel.dart';
 
 import 'bottomNav/bottomNavScreen.dart';
 
 class OrderPlacedScreen extends StatelessWidget {
-  const OrderPlacedScreen({super.key});
+  OrderPlacedScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
+    var cartController = Provider.of<CartController>(context);
+    var printController = Provider.of<Printcontroller>(context);
+
+    // printController.addTransition(cartController.items.values, context);
+    printController.addTransition(cartController.items);
+
+
+
+    cartController.clear();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(

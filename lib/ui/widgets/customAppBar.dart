@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget {
                     width: 20,
                   ),
                   UiHelper.CustomText(
-                      text: "Blinkit In",
+                      text: "FluxKart",
                       color: Color(0xFF000000),
                       fontWeight: FontWeight.bold,
                       fontsize: 15,

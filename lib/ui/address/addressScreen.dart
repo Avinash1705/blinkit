@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+
 // import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
@@ -27,9 +27,6 @@ class _AddressInputFormState extends State<AddressInputForm> {
   final _city = TextEditingController();
   final _pincode = TextEditingController();
   var address = "intial save";
-  // var addressBox = GetStorage();
-  // Obtain shared preferences.
-
 
 
   Widget _buildField(
@@ -80,14 +77,15 @@ class _AddressInputFormState extends State<AddressInputForm> {
     ),
   );
 
-
   @override
   Widget build(BuildContext context) {
     var addressController = Provider.of<AddressController>(context);
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-            onTap: () => Get.off(BottomNavScreen(index: 3,)),
+            onTap: () => Get.off(BottomNavScreen(
+                  index: 3,
+                )),
             child: Icon(Icons.arrow_back)),
         title: UiHelper.CustomText(
             text: "Address",
@@ -145,12 +143,14 @@ class _AddressInputFormState extends State<AddressInputForm> {
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   onPressed: () {
-                    // print("onsubmit ${address}");
-                    address = "${_street.text} - ${_city.text} - ${_pincode.text} ";
-                    if(address.isEmpty) address = "Update Address" ;
-                    // addressBox.write("addressKey", address);
-                    addressController.saveAddress(address);
 
+                    address =
+                        "${_street.text} - ${_city.text} - ${_pincode.text} ";
+                    if (address.isEmpty) address = "Update Address";
+
+                    // addressController.saveAddress(address);
+                    addressController.saveLocalAddress();
+                    // addressController.saveLocalAddress(address);
                     InteractiveToast.slide(context,
                         title: Text("Updated"),
                         toastSetting: SlidingToastSetting(

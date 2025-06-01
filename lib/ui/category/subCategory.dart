@@ -8,7 +8,8 @@ import '../widgets/customAppBar.dart';
 import '../widgets/uihelper.dart';
 
 class Subcategory extends StatelessWidget {
-  Subcategory({super.key});
+  String categoryName = "";
+  Subcategory({required this.categoryName,super.key});
 
   TextEditingController searchController = TextEditingController();
   var categroy = [
@@ -53,7 +54,7 @@ class Subcategory extends StatelessWidget {
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 100,backgroundColor: Color(0xfff7Cb45)),
+      appBar: AppBar(title: Text(categoryName),toolbarHeight: 100,backgroundColor: Color(0xfff7Cb45)),
       body: GridView.builder(
         padding: EdgeInsets.all(8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

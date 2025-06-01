@@ -28,12 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldbackgroud,
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            UiHelper.CustomImage(img: "image 1 (1).png")
+            UiHelper.CustomImage(img: "flux.png")
           ],
         ),
       ),

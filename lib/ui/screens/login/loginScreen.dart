@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                             ),
                             onPressed: () {
-                              Get.to(PrintScreen());
+                              Get.to(BottomNavScreen(index: 0));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -8,14 +8,14 @@ class AddressController extends ChangeNotifier {
 
   void saveAddress(String address) {
     _address = address;
-    // address = "avi test address";
     print("addressMow $address");
-    saveLocalAddress(address);
+    // saveLocalAddress(address);
     notifyListeners();
   }
 
-  Future<void> saveLocalAddress(String address) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("addressKey", address);
+  Future<void> saveLocalAddress() async {
+    print("inside localadd $address");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('addressKey', address);
   }
 }

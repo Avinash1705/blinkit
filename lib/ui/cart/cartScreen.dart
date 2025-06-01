@@ -10,11 +10,15 @@ import '../address/addressScreen.dart';
 import '../widgets/bottomCheckout.dart';
 import '../widgets/customAppBar.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   CartScreen({super.key});
 
-  TextEditingController searchController = TextEditingController();
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
 
+class _CartScreenState extends State<CartScreen> {
+  TextEditingController searchController = TextEditingController();
 
   final ScrollController scrollController = ScrollController();
 
@@ -90,45 +94,6 @@ class CartScreen extends StatelessWidget {
                             );
                           },
                         )),
-                SizedBox(height: 20),
-                Container(
-                  margin: EdgeInsets.only(left: 5, right: 5),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      shape: BoxShape.rectangle,
-                      color: Colors.black12),
-                  child: Column(
-                    children: [
-                      // UiHelper.CustomText(
-                      //     text: cartController.totalAmount.toString(),
-                      //     color: Colors.red,
-                      //     fontWeight: FontWeight.bold,
-                      //     fontsize: 20,
-                      //     fontfamily: "bold"),
-                      // InkWell(
-                      //   onTap: () {
-                      //     Get.to(AddressInputForm(
-                      //       onAddressSaved: (String address) {},
-                      //     ));
-                      //     /*   AddressInputForm(
-                      //   onAddressSaved: (address) {
-                      //     print("Saved address: $address");
-                      //     // You can store or display this in cart summary
-                      //   },
-                      // );*/
-                      //   },
-                      //   child: UiHelper.CustomText(
-                      //       text:
-                      //           "Current Add${addressController.address.toString()}",
-                      //       color: Colors.green,
-                      //       fontWeight: FontWeight.bold,
-                      //       fontsize: 20,
-                      //       fontfamily: "bold"),
-                      // )
-                    ],
-                  ),
-                ),
                 SizedBox(height: 20),
                 UiHelper.CustomText(
                     text: "Reordering will be easy",
@@ -301,53 +266,13 @@ class CartScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                // ElevatedButton(
-                //     onPressed: () {
-                //       showModalBottomSheet(
-                //         context: context,
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius:
-                //               BorderRadius.vertical(top: Radius.circular(20)),
-                //         ),
-                //         backgroundColor: Colors.white,
-                //         builder: (BuildContext context) {
-                //           return Padding(
-                //             padding: const EdgeInsets.all(16.0),
-                //             child: Column(
-                //               mainAxisSize: MainAxisSize.min,
-                //               children: <Widget>[
-                //                 Text("Select an option",
-                //                     style: TextStyle(fontSize: 18)),
-                //                 ListTile(
-                //                   leading: Icon(Icons.camera_alt),
-                //                   title: Text("Camera"),
-                //                   onTap: () {
-                //                     Navigator.pop(context);
-                //                     // handle camera action
-                //                   },
-                //                 ),
-                //                 ListTile(
-                //                   leading: Icon(Icons.photo),
-                //                   title: Text("Gallery"),
-                //                   onTap: () {
-                //                     Navigator.pop(context);
-                //                     // handle gallery action
-                //                   },
-                //                 ),
-                //               ],
-                //             ),
-                //           );
-                //         },
-                //       );
-                //     },
-                //     child: Text("bott")),
               ],
             ),
-            // bottomNavigationBar: CheckoutScreen(),
           ),
         ),
       ),
-      Positioned(bottom: 0, child: CheckoutScreen())
+      Positioned(bottom: 0, child: CheckoutScreen()),
+
     ]);
   }
 }

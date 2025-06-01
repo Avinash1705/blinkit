@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,20 +18,27 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   String localAddress = '';
 
-  // void loadPrefs() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     localAddress = prefs.getString('addressKey') ?? 'No data found';
-  //   });
-  // }
-  //
-  // @override
-  // Future<void> initState() async {
-  //   super.initState();
-  //  WidgetsBinding.instance.addPostFrameCallback((_){
-  //    // loadPrefs();
-  //  });
-  // }
+  void loadPrefs() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        localAddress = prefs.getString("addressKey") ?? "No Address Found";
+
+        print("locAddress ${localAddress}");
+      });
+    } catch (e) {
+      localAddress = e.toString();
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadPrefs();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
@@ -52,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             children: [
               Row(
                 children: [
-                  Text(addressController.address,
+                  Text(localAddress,
                       style: TextStyle(fontSize: 14, color: Colors.grey)),
                 ],
               ),
@@ -75,22 +83,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Text("change",
                     style: TextStyle(fontSize: 14, color: Colors.green)),
               ),
-              SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to checkout page
-                  // print("checkoutClicked ${3}");
-                  // Get.off(BottomNavScreen(index: 3));
-                  Get.off(OrderPlacedScreen());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: Text("Checkout", style: TextStyle(fontSize: 16)),
+              SizedBox(
+                height: 20,
               ),
+              cartController.itemCount == 0
+                  ? ElevatedButton(
+                      onPressed: () {
+                        // Get.off(OrderPlacedScreen());
+                        InteractiveToast.popError(context,
+                            title: Text("Please Add Items"),
+                            toastSetting: PopupToastSetting(
+                                toastAlignment: Alignment.center,displayDuration: Duration(seconds: 1)));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                      child: Text("Checkout", style: TextStyle(fontSize: 16)),
+                    )
+                  : ElevatedButton(
+                      onPressed: () {
+                        Get.off(OrderPlacedScreen());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                      child: Text("Checkout", style: TextStyle(fontSize: 16)),
+                    ),
             ],
           ),
         ],
