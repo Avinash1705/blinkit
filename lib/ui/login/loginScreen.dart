@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/home/homeScreen.dart';
+import 'package:swiggy/ui/login/loginScreenStatic.dart';
 import 'package:swiggy/ui/print/printScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
@@ -65,11 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 295,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFE23744),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
-                              )
-                            ),
+                                backgroundColor: Color(0xFFE23744),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
                             onPressed: () {
                               Get.to(BottomNavScreen(index: 0));
                             },
@@ -88,17 +87,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           )),
                       SizedBox(height: 8),
                       UiHelper.CustomText(
-                          text: "Access your saved address from zomato automatically!",
+                          text:
+                              "Access your saved address from zomato automatically!",
                           color: Color(0xFF9c9c9c),
                           fontWeight: FontWeight.normal,
                           fontsize: 10,
                           fontfamily: "bold"),
                       SizedBox(height: 16),
-                      UiHelper.CustomText(
-                          text: "or login as Vender/Admin",
-                          color: Color(0xFF269237),
-                          fontWeight: FontWeight.normal,
-                          fontsize: 14),
+                      InkWell(
+                        onTap: () {
+                          Get.to(StaticLoginScreen());
+                        },
+                        child: UiHelper.CustomText(
+                            text: "or login as Vender/Admin",
+                            color: Color(0xFF269237),
+                            fontWeight: FontWeight.normal,
+                            fontsize: 14),
+                      ),
                     ],
                   ),
                 ),
@@ -109,5 +114,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 }
