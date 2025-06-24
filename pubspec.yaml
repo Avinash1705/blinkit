@@ -41,6 +41,7 @@ dependencies:
   flutter_sliding_toast: any
   shared_preferences: any
 #  get_storage: any
+  flutter_local_notifications: any
 
 dev_dependencies:
   flutter_test:
