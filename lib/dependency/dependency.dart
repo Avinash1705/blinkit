@@ -8,6 +8,7 @@ import '../ui/category/searchController.dart';
 Future<void> init() async {
   // await GetStorage.init();
   Get.lazyPut(() => SearchController());
+  // await Firebase.initializeApp();
   // Get.lazyPut(() => LivePageController());
   // Get.lazyPut(() => LiveStreamingController());
   // Get.lazyPut(() => LoginPageController());

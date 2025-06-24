@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
@@ -18,24 +20,27 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   String localAddress = '';
 
-  void loadPrefs() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      setState(() {
-        localAddress = prefs.getString("addressKey") ?? "No Address Found";
+  // void loadPrefs() async {
+  //   try {
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     setState(() {
+  //       localAddress = prefs.getString("addressKey") ?? "No Address Found";
+  //
+  //       print("locAddress ${localAddress}");
+  //     });
+  //   } catch (e) {
+  //     localAddress = e.toString();
+  //   }
+  // }
+  void setAddress(){
+    // updatedAddress.value = (prefs.getString("addressKey") ?? "No Address Found");
 
-        print("locAddress ${localAddress}");
-      });
-    } catch (e) {
-      localAddress = e.toString();
-    }
   }
-
   @override
   initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loadPrefs();
+      // loadPrefs();
     });
   }
 
@@ -43,6 +48,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var addressController = Provider.of<AddressController>(context);
+    print("loc set RX${addressController.updatedAddress}");
+    print("loc set RX${addressController.address}");
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -60,8 +67,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             children: [
               Row(
                 children: [
-                  Text(localAddress,
-                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+                  Obx( () =>
+                     Text(addressController.updatedAddress.value,
+                        style: TextStyle(fontSize: 14, color: Colors.grey)),
+                  ),
                 ],
               ),
               SizedBox(
@@ -77,7 +86,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               InkWell(
                 onTap: () {
                   Get.to(AddressInputForm(
-                    onAddressSaved: (String address) {},
+                    onAddressSaved: (String address) {
+
+                    },
                   ));
                 },
                 child: Text("change",

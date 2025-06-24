@@ -77,12 +77,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 UiHelper.CustomText(
-                                    text: "Login with",
+                                    text: "Login as Customer",
                                     color: Color(0xFFFFFFFF),
                                     fontWeight: FontWeight.w500,
                                     fontsize: 14),
                                 SizedBox(width: 5),
-                                UiHelper.CustomImage(img: "image 9.png")
+                                // UiHelper.CustomImage(img: "image 9.png")
                               ],
                             ),
                           )),
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontfamily: "bold"),
                       SizedBox(height: 16),
                       UiHelper.CustomText(
-                          text: "or login with phone number",
+                          text: "or login as Vender/Admin",
                           color: Color(0xFF269237),
                           fontWeight: FontWeight.normal,
                           fontsize: 14),
@@ -109,4 +109,5 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
 }

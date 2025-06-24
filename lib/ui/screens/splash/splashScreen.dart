@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:swiggy/domain/appConsatant.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
-import '../login/loginScreen.dart';
+import '../../login/loginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

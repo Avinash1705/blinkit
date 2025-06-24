@@ -149,7 +149,7 @@ class _AddressInputFormState extends State<AddressInputForm> {
                     if (address.isEmpty) address = "Update Address";
 
                     // addressController.saveAddress(address);
-                    addressController.saveLocalAddress();
+                    addressController.saveLocalAddress(address);
                     // addressController.saveLocalAddress(address);
                     InteractiveToast.slide(context,
                         title: Text("Updated"),
