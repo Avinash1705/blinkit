@@ -1,16 +1,13 @@
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/ui/address/addressScreen.dart';
 import 'package:swiggy/ui/orderPlacedScreen.dart';
 import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
-import '../bottomNav/bottomNavScreen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override

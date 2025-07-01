@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:get/get.dart';
 import 'package:swiggy/admin/ui/admin_dashboard.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
@@ -15,9 +15,9 @@ class StaticLoginScreen extends StatefulWidget {
 class _StaticLoginScreenState extends State<StaticLoginScreen> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
-  late FlutterLocalNotificationsPlugin localNotifications;
+
   bool otpSent = false;
-  late final FlutterLocalNotificationsPlugin notifications;
+
 
   void simulateSendOtp() {
     setState(() {
@@ -37,36 +37,6 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
         const SnackBar(content: Text("Invalid OTP")),
       );
     }
-  }
-  @override
-  void initState() {
-    localNotifications = FlutterLocalNotificationsPlugin();
-
-    const AndroidInitializationSettings androidSettings =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    const InitializationSettings initSettings =
-    InitializationSettings(android: androidSettings);
-
-    localNotifications.initialize(initSettings);
-    super.initState();
-  }
-  void showNotification() async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'simple_channel',
-      'Basic Notifications',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
-
-    await notifications.show(
-      0,
-      '🔔 Hello!',
-      'This is a local notification',
-      platformDetails,
-    );
   }
   @override
   Widget build(BuildContext context) {
@@ -102,7 +72,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
               child: Text(otpSent ? "Verify OTP" : "Send OTP"),
             ),
             ElevatedButton(onPressed: () async{
-              showNotification();
+
             }, child: Text("Nootication"))
           ],
         ),
@@ -121,3 +91,5 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
     );
   }
 }
+
+

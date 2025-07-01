@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/cartController.dart';
 
 import '../../controllers/appDetails/appDetails.dart';
+import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../widgets/uihelper.dart';
 
@@ -77,11 +78,18 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   // var appDetailController = Get.put(AppDetails());
-  late var dataLoaded = "";
+  late AppDetailModel dataLoaded;
 
   @override
   void initState() {
-    // appDetailController.fe
+    AppDetails.testApi().then((value) => print("testt after $value"));
+    AppDetails details = AppDetails();
+    // details.fetchProducts().then((value) => {
+    //       setState(() {
+    //         dataLoaded = value;
+    //         print("response Main ${value}");
+    //       })
+    //     });
     super.initState();
   }
 
@@ -90,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final cartController =
         Provider.of<CartController>(context); // 👈 Access the model
 
-    print("cheking api on ui ${AppDetails.fetchProducts()}");
     return SingleChildScrollView(
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -116,12 +123,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 20,
                           ),
-                          UiHelper.CustomText(
-                              text: "FluxKart",
-                              color: Color(0xFFffffff),
-                              fontWeight: FontWeight.bold,
-                              fontsize: 15,
-                              fontfamily: "bold")
+                          dataLoaded.data != null
+                              ? CircularProgressIndicator()
+                              : UiHelper.CustomText(
+                                  text: "FluxKart",
+                                  color: Color(0xFFffffff),
+                                  fontWeight: FontWeight.bold,
+                                  fontsize: 15,
+                                  fontfamily: "bold")
                         ],
                       ),
                       Row(

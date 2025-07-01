@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
+import 'controllers/appDetails/appDetails.dart';
 import 'controllers/printController.dart';
 import 'dependency/dependency.dart';
 
@@ -12,6 +13,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   init();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartController()),
     ChangeNotifierProvider(create: (a) => AddressController()),
