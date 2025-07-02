@@ -82,14 +82,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    AppDetails.testApi().then((value) => print("testt after $value"));
-    AppDetails details = AppDetails();
-    // details.fetchProducts().then((value) => {
-    //       setState(() {
-    //         dataLoaded = value;
-    //         print("response Main ${value}");
-    //       })
-    //     });
+    AppDetails.testApi().then((value) => {
+          setState(() {
+            dataLoaded = value;
+          })
+        });
     super.initState();
   }
 
@@ -123,10 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 20,
                           ),
-                          dataLoaded.data != null
+                          dataLoaded.data == null
                               ? CircularProgressIndicator()
                               : UiHelper.CustomText(
-                                  text: "FluxKart",
+                                  text: dataLoaded.data![0].appName.toString(),
                                   color: Color(0xFFffffff),
                                   fontWeight: FontWeight.bold,
                                   fontsize: 15,
