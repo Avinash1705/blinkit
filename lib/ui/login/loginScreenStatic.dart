@@ -29,7 +29,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
   }
 
   void simulateLogin() {
-    if (otpController.text == "123456") {
+    if (otpController.text == "12345") {
       checkLoginAccess();
 
     } else {
@@ -46,34 +46,42 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextField(
-              controller: phoneController,
-              maxLength: 10,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: "Phone Number",
-                prefixText: "+91 ",
+            SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: phoneController,
+                    maxLength: 10,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      labelText: "Phone Number",
+                      prefixText: "+91 ",
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  if (otpSent)
+                    TextField(
+                      controller: otpController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Enter OTP",
+                      ),
+                    ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: otpSent ? simulateLogin : simulateSendOtp,
+                    child: Text(otpSent ? "Verify OTP" : "Send OTP"),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            if (otpSent)
-              TextField(
-                controller: otpController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Enter OTP",
-                ),
-              ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: otpSent ? simulateLogin : simulateSendOtp,
-              child: Text(otpSent ? "Verify OTP" : "Send OTP"),
-            ),
-            ElevatedButton(onPressed: () async{
-
-            }, child: Text("Nootication"))
+            ElevatedButton(onPressed: (){
+              
+            }, child: Text("Register")),
           ],
         ),
       ),

@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
+import 'package:swiggy/ui/login/loginScreenStatic.dart';
+import 'package:swiggy/vender/ui/vendor_registration.dart';
 import 'controllers/appDetails/appDetails.dart';
 import 'controllers/printController.dart';
 import 'dependency/dependency.dart';
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: BottomNavScreen(index: 0),
-      home: LoginScreen(),
+      home: VendorRegistrationPage(),
     );
   }
 }
