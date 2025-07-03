@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:swiggy/admin/ui/admin_dashboard.dart';
+import 'package:swiggy/vender/controller/AllVenderController.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
+import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart';
+
+import '../../vender/ui/vendor_registration.dart';
 
 class StaticLoginScreen extends StatefulWidget {
   const StaticLoginScreen({super.key});
@@ -15,10 +19,20 @@ class StaticLoginScreen extends StatefulWidget {
 class _StaticLoginScreenState extends State<StaticLoginScreen> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
-
+  late GetVenderResponseModel getVenderResponseModel ;
   bool otpSent = false;
 
-
+  @override
+  void initState() {
+    AllVenderController().fetchVendors().then((value) => {
+      getVenderResponseModel = value,
+      print("Vendors fetched: ${getVenderResponseModel.data?.length}"),
+      setState(() {
+        // This will trigger a rebuild with the fetched data
+      })
+    });
+    super.initState();
+  }
   void simulateSendOtp() {
     setState(() {
       otpSent = true;
@@ -76,11 +90,14 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
                     onPressed: otpSent ? simulateLogin : simulateSendOtp,
                     child: Text(otpSent ? "Verify OTP" : "Send OTP"),
                   ),
+                  ElevatedButton(onPressed: (){
+
+                  }, child: Text("Login as Guest ${getVenderResponseModel.data!.length}")),
                 ],
               ),
             ),
             ElevatedButton(onPressed: (){
-              
+              Get.to(VendorRegistrationPage());
             }, child: Text("Register")),
           ],
         ),
@@ -92,10 +109,26 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
       Get.to(AdminDashboard());
     }
     else {
-      Get.to(VendorDashboard());
+      if(getVenderResponseModel.data == null || getVenderResponseModel.data!.isEmpty){
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("No vendors found")),
+        );
+        return;
+      }
+      for(int i=0;i<getVenderResponseModel.data!.length;i++){
+        if(getVenderResponseModel.data?[i].phone == phoneController.value.text){
+          Get.to(VendorDashboard(
+            vendorDetails: getVenderResponseModel.data![i],
+          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Login successful")),
+          );
+          return;
+        }
+      }
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Login successful")),
+      const SnackBar(content: Text("Phone Not Registered")),
     );
   }
 }

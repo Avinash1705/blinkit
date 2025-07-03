@@ -30,16 +30,6 @@ class VendorRegisterController {
     if (!formKey.currentState!.validate()) return;
     late vendeRegisterResponseModel urRes;
     try {
-      // final response = await http.post(
-      //   Uri.parse(apiUrl),
-      //   body: {
-      //     'vendor_id': vendorIdController.text.trim(),
-      //     'vendor_name': nameController.text.trim(),
-      //     'shop_name': shopNameController.text.trim(),
-      //     'phone': phoneController.text.trim(),
-      //     'location': locationController.text.trim(),
-      //   },
-      // );
       var response = await http
           .post(
               Uri.parse(

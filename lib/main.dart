@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: BottomNavScreen(index: 0),
-      home: VendorRegistrationPage(),
+      home: StaticLoginScreen(),
     );
   }
 }

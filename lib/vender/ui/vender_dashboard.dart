@@ -3,15 +3,17 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../ui/login/loginScreen.dart';
+import '../venderModels/GetVenderResponseModel.dart';
 
 class VendorDashboard extends StatelessWidget {
-  const VendorDashboard({super.key});
+  final Data vendorDetails;
+   VendorDashboard({super.key,  required this.vendorDetails});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Vendor Dashboard'),
+        title:  Text('${vendorDetails.venderName} Dashboard'),
         backgroundColor: Colors.deepPurple,
       ),
       drawer: Drawer(
