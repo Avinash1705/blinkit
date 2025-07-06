@@ -8,7 +8,9 @@ class UiHelper {
   static CustomImage({required String img}) {
     return Image.asset("assets/images/$img");
   }
-
+  static CustomImageNetwork({required String img}) {
+    return Image.network(img);
+  }
   static CustomText(
       {required String text,
       required Color color,

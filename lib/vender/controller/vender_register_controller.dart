@@ -16,7 +16,7 @@ class VendorRegisterController {
   final locationController = TextEditingController();
 
   final apiUrl =
-      "http://192.168.1.29:8080/fluxkart/apis/register_vender.php"; // Replace with your actual URL
+      AppConstants.registerVenders; // Replace with your actual URL
 
   void dispose() {
     vendorIdController.dispose();

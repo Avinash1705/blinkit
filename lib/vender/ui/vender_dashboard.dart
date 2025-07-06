@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+
 import '../../ui/login/loginScreen.dart';
+import '../controller/addItemsController.dart';
 import '../venderModels/GetVenderResponseModel.dart';
 
 class VendorDashboard extends StatelessWidget {
@@ -11,6 +13,7 @@ class VendorDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("${vendorDetails.venderId} Dashboard");
     return Scaffold(
       appBar: AppBar(
         title:  Text('${vendorDetails.venderName} Dashboard'),
@@ -37,7 +40,7 @@ class VendorDashboard extends StatelessWidget {
               title: const Text('Add Product'),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => const AddProductPage(),
+                  builder: (_) =>  AddProductPage(vendorDetail: vendorDetails),
                 ));
               },
             ),
@@ -83,22 +86,37 @@ class VendorDashboard extends StatelessWidget {
 // Placeholder Pages
 
 class AddProductPage extends StatelessWidget {
-  const AddProductPage({super.key});
+   Data vendorDetail;
+   AddProductPage({super.key,required this.vendorDetail});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController uniqueIdController = TextEditingController();
+    TextEditingController productNameController = TextEditingController();
+    TextEditingController priceController = TextEditingController();
+    TextEditingController descController = TextEditingController();
     return Scaffold(
       appBar: AppBar(title: const Text("Add Product")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: const [
-            TextField(decoration: InputDecoration(labelText: 'Product Name')),
-            TextField(decoration: InputDecoration(labelText: 'Price')),
-            TextField(decoration: InputDecoration(labelText: 'Description')),
+          children:  [
+            TextField(decoration: InputDecoration(labelText: 'Unique id')),
+            TextField(controller: uniqueIdController,decoration: InputDecoration(labelText: 'Product Id')),
+            TextField(controller: productNameController,decoration: InputDecoration(labelText: 'Product Name')),
+            TextField(controller: priceController,decoration: InputDecoration(labelText: 'Price')),
+            TextField(controller: descController,decoration: InputDecoration(labelText: 'Description')),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: null, // replace with add logic
+              onPressed: (){
+                AddItemsController.addItem(uniqueIdController.text,vendorDetail.venderId.toString(), productNameController.text,  vendorDetail.phone.toString(), descController.text, priceController.text.toString().isEmpty ? 0 : int.parse(priceController.text))
+                    .then((value) {
+                  Get.snackbar("Success", "Product added successfully");
+                  Navigator.pop(context);
+                }).catchError((error) {
+                  Get.snackbar("Error", "Failed to add product: $error");
+                });
+              }, // replace with add logic
               child: Text("Submit"),
             )
           ],

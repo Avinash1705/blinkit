@@ -2,16 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:swiggy/ui/category/subCategory.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
+import '../../controllers/categoriesController.dart';
+import '../../model/GetCategoriesResponseModel.dart';
 import '../widgets/customAppBar.dart';
+import 'SubCategoryNew.dart';
 
-class Category extends StatelessWidget {
+class Category extends StatefulWidget {
   Category({super.key});
 
+  @override
+  State<Category> createState() => _CategoryState();
+}
+
+class _CategoryState extends State<Category> {
   //SearchController searchController = Get.find<SearchController>();
   TextEditingController searchController = TextEditingController();
-
+  late GetCategoriesResponseModel categoriesResponseModel;
   //array cateory
   var data = [
     {"img": "image 50.png", "text": "Lights, Diyas \n & Candles"},
@@ -19,11 +28,13 @@ class Category extends StatelessWidget {
     {"img": "image 52.png", "text": "Appliances  \n & Gadgets"},
     {"img": "image 53.png", "text": "Home \n & Living"}
   ];
+
   var categroy = [
     {"img": "image 54.png", "text": "Golden Glass\n Wooden Lid Candle (Oudh)"},
     {"img": "image 57.png", "text": "Royal Gulab Jamun\n By Bikano"},
     {"img": "image 63.png", "text": "Golden Glass\n Wooden Lid Candle (Oudh)"},
   ];
+
   var grocerykitchen = [
     {"img": "image 41.png", "text": "Vegetables & \nFruits"},
     {"img": "image 42.png", "text": "Atta, Dal & \nRice"},
@@ -33,6 +44,7 @@ class Category extends StatelessWidget {
     {"img": "image 45 (1).png", "text": "Biscuits & \nBakery"},
     {"img": "image 45 (1).png", "text": "Biscuits & \nBakery"},
   ];
+
   var snakesAndDrinks = [
     {"img": "image 31.png", "text": "Chips & \n Namkeens"},
     {"img": "image 32.png", "text": "Sweets & \nChocalates"},
@@ -42,6 +54,7 @@ class Category extends StatelessWidget {
     {"img": "image 35.png", "text": "Beauty & \nCosmetics"},
     {"img": "image 35.png", "text": "Beauty & \nCosmetics"},
   ];
+
   var houseHoldUtentials = [
     {"img": "image 36.png", "text": "Chips & \n Namkeens"},
     {"img": "image 37.png", "text": "Sweets & \nChocalates"},
@@ -51,7 +64,17 @@ class Category extends StatelessWidget {
     {"img": "image 40.png", "text": "Beauty & \nCosmetics"},
     {"img": "image 40.png", "text": "Beauty & \nCosmetics"}
   ];
+  @override
+  void initState() {
+    GetCategoriesController()
+        .getCategories()
+        .then((value) => setState(() {
+      categoriesResponseModel = value;
+      // print("onscreen ${categoriesResponseModel.data?[0].categoryName}");
+        }));
 
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -66,6 +89,63 @@ class Category extends StatelessWidget {
           CustomAppBar(controller: searchController),
               SizedBox(
                 height: 40,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                  ),
+                  UiHelper.CustomText(
+                      text: "Categories Current Present",
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontsize: 14,
+                      fontfamily: "bold")
+                ],
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                          child: InkWell(
+                            onTap: () => Get.to(SubCategoryNew(
+                              categoryName:
+                              "PAnda"
+                                  .toString(),
+                              // grocerykitchen[index]["text"].toString(),
+                            )),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 78,
+                                  width: 71,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xFFD9EBEB)),
+                                  child: UiHelper.CustomImageNetwork(
+                                      img: categoriesResponseModel.data![index].categoryImg.toString()),
+                                ),
+                                UiHelper.CustomText(
+                                    text:
+                                    categoriesResponseModel.data![index].categoryName.toString(),
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontsize: 10)
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: categoriesResponseModel.data!.length,
+                    scrollDirection: Axis.horizontal,
+                  ),
+                ),
               ),
               Row(
                 children: [
@@ -147,51 +227,39 @@ class Category extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "Grocery & Kichen",
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontsize: 14,
-                      fontfamily: "bold")
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 78,
-                              width: 71,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xFFD9EBEB)),
-                              child: UiHelper.CustomImage(
-                                  img: snakesAndDrinks[index]["img"].toString()),
-                            ),
-                            UiHelper.CustomText(
-                                text: snakesAndDrinks[index]["text"].toString(),
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontsize: 10)
-                          ],
-                        ),
-                      );
-                    },
-                    itemCount: snakesAndDrinks.length,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-              ),
+
+              // Expanded(
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 20),
+              //     child: ListView.builder(
+              //       itemBuilder: (context, index) {
+              //         return Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: Column(
+              //             children: [
+              //               Container(
+              //                 height: 78,
+              //                 width: 71,
+              //                 decoration: BoxDecoration(
+              //                     borderRadius: BorderRadius.circular(10),
+              //                     color: Color(0xFFD9EBEB)),
+              //                 child: UiHelper.CustomImage(
+              //                     img: snakesAndDrinks[index]["img"].toString()),
+              //               ),
+              //               UiHelper.CustomText(
+              //                   text: snakesAndDrinks[index]["text"].toString(),
+              //                   color: Colors.black,
+              //                   fontWeight: FontWeight.normal,
+              //                   fontsize: 10)
+              //             ],
+              //           ),
+              //         );
+              //       },
+              //       itemCount: snakesAndDrinks.length,
+              //       scrollDirection: Axis.horizontal,
+              //     ),
+              //   ),
+              // ),
               Row(
                 children: [
                   SizedBox(
