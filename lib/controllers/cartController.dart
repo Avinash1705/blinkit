@@ -15,7 +15,7 @@ class CartController with ChangeNotifier {
   double get totalAmount {
     double total = 0.0;
     _items.forEach((key, item) {
-      print("item added${_items.keys}");
+
       total += item.price * item.quantity;
     });
     return total;
@@ -23,9 +23,9 @@ class CartController with ChangeNotifier {
 
   //added from homescreen so need all fields
   void addItem(String productId, String title, String img, double price) {
-    print("cart scree model prodId${productId}");
+
     if (_items.containsKey(productId)) {
-      print("cart scree model prodId same ${productId}");
+
       _items.update(
         productId,
         (existing) => CartItem(

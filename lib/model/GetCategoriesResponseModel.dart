@@ -34,10 +34,33 @@ class Data {
   String? categoryName;
   String? categoryImg;
   String? id;
+  Data();
+  Data.withValues({this.categoryName, this.categoryImg, this.id});
 
-  Data({this.categoryName, this.categoryImg, this.id});
 
   Data.fromJson(Map<String, dynamic> json) {
+    categoryName = json['category_name'];
+    categoryImg = json['category_img'];
+    id = json['id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['category_name'] = this.categoryName;
+    data['category_img'] = this.categoryImg;
+    data['id'] = this.id;
+    return data;
+  }
+}
+class Data1 {
+  String? categoryName;
+  String? categoryImg;
+  String? id;
+  Data1({String? categoryName, String? categoryImg, String? id});
+  Data1.withValues({this.categoryName, this.categoryImg, this.id});
+
+
+  Data1.fromJson(Map<String, dynamic> json) {
     categoryName = json['category_name'];
     categoryImg = json['category_img'];
     id = json['id'];

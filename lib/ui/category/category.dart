@@ -21,6 +21,10 @@ class _CategoryState extends State<Category> {
   //SearchController searchController = Get.find<SearchController>();
   TextEditingController searchController = TextEditingController();
   late GetCategoriesResponseModel categoriesResponseModel;
+  Data1 data1 = Data1.withValues(
+      categoryName: "categoryName",
+      categoryImg: "categoryImg",
+      id: "id");
   //array cateory
   var data = [
     {"img": "image 50.png", "text": "Lights, Diyas \n & Candles"},
@@ -70,7 +74,7 @@ class _CategoryState extends State<Category> {
         .getCategories()
         .then((value) => setState(() {
       categoriesResponseModel = value;
-      // print("onscreen ${categoriesResponseModel.data?[0].categoryName}");
+      // print("onscreen ${categoriesResponseModel.data}");
         }));
 
     super.initState();
@@ -113,12 +117,17 @@ class _CategoryState extends State<Category> {
                         padding: const EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
                           child: InkWell(
-                            onTap: () => Get.to(SubCategoryNew(
-                              categoryName:
-                              "PAnda"
-                                  .toString(),
-                              // grocerykitchen[index]["text"].toString(),
-                            )),
+                            onTap: () => {
+                              /*converting data to data1*/
+
+                              data1.id = categoriesResponseModel.data![index].id.toString(),
+                              data1.categoryName = categoriesResponseModel.data![index].categoryName.toString(),
+                              Get.to(SubCategoryNew(
+                                data: data1 ,
+                                // grocerykitchen[index]["text"].toString(),
+                              )
+                              )
+                            },
                             child: Column(
                               children: [
                                 Container(
@@ -128,7 +137,7 @@ class _CategoryState extends State<Category> {
                                       borderRadius: BorderRadius.circular(10),
                                       color: Color(0xFFD9EBEB)),
                                   child: UiHelper.CustomImageNetwork(
-                                      img: categoriesResponseModel.data![index].categoryImg.toString()),
+                                      img: categoriesResponseModel.data![index].categoryImg.toString(), height: 100, width: 100),
                                 ),
                                 UiHelper.CustomText(
                                     text:

@@ -45,8 +45,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var addressController = Provider.of<AddressController>(context);
-    print("loc set RX${addressController.updatedAddress}");
-    print("loc set RX${addressController.address}");
+
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),

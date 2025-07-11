@@ -1,5 +1,7 @@
 
 
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:swiggy/domain/AppConstants.dart';
 import 'package:swiggy/model/GetSubCategoryModel.dart';
@@ -15,10 +17,10 @@ class SubCategoryController {
   Future<GetSubCategoryModel> fetchSubCategories() async {
     // Simulate a network call or database query
      response = await http.get(Uri.parse(url));
-     print("check resoibse ${response}");
+     // print("check resoibse ${response.body}");
     if (response.statusCode == 200) {
       // If the server returns an OK response, parse the JSON
-      return GetSubCategoryModel.fromJson(response.body);
+      return GetSubCategoryModel.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response, throw an exception
       throw Exception('Failed to load subcategories');

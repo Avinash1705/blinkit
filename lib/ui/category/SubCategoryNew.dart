@@ -1,14 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/cartController.dart';
 import '../../controllers/subCatgoryController.dart';
+import '../../model/GetCategoriesResponseModel.dart';
+import '../../model/GetSubCategoryModel.dart';
+import '../../model/GetSubCategoryModel.dart' as mySubcategory;
 import '../widgets/uihelper.dart';
 
 class SubCategoryNew extends StatefulWidget {
-  String categoryName = "";
-   SubCategoryNew({required this.categoryName,super.key});
+  // String categoryName = "";
+    Data1 data = Data1();
+   // SubCategoryNew({required this.categoryName,super.key});
+   SubCategoryNew({super.key, required this.data});
 
   @override
   State<SubCategoryNew> createState() => _SubCategoryNewState();
@@ -16,7 +22,9 @@ class SubCategoryNew extends StatefulWidget {
 
 class _SubCategoryNewState extends State<SubCategoryNew> {
   TextEditingController searchController = TextEditingController();
-  late SubCategoryController subCategoryController;
+   SubCategoryController subCategoryController = SubCategoryController();
+   // late GetSubCategoryModel subCategoryModel;
+  late List<mySubcategory.Data>? data;
   var categroy = [
     {
       "id": 1,
@@ -58,15 +66,17 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
   // String categoryName = widget.categoryName;
   @override
   void initState() {
-    subCategoryController.fetchSubCategories().then((value) => print("subCategory ${value.data}"));
+    subCategoryController.fetchSubCategories().then((value) =>setState(() {
+      data = value.data?.where((element) => element.categoryId == widget.data.id).toList();
+    }));
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     return Scaffold(
-      appBar: AppBar(title: Text(widget.categoryName),toolbarHeight: 100,backgroundColor: Color(0xfff7Cb45)),
-      body: GridView.builder(
+      appBar: AppBar(title: Text(widget.data.categoryName.toString()),toolbarHeight: 100,backgroundColor: Color(0xfff7Cb45)),
+      body: data!.isEmpty  ? Center(child: Text("No item added in this category")):GridView.builder(
         padding: EdgeInsets.all(8),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Number of columns
@@ -74,7 +84,7 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
           mainAxisSpacing: 10,
           childAspectRatio: 1, // width / height
         ),
-        itemCount: categroy.length,
+        itemCount: data!.length,
         itemBuilder: (context, index) {
           return Container(
             color: Colors.white,
@@ -85,12 +95,13 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                 child: Flexible(
                   child: Column(
                     children: [
-                      UiHelper.CustomImage(
-                          img: categroy[index]["img"]
-                              .toString()),
+                      // UiHelper.CustomImage(
+                      //     img: categroy[index]["img"]
+                      //         .toString()),
+                      UiHelper.CustomImageNetwork(img: data![index].itemImg.toString(), height: 100, width: 100),
                       SizedBox(height: 5),
                       UiHelper.CustomText(
-                          text: categroy[index]["text"]
+                          text: data![index].itemName
                               .toString(),
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -112,7 +123,7 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                         children: [
                           UiHelper.CustomText(
                             // text: "₹ ${Random().nextInt(10)}",
-                              text: "₹ ${categroy[index]["price"]
+                              text: "₹ ${data![index].price
                                   .toString()}",
                               color: Color(0xff000000),
                               fontWeight: FontWeight.bold,

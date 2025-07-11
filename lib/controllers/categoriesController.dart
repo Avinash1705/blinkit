@@ -19,7 +19,6 @@ class GetCategoriesController {
           Uri.parse(url));
 
       categoriesResponseModel = GetCategoriesResponseModel.fromJson(jsonDecode(response.body));
-      print("getCategories response: ${categoriesResponseModel.data?[1].categoryName}");
     } catch (ex) {
       print("testt exception $ex");
     }

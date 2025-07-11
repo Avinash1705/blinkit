@@ -11,16 +11,16 @@ class AddressController extends ChangeNotifier {
 
   void saveAddress(String address) {
     _address = address;
-    print("addressMow $address");
+
     // saveLocalAddress(address);
     notifyListeners();
   }
 
   Future<void> saveLocalAddress(String add) async {
-    print("loc set1  $add");
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('addressKey', add);
     updatedAddress.value = (prefs.getString("addressKey") ?? "No Address Found") ;
-    print("loc set2 ${updatedAddress.value}");
+
   }
 }
