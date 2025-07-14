@@ -4,8 +4,10 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
+import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 import 'package:swiggy/ui/login/loginScreenStatic.dart';
+import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
 import 'package:swiggy/vender/ui/vendor_registration.dart';
 import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart';
@@ -32,15 +34,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Blink-it',
+      title: 'Flux-it',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: BottomNavScreen(index: 0),
-      // home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
-      home: LoginScreen(),
+      home: BottomNavScreen(index: 1),
+      // home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3232321",location: "lko"),),
+      // home: AddProductPage(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
+      // home: MyProductsPage(),
+      // home: LoginScreen(),
+      // home: SplashScreen(),
+      // home: AddProductPage(vendorDetail: null,),
     );
   }
 }

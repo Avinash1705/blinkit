@@ -2,7 +2,7 @@
 
 class AppConstants {
 
-  // static const String ip = "192.168.1.29:8080";
+  // static const String ip = "192.168.1.24:8080";
   static const String ip = "localhost";
   static const String appDetail = "http://$ip/fluxkart/apis/app_detail.php";
   static const String getAllVenders = "http://$ip/fluxkart/apis/get_venders.php";

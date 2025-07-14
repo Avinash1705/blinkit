@@ -119,7 +119,7 @@ class _CategoryState extends State<Category> {
                           child: InkWell(
                             onTap: () => {
                               /*converting data to data1*/
-
+                          print("category img ${categoriesResponseModel.data![index].categoryImg}"),
                               data1.id = categoriesResponseModel.data![index].id.toString(),
                               data1.categoryName = categoriesResponseModel.data![index].categoryName.toString(),
                               Get.to(SubCategoryNew(
@@ -136,8 +136,8 @@ class _CategoryState extends State<Category> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Color(0xFFD9EBEB)),
-                                  child: UiHelper.CustomImageNetwork(
-                                      img: categoriesResponseModel.data![index].categoryImg.toString(), height: 100, width: 100),
+                                  child: UiHelper.CustomImageNetworkNoDimension(
+                                      img: categoriesResponseModel.data![index].categoryImg.toString()),
                                 ),
                                 UiHelper.CustomText(
                                     text:

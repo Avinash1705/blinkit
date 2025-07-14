@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:swiggy/domain/AppConstants.dart';
 
-import '../venderModels/GetVenderResponseModel.dart';
 class AddItemsController {
   final String baseUrl;
 
@@ -24,6 +23,7 @@ class AddItemsController {
     }
     else {
       print(response.reasonPhrase);
+      throw Exception('Failed to add item: ${response.reasonPhrase}');
     }
   }
 }

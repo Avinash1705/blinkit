@@ -11,6 +11,9 @@ class UiHelper {
   static CustomImageNetwork({required String img, required int height, required int width}) {
     return Image.network(img);
   }
+  static CustomImageNetworkNoDimension({required String img}) {
+    return Image.network(img);
+  }
   static CustomText(
       {required String text,
       required Color color,
