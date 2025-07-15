@@ -38,6 +38,9 @@ class Data {
   String? id;
   String? price;
   String? itemDescription;
+  String? new_price;
+  String? weight;
+  String? quantity;
 
   Data(
       {this.categoryId,
@@ -46,6 +49,9 @@ class Data {
         this.phone,
         this.id,
         this.price,
+        this.new_price,
+        this.weight,
+        this.quantity,
         this.itemDescription});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -55,6 +61,9 @@ class Data {
     phone = json['phone'];
     id = json['id'];
     price = json['price'];
+    new_price = json['new_price'];
+    quantity = json['quantity'];
+    weight = json['weight'];
     itemDescription = json['item_description'];
   }
 
@@ -66,6 +75,9 @@ class Data {
     data['phone'] = this.phone;
     data['id'] = this.id;
     data['price'] = this.price;
+    data['quantity'] = this.quantity;
+    data['weight'] = this.weight;
+    data['new_price'] = this.new_price;
     data['item_description'] = this.itemDescription;
     return data;
   }

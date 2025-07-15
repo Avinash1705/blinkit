@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -17,10 +19,10 @@ class OrderPlacedScreen extends StatelessWidget {
     var cartController = Provider.of<CartController>(context);
     var printController = Provider.of<Printcontroller>(context);
 
-    // printController.addTransition(cartController.items.values, context);
     printController.addTransition(cartController.items);
-
-
+  // print("printCart all items  ${jsonEncode(cartController.items)}");
+    /*Existing quantity update in api and
+    * make a list of items which has been ordered later using phone filter show to specific vender */
 
     cartController.clear();
     return Scaffold(

@@ -119,7 +119,7 @@ class Subcategory extends StatelessWidget {
                                     .toString(),
                                 double.parse(
                                     categroy[index]["price"]
-                                        .toString()));
+                                        .toString()),0);
                             InteractiveToast.pop(context,
                                 title: Text("${categroy[index]["text"]
                                     .toString()} Added"));

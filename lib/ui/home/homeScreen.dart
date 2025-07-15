@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             categroy[index]["img"].toString(),
                                             double.parse(categroy[index]
                                                     ["price"]
-                                                .toString()));
+                                                .toString()),0);
                                         InteractiveToast.popSuccess(context,
                                             title: Text(
                                                 "${categroy[index]["text"].toString()} "),

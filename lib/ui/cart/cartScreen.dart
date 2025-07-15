@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/addressController.dart';
@@ -46,11 +49,14 @@ class _CartScreenState extends State<CartScreen> {
                             cartController.totalCartCost();
                             var currentItem =
                                 cartController.items.values.toList()[index];
+                            // print("currentUmg" + jsonEncode(currentItem));
                             return Card(
                               margin: EdgeInsets.all(8),
                               child: ListTile(
                                 leading:
-                                    UiHelper.CustomImage(img: currentItem.img),
+                                    // UiHelper.CustomImage(img: currentItem.img),
+                                    UiHelper.CustomImageNetworkNoDimension(
+                                        img: currentItem.img),
                                 title: Text(
                                   currentItem.title,
                                   style: TextStyle(color: Colors.blue),
@@ -79,13 +85,13 @@ class _CartScreenState extends State<CartScreen> {
                                     IconButton(
                                       icon: Icon(Icons.add),
                                       onPressed: () {
-                                        // print("cart scree 2  ${cartController.items.keys.first}");
-                                        cartController.addItem(
+                                        currentItem.quantity < int.parse(currentItem.existingQuantity.toString()) ?cartController.addItem(
                                             cartController.items.keys
                                                 .toList()[index],
                                             currentItem.title,
                                             currentItem.img,
-                                            currentItem.price);
+                                            currentItem.price,
+                                            currentItem.existingQuantity): InteractiveToast.pop(context, title: Text("Quantity exceeded"));
                                       },
                                     ),
                                   ],
@@ -272,7 +278,6 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
       Positioned(bottom: 0, child: CheckoutScreen()),
-
     ]);
   }
 }

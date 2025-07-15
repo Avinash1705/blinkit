@@ -4,13 +4,14 @@ class CartItem {
   final String img;
   final int quantity;
   final double price;
+  final int? existingQuantity;
 
   CartItem({
     required this.productId,
     required this.title,
     required this.img,
     required this.quantity,
-    required this.price,
+    required this.price, required ,this.existingQuantity,
   });
 
 
@@ -21,6 +22,7 @@ class CartItem {
       img: json['img'],
       quantity: json['quantity'],
       price: json['price'],
+existingQuantity: json['existingQuantity'],
     );
   }
 
@@ -30,6 +32,7 @@ class CartItem {
     'img': img,
     'quantity': quantity,
     'price': price,
+    'existingQuantity': existingQuantity,
   };
 }
 

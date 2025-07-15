@@ -10,22 +10,20 @@ class CartController with ChangeNotifier {
   int get itemCount => _items.length;
   double _totalCost = 0;
 
-  double get totalCost =>_totalCost;
+  double get totalCost => _totalCost;
 
   double get totalAmount {
     double total = 0.0;
     _items.forEach((key, item) {
-
       total += item.price * item.quantity;
     });
     return total;
   }
 
   //added from homescreen so need all fields
-  void addItem(String productId, String title, String img, double price) {
-
+  void addItem(String productId, String title, String img, double price,
+      int? existingQuantity) {
     if (_items.containsKey(productId)) {
-
       _items.update(
         productId,
         (existing) => CartItem(
@@ -34,18 +32,19 @@ class CartController with ChangeNotifier {
           img: existing.img,
           quantity: existing.quantity + 1,
           price: existing.price,
+          existingQuantity: existingQuantity,
         ),
       );
     } else {
       _items.putIfAbsent(
         productId,
         () => CartItem(
-          productId: DateTime.now().toString(),
-          title: title,
-          img: img,
-          quantity: 1,
-          price: price,
-        ),
+            productId: DateTime.now().toString(),
+            title: title,
+            img: img,
+            quantity: 1,
+            price: price,
+            existingQuantity: existingQuantity),
       );
     }
     notifyListeners();

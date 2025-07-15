@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -30,21 +32,16 @@ class _PrintScreenState extends State<PrintScreen> {
   Widget build(BuildContext context) {
     var printController = Provider.of<Printcontroller>(context);
     var addressController = Provider.of<AddressController>(context);
-    // var cartController = Provider.of<CartController>(context);
-    // Iterable<CartItem> itemsAll = box.read("itemkey");
-    // print("printCart Read new ${printController.getCartItems()}");
+    var cartController = Provider.of<CartController>(context);
+
     Future<List<CartItem>> loadCartItem() async {
       List<CartItem> cartItem = await printController.getCartItems();
       itemsAll.addAll(cartItem);
-      // printController.getCartItems().then((val) => {
-      //   itemsAll.addAll(val)
-      // });
       return itemsAll;
-      print("printCart $itemsAll");
     }
-
+    print("cart items ${jsonEncode(cartController.items)}");
     loadCartItem();
-    print("printCart 2 ${itemsAll}");
+    // print("printCart 2 ${itemsAll}");
     return FutureBuilder<List<CartItem>>(
       future: loadCartItem(),
       builder: (context,snapshot) => Scaffold(
