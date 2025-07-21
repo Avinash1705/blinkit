@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import '../venderModels/VenderSpecificProductsModel.dart';
 
-Future<VenderSpecificProductsModel> getVendorCategories() async {
-  final url = Uri.parse('http://localhost/fluxkart/apis/getSpecificVenderCategories.php?phone=87000');
+Future<VenderSpecificProductsModel> getVendorCategories(String phone) async {
+  final url = Uri.parse('http://localhost/fluxkart/apis/getSpecificVenderCategories.php?phone=$phone');
   late VenderSpecificProductsModel venderSpecificProductsModel;
   try {
     final response = await http.get(url);

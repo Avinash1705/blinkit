@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
@@ -140,9 +142,10 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                                   if (kDebugMode) {
                                     print("Item added to cart");
                                   }
-                                  print(
-                                      "Item added to cart ${data![index].quantity.toString()}");
+                                  // print(
+                                  //     "Item added to cart ${data![index].quantity.toString()}");
                                   // Add item to cart
+                                  // print("cart item cheking ${jsonEncode(data![index])}");
                                   cartController.addItem(
                                       data![index].id.toString(),
                                       data![index].itemName.toString(),

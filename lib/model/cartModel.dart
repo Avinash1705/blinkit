@@ -4,7 +4,7 @@ class CartItem {
   final String img;
   final int quantity;
   final double price;
-  final int? existingQuantity;
+  int? existingQuantity;
 
   CartItem({
     required this.productId,

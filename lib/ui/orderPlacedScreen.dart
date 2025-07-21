@@ -18,8 +18,9 @@ class OrderPlacedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var printController = Provider.of<Printcontroller>(context);
-
+    print("cart items before ${jsonEncode(cartController.items)}");
     printController.addTransition(cartController.items);
+    printController.updateExistingQuantity();
   // print("printCart all items  ${jsonEncode(cartController.items)}");
     /*Existing quantity update in api and
     * make a list of items which has been ordered later using phone filter show to specific vender */

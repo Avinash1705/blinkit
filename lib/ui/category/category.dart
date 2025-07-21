@@ -119,7 +119,6 @@ class _CategoryState extends State<Category> {
                           child: InkWell(
                             onTap: () => {
                               /*converting data to data1*/
-                          print("category img ${categoriesResponseModel.data![index].categoryImg}"),
                               data1.id = categoriesResponseModel.data![index].id.toString(),
                               data1.categoryName = categoriesResponseModel.data![index].categoryName.toString(),
                               Get.to(SubCategoryNew(
