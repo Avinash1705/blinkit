@@ -2,7 +2,7 @@ class CartItem {
   final String productId;
   final String title;
   final String img;
-  final int quantity;
+   int quantity;
   final double price;
   int? existingQuantity;
 
@@ -11,7 +11,8 @@ class CartItem {
     required this.title,
     required this.img,
     required this.quantity,
-    required this.price, required ,this.existingQuantity,
+    required this.price,
+  required ,this.existingQuantity,
   });
 
 

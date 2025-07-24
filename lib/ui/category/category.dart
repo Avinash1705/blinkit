@@ -20,7 +20,7 @@ class Category extends StatefulWidget {
 class _CategoryState extends State<Category> {
   //SearchController searchController = Get.find<SearchController>();
   TextEditingController searchController = TextEditingController();
-  late GetCategoriesResponseModel categoriesResponseModel;
+  GetCategoriesResponseModel categoriesResponseModel = GetCategoriesResponseModel();
   Data1 data1 = Data1.withValues(
       categoryName: "categoryName",
       categoryImg: "categoryImg",
@@ -111,7 +111,7 @@ class _CategoryState extends State<Category> {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: ListView.builder(
+                  child: categoriesResponseModel.data == null? CircularProgressIndicator():ListView.builder(
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -235,39 +235,6 @@ class _CategoryState extends State<Category> {
               SizedBox(
                 height: 30,
               ),
-
-              // Expanded(
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 20),
-              //     child: ListView.builder(
-              //       itemBuilder: (context, index) {
-              //         return Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Column(
-              //             children: [
-              //               Container(
-              //                 height: 78,
-              //                 width: 71,
-              //                 decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     color: Color(0xFFD9EBEB)),
-              //                 child: UiHelper.CustomImage(
-              //                     img: snakesAndDrinks[index]["img"].toString()),
-              //               ),
-              //               UiHelper.CustomText(
-              //                   text: snakesAndDrinks[index]["text"].toString(),
-              //                   color: Colors.black,
-              //                   fontWeight: FontWeight.normal,
-              //                   fontsize: 10)
-              //             ],
-              //           ),
-              //         );
-              //       },
-              //       itemCount: snakesAndDrinks.length,
-              //       scrollDirection: Axis.horizontal,
-              //     ),
-              //   ),
-              // ),
               Row(
                 children: [
                   SizedBox(

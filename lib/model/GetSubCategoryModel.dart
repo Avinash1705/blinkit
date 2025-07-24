@@ -54,17 +54,19 @@ class Data {
         this.quantity,
         this.itemDescription});
 
-  Data.fromJson(Map<String, dynamic> json) {
-    categoryId = json['category_id'];
-    itemName = json['item_name'];
-    itemImg = json['item_img'];
-    phone = json['phone'];
-    id = json['id'];
-    price = json['price'];
-    new_price = json['new_price'];
-    quantity = json['quantity'];
-    weight = json['weight'];
-    itemDescription = json['item_description'];
+ factory Data.fromJson(Map<String, dynamic> json) {
+   return Data(
+     categoryId: json['category_id']?? '',
+     itemName: json['item_name']?? '',
+     itemImg: json['item_img']?? '',
+     phone: json['phone']?? '',
+     id: json['id']?? '',
+     price: json['price']?? '',
+     new_price: json['new_price']?? '',
+     weight: json['weight']?? '',
+     quantity: json['quantity']?? '',
+     itemDescription: json['item_description']?? '',
+   );
   }
 
   Map<String, dynamic> toJson() {

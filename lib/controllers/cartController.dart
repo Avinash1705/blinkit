@@ -23,10 +23,11 @@ class CartController with ChangeNotifier {
   //added from homescreen so need all fields
   void addItem(String productId, String title, String img, double price,
       int? existingQuantity) {
+
     if (_items.containsKey(productId)) {
       _items.update(
         productId,
-        (existing) => CartItem(
+            (existing) => CartItem(
           productId: productId,
           title: existing.title,
           img: existing.img,
@@ -35,11 +36,11 @@ class CartController with ChangeNotifier {
           existingQuantity: existingQuantity,
         ),
       );
-    } else {
+    }
+    else {
       _items.putIfAbsent(
         productId,
-        () => CartItem(
-            // productId: DateTime.now().toString(),
+            () => CartItem(
             productId: productId,
             title: title,
             img: img,

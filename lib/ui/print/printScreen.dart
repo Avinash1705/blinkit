@@ -39,7 +39,7 @@ class _PrintScreenState extends State<PrintScreen> {
       itemsAll.addAll(cartItem);
       return itemsAll;
     }
-    print("cart items ${jsonEncode(cartController.items)}");
+    print("cart items PrintScreen ${jsonEncode(cartController.items)}");
     loadCartItem();
     // print("printCart 2 ${itemsAll}");
     return FutureBuilder<List<CartItem>>(
