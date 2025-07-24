@@ -50,10 +50,7 @@ class Printcontroller extends ChangeNotifier {
       }
       else {
         item.existingQuantity = item.existingQuantity! - item.quantity;
-        print("Updating item:Inside ${item.productId} with quantity: ${item.existingQuantity}");
       }
-      print("cart items after ${jsonEncode(listItem)}");
-      print("Updating item: ${item.productId} with quantity: ${item.existingQuantity}");
       // Call your API to update the existing quantity here
     }
   }

@@ -8,20 +8,39 @@ import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/controllers/printController.dart';
 import 'package:swiggy/model/cartModel.dart';
 
+import '../controllers/checkoutController.dart';
 import 'bottomNav/bottomNavScreen.dart';
 
-class OrderPlacedScreen extends StatelessWidget {
-  OrderPlacedScreen({super.key});
+class OrderPlacedScreen extends StatefulWidget {
+  const OrderPlacedScreen({super.key});
 
+  @override
+  State<OrderPlacedScreen> createState()  =>_OrderPlacedScreenState();
+}
+void updateQty(){
+  CheckOutController().updateItemQuantity(33121, 1).then((value) =>
+  {
+    print("Qty updated successfully $value")
+  }).catchError((error) {
+    print("Error updating quantity: $error");
+  });
 
+}
+class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
+
+  @override
+  void initState() {
+    updateQty();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var printController = Provider.of<Printcontroller>(context);
-    print("cart items before ${jsonEncode(cartController.items)}");
+
     printController.addTransition(cartController.items);
     printController.updateExistingQuantity();
-  // print("printCart all items  ${jsonEncode(cartController.items)}");
+    // print("printCart all items  ${jsonEncode(cartController.items)}");
     /*Existing quantity update in api and
     * make a list of items which has been ordered later using phone filter show to specific vender */
 

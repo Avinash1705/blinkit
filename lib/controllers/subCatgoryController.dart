@@ -15,6 +15,7 @@ class SubCategoryController {
   late var response;
   // Example method to fetch subcategories
   Future<GetSubCategoryModel> fetchSubCategories() async {
+    print("method is called again");
     // Simulate a network call or database query
      response = await http.get(Uri.parse(url));
      // print("check resoibse ${response.body}");

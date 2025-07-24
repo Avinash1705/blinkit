@@ -159,8 +159,6 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                                       print("Add to cart clicked ${data![index].quantity}");
 
                                     }
-                                    print("qty in cartBefore: ${cartController.items[data![index].id.toString()]?.quantity} ext qty: ${cartController.items[data![index].id.toString()]?.existingQuantity}");
-
                                   if(cartController.items[data![index].id.toString()]?.quantity == null || (int.parse(cartController.items[data![index].id.toString()]!.quantity.toString()) +1) <=  int.parse(data![index].quantity.toString())){
                                     cartController.addItem(
                                         data![index].id.toString(),

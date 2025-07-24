@@ -12,4 +12,6 @@ class AppConstants {
   static const String getAllCategories = "http://$ip/fluxkart/apis/get_categories.php";
   static const String getSubCategories = "http://$ip/fluxkart/apis/get_subCategory.php";
   static const String getOrderedPlaced = "http://$ip/fluxkart/apis/getOrderPlaced.php";
+  static const String updateSubcategoryAndSoldItem = "http://$ip/fluxkart/apis/updateSubcategoryAndSoldItem.php";
+
 }

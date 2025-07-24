@@ -8,6 +8,7 @@ import 'package:swiggy/ui/address/addressScreen.dart';
 import 'package:swiggy/ui/orderPlacedScreen.dart';
 import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
+import '../../controllers/checkoutController.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -29,15 +30,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   //     localAddress = e.toString();
   //   }
   // }
-  void setAddress(){
-    // updatedAddress.value = (prefs.getString("addressKey") ?? "No Address Found");
 
-  }
   @override
   initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // loadPrefs();
+
     });
   }
 
