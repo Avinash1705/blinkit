@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.1.5
   flutter_sliding_toast: any
   shared_preferences: any
+  syncfusion_flutter_charts: any
 #  get_storage: any
 
 dev_dependencies:

@@ -37,11 +37,12 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
    late List<mySubcategory.Data>? data = [];
    late List<allVenders.Data>? allVenderData = [];
    bool addBtnActive = true;
-
+   List<int> idList = [3312,33121];
   // String categoryName = widget.categoryName;
 
   @override
   void initState() {
+    print("jsonLIst"+ jsonEncode({'ids': idList}));
     fetchData();
     super.initState();
   }
