@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swiggy/vender/ui/SubscriptionService.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
@@ -17,7 +18,7 @@ import '../venderModels/VenderSpecificProductsModel.dart'
 import 'categoryDropdown.dart';
 
 class VendorDashboard extends StatelessWidget {
-  final venderData.Data vendorDetails;
+  late venderData.Data vendorDetails;
 
   VendorDashboard({super.key, required this.vendorDetails});
 
@@ -28,13 +29,21 @@ class VendorDashboard extends StatelessWidget {
     SalesData('Apr', 32),
     SalesData('May', 40),
   ];
+  List<PieData> piedata = [
+    PieData('Sales Person 1', 35, 'Person 1'),
+    PieData('Sales Person 2', 21, 'Person 2'),
+    PieData('Sales Person 3', 32, 'Person 3'),
+    PieData('Sales Person 4', 76, 'Person 4'),
+    PieData('Sales Person 5', 534, 'Person 5'),
+  ];
+
 
   @override
   Widget build(BuildContext context) {
-    print("${vendorDetails.venderId} Dashboard");
+    print("${vendorDetails.venderId} Dashboard ${vendorDetails.valid}");
     return Scaffold(
         appBar: AppBar(
-          title: Text('${vendorDetails.venderName} Dashboard'),
+          title: Text('${vendorDetails.venderName} Dashboard ${vendorDetails.valid}'),
           backgroundColor: Colors.deepPurple,
         ),
         drawer: Drawer(
@@ -100,53 +109,60 @@ class VendorDashboard extends StatelessWidget {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-    child: SizedBox(
-      height: MediaQuery.of(context).size.height,
-      child: Column(children: [
-        //Initialize the chart widget
-        // SfCartesianChart(title: ChartTitle(text: 'Half yearly sales analysis'),)
-        SfCartesianChart(
-          primaryXAxis: CategoryAxis(),
-          // Chart title
-          title: ChartTitle(text: 'Half yearly sales analysis'),
-          // Enable legend
-          legend: Legend(isVisible: true),
-          // Enable tooltip
-          tooltipBehavior: TooltipBehavior(enable: true),
-          series: <CartesianSeries<SalesData, String>>[
-            LineSeries<SalesData, String>(
-              dataSource: data,
-              xValueMapper: (SalesData sales, _) => sales.year,
-              yValueMapper: (SalesData sales, _) => sales.sales,
-              name: 'Sales',
-              // Enable data label
-              dataLabelSettings: DataLabelSettings(isVisible: true),
-            ),
-          ],
-        ),
-        Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              //Initialize the spark charts widget
-              child: SfSparkLineChart.custom(
-                //Enable the trackball
-                trackball: SparkChartTrackball(
-                  activationMode: SparkChartActivationMode.tap,
-                ),
-                //Enable marker
-                marker: SparkChartMarker(
-                  displayMode: SparkChartMarkerDisplayMode.all,
-                ),
-                //Enable data label
-                labelDisplayMode: SparkChartLabelDisplayMode.all,
-                xValueMapper: (int index) => data[index].year,
-                yValueMapper: (int index) => int.parse(data[index].sales.toString()),
-                dataCount: 5,
+        body: vendorDetails.valid! == 0 ?SubscriptionScreen(vendorDetails):SingleChildScrollView(
+            child: Expanded(child: Column(children: [
+              Center(
+                  child:SfCircularChart(
+                      title: ChartTitle(text: 'Sales by sales person'),
+                      legend: Legend(isVisible: true),
+                      series: <PieSeries<PieData, String>>[
+                        PieSeries<PieData, String>(
+                            explode: true,
+                            explodeIndex: 0,
+                            dataSource: piedata,
+                            xValueMapper: (PieData data, _) => data.xData,
+                            yValueMapper: (PieData data, _) => data.yData,
+                            dataLabelMapper: (PieData data, _) => data.text,
+                            dataLabelSettings: DataLabelSettings(isVisible: true)),
+                      ]
+                  )
               ),
-            ))
-      ]),
-    )),
+              SfCartesianChart(
+                primaryXAxis: CategoryAxis(),
+                // Chart title
+                title: ChartTitle(text: 'Half yearly sales analysis'),
+                // Enable legend
+                legend: Legend(isVisible: true),
+                // Enable tooltip
+                tooltipBehavior: TooltipBehavior(enable: true),
+                series: <CartesianSeries<SalesData, String>>[
+                  LineSeries<SalesData, String>(
+                    dataSource: data,
+                    xValueMapper: (SalesData sales, _) => sales.year,
+                    yValueMapper: (SalesData sales, _) => sales.sales,
+                    name: 'Sales',
+                    // Enable data label
+                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                  ),
+                ],
+              ),
+              // SfSparkLineChart.custom(
+              //   //Enable the trackball
+              //   trackball: SparkChartTrackball(
+              //     activationMode: SparkChartActivationMode.tap,
+              //   ),
+              //   //Enable marker
+              //   marker: SparkChartMarker(
+              //     displayMode: SparkChartMarkerDisplayMode.all,
+              //   ),
+              //   //Enable data label
+              //   labelDisplayMode: SparkChartLabelDisplayMode.all,
+              //   xValueMapper: (int index) => data[index].year,
+              //   yValueMapper: (int index) => int.parse(data[index].sales.toString()),
+              //   dataCount: 5,
+              // ),
+
+            ]),)),
     );
   }
 }

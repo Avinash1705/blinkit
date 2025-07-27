@@ -109,12 +109,6 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
       Get.to(AdminDashboard());
     }
     else {
-      // if(getVenderResponseModel.data == null || getVenderResponseModel.data!.isEmpty){
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(content: Text("No vendors found")),
-      //   );
-      //   return;
-      // }
       for(int i=0;i<getVenderResponseModel.data!.length;i++){
         print("no are ${getVenderResponseModel.data?[i].phone}");
         if(getVenderResponseModel.data?[i].phone == phoneController.value.text){

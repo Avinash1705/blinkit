@@ -36,13 +36,14 @@ class Data {
   String? shopName;
   String? phone;
   String? location;
+  String? valid;
 
   Data(
       {this.venderName,
         this.venderId,
         this.shopName,
         this.phone,
-        this.location});
+        this.location,this.valid});
 
   Data.fromJson(Map<String, dynamic> json) {
     venderName = json['vender_name'];
@@ -50,6 +51,7 @@ class Data {
     shopName = json['shop_name'];
     phone = json['phone'];
     location = json['location'];
+    valid = json['valid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +61,7 @@ class Data {
     data['shop_name'] = this.shopName;
     data['phone'] = this.phone;
     data['location'] = this.location;
+    data['valid'] = this.valid;
     return data;
   }
 }
