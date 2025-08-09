@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,9 +8,16 @@ import 'package:swiggy/ui/category/subCategory.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../../controllers/categoriesController.dart';
+import '../../controllers/subCatgoryController.dart';
 import '../../model/GetCategoriesResponseModel.dart';
+import '../../model/GetSubCategoryModel.dart';
+import '../../vender/controller/AllVenderController.dart';
+import '../../vender/venderModels/GetVenderResponseModel.dart';
 import '../widgets/customAppBar.dart';
 import 'SubCategoryNew.dart';
+import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
+    as allVenders;
+import '../../model/GetSubCategoryModel.dart' as mySubcategory;
 
 class Category extends StatefulWidget {
   Category({super.key});
@@ -20,11 +29,11 @@ class Category extends StatefulWidget {
 class _CategoryState extends State<Category> {
   //SearchController searchController = Get.find<SearchController>();
   TextEditingController searchController = TextEditingController();
-  GetCategoriesResponseModel categoriesResponseModel = GetCategoriesResponseModel();
+  GetCategoriesResponseModel categoriesResponseModel =
+      GetCategoriesResponseModel();
   Data1 data1 = Data1.withValues(
-      categoryName: "categoryName",
-      categoryImg: "categoryImg",
-      id: "id");
+      categoryName: "categoryName", categoryImg: "categoryImg", id: "id");
+
   //array cateory
   var data = [
     {"img": "image 50.png", "text": "Lights, Diyas \n & Candles"},
@@ -68,17 +77,49 @@ class _CategoryState extends State<Category> {
     {"img": "image 40.png", "text": "Beauty & \nCosmetics"},
     {"img": "image 40.png", "text": "Beauty & \nCosmetics"}
   ];
+  SubCategoryController subCategoryController = SubCategoryController();
+  AllVenderController allVenderController = AllVenderController();
+  late List<allVenders.Data>? allVenderData = [];
+  late List<allVenders.Data>? allFilteredVenderData = [];
+  late List<mySubcategory.Data>? allFilteredSubcategory = [];
+  late List<mySubcategory.Data>? allSubcategory = [];
+
   @override
   void initState() {
-    GetCategoriesController()
-        .getCategories()
-        .then((value) => setState(() {
-      categoriesResponseModel = value;
-      // print("onscreen ${categoriesResponseModel.data}");
+    GetCategoriesController().getCategories().then((value) => setState(() {
+          categoriesResponseModel = value;
+          print("onscreen ${jsonEncode(categoriesResponseModel.data)}");
         }));
-
+    fetchData();
     super.initState();
   }
+
+  void fetchData() async {
+    try {
+      final responses = await Future.wait([
+        subCategoryController.fetchSubCategories(),
+        allVenderController.fetchVendors(),
+      ]);
+      final subCategoryResponse = responses[0] as GetSubCategoryModel;
+      final vendorResponse = responses[1] as GetVenderResponseModel;
+      setState(() {
+        allVenderData = vendorResponse.data!;
+        allSubcategory = subCategoryResponse.data;
+        for (int i = 0; i < vendorResponse.data!.length; i++) {
+          for (int j = 0; j < allSubcategory!.length; j++) {
+          if (vendorResponse.data![i].phone == allSubcategory![j].phone) {
+            allFilteredVenderData!.add(vendorResponse.data![i]);
+            allFilteredSubcategory?.add(allSubcategory![j]);
+          }
+        }
+      }
+        // print("new Avi category ${jsonEncode(allFilteredVenderData)}")  ;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -90,7 +131,8 @@ class _CategoryState extends State<Category> {
               SizedBox(
                 height: 40,
               ),
-          CustomAppBar(controller: searchController),
+              CustomAppBar(controller: searchController),
+
               SizedBox(
                 height: 40,
               ),
@@ -99,6 +141,12 @@ class _CategoryState extends State<Category> {
                   SizedBox(
                     width: 20,
                   ),
+                  // UiHelper.CustomImageNetworkNoDimension(img: categoriesResponseModel
+                  //     .data![0].categoryImg
+                  //     .toString()),
+
+                  // UiHelper.CustomImageNetworkCategory(img: "BiscuitsBakery.png"),
+                  Image.network("https://royalblue-opossum-328842.hostingersite.com/fluxKart/img/milk.png"),
                   UiHelper.CustomText(
                       text: "Categories Current Present",
                       color: Colors.black,
@@ -111,48 +159,140 @@ class _CategoryState extends State<Category> {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: categoriesResponseModel.data == null? CircularProgressIndicator():ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SingleChildScrollView(
+                  child: categoriesResponseModel.data == null
+                      ? CircularProgressIndicator()
+                      : ListView.builder(
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SingleChildScrollView(
+                                child: InkWell(
+                                  onTap: () => {
+                                    print("ontap ${UiHelper
+                                      .CustomImageNetworkCategory(
+                                  img: categoriesResponseModel
+                                      .data![index].categoryImg
+                                      .toString())}"),
+                                    /*converting data to data1*/
+                                    data1.id = categoriesResponseModel
+                                        .data![index].id
+                                        .toString(),
+                                    data1.categoryName = categoriesResponseModel
+                                        .data![index].categoryName
+                                        .toString(),
+                                    Get.to(SubCategoryNew(
+                                      data: data1,
+                                      // grocerykitchen[index]["text"].toString(),
+                                    ))
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 78,
+                                        width: 71,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Color(0xFFD9EBEB)),
+                                        child: UiHelper
+                                            .CustomImageNetworkNoDimension(
+                                                img: categoriesResponseModel
+                                                    .data![index].categoryImg
+                                                    .toString()),
+                                      ),
+                                      UiHelper.CustomText(
+                                          text: categoriesResponseModel
+                                              .data![index].categoryName
+                                              .toString(),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontsize: 10)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount: categoriesResponseModel.data!.length,
+                          scrollDirection: Axis.horizontal,
+                        ),
+                ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                  ),
+                  UiHelper.CustomText(
+                      text: "Shops Current Present",
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontsize: 14,
+                      fontfamily: "bold")
+                ],
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: allFilteredVenderData!.isEmpty
+                      ? CircularProgressIndicator()
+                      : SizedBox(
+                    height: 150,
+                        child: ListView.builder(
+                                            itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: InkWell(
-                            onTap: () => {
-                              /*converting data to data1*/
-                              data1.id = categoriesResponseModel.data![index].id.toString(),
-                              data1.categoryName = categoriesResponseModel.data![index].categoryName.toString(),
-                              Get.to(SubCategoryNew(
-                                data: data1 ,
-                                // grocerykitchen[index]["text"].toString(),
-                              )
-                              )
-                            },
+                            // onTap: () => {
+                            //   /*converting data to data1*/
+                            //   data1.id = categoriesResponseModel
+                            //       .data![index].id
+                            //       .toString(),
+                            //   data1.categoryName = categoriesResponseModel
+                            //       .data![index].categoryName
+                            //       .toString(),
+                            //   Get.to(SubCategoryNew(
+                            //     data: data1,
+                            //     // grocerykitchen[index]["text"].toString(),
+                            //   ))
+                            // },
                             child: Column(
                               children: [
                                 Container(
-                                  height: 78,
+                                  height: 50,
                                   width: 71,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                      BorderRadius.circular(10),
                                       color: Color(0xFFD9EBEB)),
-                                  child: UiHelper.CustomImageNetworkNoDimension(
-                                      img: categoriesResponseModel.data![index].categoryImg.toString()),
+                                  // child: UiHelper
+                                  //     .CustomImageNetworkNoDimension(
+                                  //     img: allFilteredVenderData![index].shopName
+                                  //         .toString()),
+                                    child:Image.asset(
+                                      "images/shop.png",
+                                      fit: BoxFit.cover,
+                                    ),
                                 ),
                                 UiHelper.CustomText(
-                                    text:
-                                    categoriesResponseModel.data![index].categoryName.toString(),
+                                    text: allFilteredVenderData![index].shopName
+                                        .toString(),
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal,
                                     fontsize: 10)
                               ],
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    itemCount: categoriesResponseModel.data!.length,
-                    scrollDirection: Axis.horizontal,
-                  ),
+                        );
+                                            },
+                                            itemCount: allFilteredVenderData!.length,
+                                            scrollDirection: Axis.horizontal,
+                                          ),
+                      ),
                 ),
               ),
               Row(

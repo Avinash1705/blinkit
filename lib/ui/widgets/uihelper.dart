@@ -2,14 +2,21 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:swiggy/domain/AppConstants.dart';
 
 class UiHelper {
 
   static CustomImage({required String img}) {
     return Image.asset("assets/images/$img");
   }
-  static CustomImageNetwork({required String img, required int height, required int width}) {
-    return Image.network(img);
+  // static CustomImageNetwork({required String img, required int height, required int width}) {
+  //   return Image.network(img);
+  // }
+  //category image
+  static CustomImageNetworkCategory({required String img}) {
+    // print("test gjgj $img");
+    //   print("test img https://${AppConstants.ip}/img/category/$img");
+    return Image.network("https://${AppConstants.ip}/fluxKart/img/category/$img");
   }
   static CustomImageNetworkNoDimension({required String img}) {
     return Image.network(img);

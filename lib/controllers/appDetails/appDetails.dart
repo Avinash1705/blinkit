@@ -15,9 +15,8 @@ class AppDetails extends GetxController {
     late var response;
     late AppDetailModel urRes;
     try {
-      response = await http.get(
-          Uri.parse(url));
-
+      response = await http.get(Uri.parse(url));
+      print("response isApp Details ${response.body}");
       urRes = AppDetailModel.fromJson(jsonDecode(response.body));
     } catch (ex) {
       print("testt exception $ex");

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/cartController.dart';
 
 import '../../controllers/appDetails/appDetails.dart';
+import '../../domain/AppConstants.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../widgets/uihelper.dart';
@@ -85,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AppDetails.testApi().then((value) => {
           setState(() {
             dataLoaded = value;
+            print("test api of app config ${jsonEncode(dataLoaded)}");
           })
         });
     super.initState();
@@ -136,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 20,
                           ),
                           UiHelper.CustomText(
-                              text: "15 minutes",
+                              text: "16 minutes",
                               color: Color(0xFFffffff),
                               fontWeight: FontWeight.bold,
                               fontsize: 20,

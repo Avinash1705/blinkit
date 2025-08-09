@@ -17,7 +17,6 @@ class GetCategoriesController {
     try {
       response = await http.get(
           Uri.parse(url));
-
       categoriesResponseModel = GetCategoriesResponseModel.fromJson(jsonDecode(response.body));
     } catch (ex) {
       print("testt exception $ex");
