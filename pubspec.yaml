@@ -42,6 +42,9 @@ dependencies:
 #  shared_preferences: any
   syncfusion_flutter_charts: any
 #  get_storage: any
+#  image_picker: ^1.1.1
+#  permission_handler: ^11.3.0
+#  flutter_plugin_android_lifecycle: ^2.0.17
 
 dev_dependencies:
   flutter_test:

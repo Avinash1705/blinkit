@@ -13,6 +13,7 @@ import '../../ui/login/loginScreen.dart';
 import '../controller/VenderOrdersController.dart';
 import '../controller/VenderSpecificProductsController.dart';
 import '../controller/addItemsController.dart';
+import '../helperWidget/ImagePickerExample.dart';
 import '../venderModels/GetVenderResponseModel.dart' as venderData;
 import '../venderModels/OrderPlacedModel.dart' as orderPlacedModelData;
 import '../venderModels/SalesYearDataModel.dart';
@@ -232,6 +233,12 @@ class _AddProductPageState extends State<AddProductPage> {
                     controller: quantityController,
                     decoration: InputDecoration(labelText: 'Quantity')),
                 SizedBox(height: 20),
+                ElevatedButton(onPressed: (){
+                  // Get.to(CameraFullScreen());
+                  SnackBar(content: Text("Image Picker not implemented yet"));
+                }, child: Text("Image Picker")),
+                SizedBox(height: 20),
+
                 ElevatedButton(
                   onPressed: () {
                     setState(() {

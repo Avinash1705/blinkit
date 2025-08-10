@@ -45,11 +45,11 @@ class MyApp extends StatelessWidget {
       // home: BottomNavScreen(index: 0),
       // home: SubscriptionScreen(),
       // home: PaymentScreen(),
-      home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "4444444444",location: "lko",valid: "0"),),
+      // home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "4444444444",location: "lko",valid: "0"),),
       // home: AddProductPage(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
       // home: MyProductsPage(),
       // home: StaticLoginScreen(),
-      // home: SplashScreen(),
+      home: SplashScreen(),
       // home: AddProductPage(vendorDetail: null,),
     );
   }
