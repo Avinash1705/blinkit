@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
@@ -282,9 +285,11 @@ class _MyProductsPage extends State<MyProductsPage> {
     getVendorCategories(widget.phone)
         .then((value) => {
               setState(() {
+                // print("check1 ${widget.phone}");
+                // print("check2 ${value}");
                 venderSpecificProductsModelList = value.data!;
                 print(
-                    "Fetched vendor categories: ${venderSpecificProductsModelList.length}");
+                    "Fetched vendor categories: ${jsonEncode(venderSpecificProductsModelList)}");
               })
             })
         .catchError((error) {
@@ -300,11 +305,13 @@ class _MyProductsPage extends State<MyProductsPage> {
       appBar: AppBar(title: const Text("My Products")),
       body: ListView.builder(
         itemBuilder: (context, index) {
+          print("new Sdata ${jsonEncode(venderSpecificProductsModelList)}");
           final product = venderSpecificProductsModelList[index];
           return Card(
             child: ListTile(
-              leading: Image.network(product.itemImg ?? '',
-                  width: 50, height: 50, fit: BoxFit.cover),
+              // leading: Image.network(product.itemImg ?? '',
+              //     width: 50, height: 50, fit: BoxFit.cover),
+              leading: UiHelper.CustomImageNetworkSubCategory(img: product.itemImg.toString()),
               title: Text(product.itemName ?? 'No Name'),
               subtitle: Text(
                   'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
@@ -353,37 +360,41 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return orderPlacedModelList == null
-        ? const CircularProgressIndicator()
-        : ListView.builder(
-            itemCount: orderPlacedModelList!.length,
-            itemBuilder: (context, index) {
-              if (orderPlacedModelList == null ||
-                  orderPlacedModelList!.isEmpty) {
-                return const Center(child: Text("No orders found"));
-              }
-              final product = orderPlacedModelList![index];
-              return Card(
-                margin: EdgeInsets.all(20),
-                color: Colors.greenAccent,
-                child: ListTile(
-                  leading: Image.network(product.itemImg ?? '',
-                      width: 50, height: 50, fit: BoxFit.cover),
-                  title: Text(product.itemName ?? 'No Name'),
-                  subtitle: Text(
-                      'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
-                      ''
-                      '\nNew Price: ${product.newPrice ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      // Implement delete logic here
-                      Get.snackbar(
-                          "Delete", "Delete functionality not implemented yet");
-                    },
-                  ),
+    print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
+    return Scaffold(
+      body:  orderPlacedModelList == null
+          ? const CircularProgressIndicator()
+          : ListView.builder(
+          itemCount: orderPlacedModelList!.length,
+          itemBuilder: (context, index) {
+            if (orderPlacedModelList == null ||
+                orderPlacedModelList!.isEmpty) {
+              return const Center(child: Text("No orders found"));
+            }
+            final product = orderPlacedModelList![index];
+            return Card(
+              margin: EdgeInsets.all(20),
+              color: Colors.greenAccent,
+              child: ListTile(
+                // leading: Image.network(product.itemImg ?? '',
+                //     width: 50, height: 50, fit: BoxFit.cover),
+                leading: SizedBox( width: 50, height: 50,child: UiHelper.CustomImageNetworkSubCategory(img: product.itemImg.toString()),),
+                title: Text(product.itemName ?? 'No Name'),
+                subtitle: Text(
+                    'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
+                        ''
+                        '\nNew Price: ${product.newPrice ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    // Implement delete logic here
+                    Get.snackbar(
+                        "Delete", "Delete functionality not implemented yet");
+                  },
                 ),
-              );
-            });
+              ),
+            );
+          }),
+    );
   }
 }

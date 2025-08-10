@@ -1,10 +1,11 @@
 import 'package:http/http.dart' as http;
+import 'package:swiggy/domain/AppConstants.dart';
 import 'dart:convert';
 
 import '../venderModels/VenderSpecificProductsModel.dart';
 
 Future<VenderSpecificProductsModel> getVendorCategories(String phone) async {
-  final url = Uri.parse('http://localhost/fluxkart/apis/getSpecificVenderCategories.php?phone=$phone');
+  final url = Uri.parse('${AppConstants.getSpecificVenderCategories}?phone=$phone');
   late VenderSpecificProductsModel venderSpecificProductsModel;
   try {
     final response = await http.get(url);

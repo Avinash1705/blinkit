@@ -60,7 +60,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: double.infinity,
@@ -96,6 +96,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
                 ],
               ),
             ),
+            SizedBox(height: 100),
             ElevatedButton(onPressed: (){
               Get.to(VendorRegistrationPage());
             }, child: Text("Register")),
