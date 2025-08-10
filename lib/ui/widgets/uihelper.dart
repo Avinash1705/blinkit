@@ -16,7 +16,21 @@ class UiHelper {
   static CustomImageNetworkCategory({required String img}) {
     // print("test gjgj $img");
     //   print("test img https://${AppConstants.ip}/img/category/$img");
-    return Image.network("https://${AppConstants.ip}/fluxKart/img/category/$img");
+    return Image.network("http://${AppConstants.ip}/fluxKart/img/category/$img");
+  }
+  //Sub category image
+  static CustomImageNetworkSubCategory({required String img}) {
+
+    return Image.network("http://${AppConstants.ip}/fluxKart/img/subCategory/$img",fit: BoxFit.cover,);
+  }
+  //Sub category image
+  static CustomImageNetworkShop({required String img}) {
+
+    return Image.network("http://${AppConstants.ip}/fluxKart/img/shop/$img",fit: BoxFit.cover,);
+  }
+  static fullUrlImageNetworkCategory({required String img}) {
+   //getting full url from server
+    return Image.network(img);
   }
   static CustomImageNetworkNoDimension({required String img}) {
     return Image.network(img);

@@ -55,8 +55,9 @@ class _CartScreenState extends State<CartScreen> {
                               child: ListTile(
                                 leading:
                                     // UiHelper.CustomImage(img: currentItem.img),
-                                    UiHelper.CustomImageNetworkNoDimension(
-                                        img: currentItem.img),
+
+                                    UiHelper.CustomImageNetworkSubCategory(
+                                        img: currentItem.img)?? UiHelper.CustomImage(img: currentItem.img),
                                 title: Text(
                                   currentItem.title,
                                   style: TextStyle(color: Colors.blue),

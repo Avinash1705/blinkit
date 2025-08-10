@@ -88,7 +88,7 @@ class _CategoryState extends State<Category> {
   void initState() {
     GetCategoriesController().getCategories().then((value) => setState(() {
           categoriesResponseModel = value;
-          print("onscreen ${jsonEncode(categoriesResponseModel.data)}");
+          // print("onscreen ${jsonEncode(categoriesResponseModel.data)}");
         }));
     fetchData();
     super.initState();
@@ -105,14 +105,18 @@ class _CategoryState extends State<Category> {
       setState(() {
         allVenderData = vendorResponse.data!;
         allSubcategory = subCategoryResponse.data;
+        // print("cat all data1 ${jsonEncode(allVenderData)}");
+        // print("cat all data2 ${jsonEncode(allSubcategory)}");
         for (int i = 0; i < vendorResponse.data!.length; i++) {
           for (int j = 0; j < allSubcategory!.length; j++) {
-          if (vendorResponse.data![i].phone == allSubcategory![j].phone) {
-            allFilteredVenderData!.add(vendorResponse.data![i]);
-            allFilteredSubcategory?.add(allSubcategory![j]);
+            if (vendorResponse.data![i].phone == allSubcategory![j].phone) {
+              /*No need to update vender data
+            * Show all vender even no items*/
+              // allFilteredVenderData!.add(vendorResponse.data![i]);
+              allFilteredSubcategory?.add(allSubcategory![j]);
+            }
           }
         }
-      }
         // print("new Avi category ${jsonEncode(allFilteredVenderData)}")  ;
       });
     } catch (e) {
@@ -132,7 +136,9 @@ class _CategoryState extends State<Category> {
                 height: 40,
               ),
               CustomAppBar(controller: searchController),
-
+              //working
+              // UiHelper.CustomImageNetworkCategory(img: "BiscuitsBakery.png"),
+              // Image.network("https://royalblue-opossum-328842.hostingersite.com/fluxKart/img/category/AttaDalRice.png"),
               SizedBox(
                 height: 40,
               ),
@@ -141,12 +147,6 @@ class _CategoryState extends State<Category> {
                   SizedBox(
                     width: 20,
                   ),
-                  // UiHelper.CustomImageNetworkNoDimension(img: categoriesResponseModel
-                  //     .data![0].categoryImg
-                  //     .toString()),
-
-                  // UiHelper.CustomImageNetworkCategory(img: "BiscuitsBakery.png"),
-                  Image.network("https://royalblue-opossum-328842.hostingersite.com/fluxKart/img/milk.png"),
                   UiHelper.CustomText(
                       text: "Categories Current Present",
                       color: Colors.black,
@@ -163,16 +163,13 @@ class _CategoryState extends State<Category> {
                       ? CircularProgressIndicator()
                       : ListView.builder(
                           itemBuilder: (context, index) {
+                            // print(
+                            //     "ur list ${categoriesResponseModel.data![index].categoryImg.toString()}");
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SingleChildScrollView(
                                 child: InkWell(
                                   onTap: () => {
-                                    print("ontap ${UiHelper
-                                      .CustomImageNetworkCategory(
-                                  img: categoriesResponseModel
-                                      .data![index].categoryImg
-                                      .toString())}"),
                                     /*converting data to data1*/
                                     data1.id = categoriesResponseModel
                                         .data![index].id
@@ -195,7 +192,7 @@ class _CategoryState extends State<Category> {
                                                 BorderRadius.circular(10),
                                             color: Color(0xFFD9EBEB)),
                                         child: UiHelper
-                                            .CustomImageNetworkNoDimension(
+                                            .fullUrlImageNetworkCategory(
                                                 img: categoriesResponseModel
                                                     .data![index].categoryImg
                                                     .toString()),
@@ -238,61 +235,62 @@ class _CategoryState extends State<Category> {
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: allFilteredVenderData!.isEmpty
+                  child: allVenderData!.isEmpty
                       ? CircularProgressIndicator()
                       : SizedBox(
-                    height: 150,
-                        child: ListView.builder(
-                                            itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            // onTap: () => {
-                            //   /*converting data to data1*/
-                            //   data1.id = categoriesResponseModel
-                            //       .data![index].id
-                            //       .toString(),
-                            //   data1.categoryName = categoriesResponseModel
-                            //       .data![index].categoryName
-                            //       .toString(),
-                            //   Get.to(SubCategoryNew(
-                            //     data: data1,
-                            //     // grocerykitchen[index]["text"].toString(),
-                            //   ))
-                            // },
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 50,
-                                  width: 71,
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                      color: Color(0xFFD9EBEB)),
-                                  // child: UiHelper
-                                  //     .CustomImageNetworkNoDimension(
-                                  //     img: allFilteredVenderData![index].shopName
-                                  //         .toString()),
-                                    child:Image.asset(
-                                      "images/shop.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                ),
-                                UiHelper.CustomText(
-                                    text: allFilteredVenderData![index].shopName
+                          height: 150,
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () => {
+                                    print("u clicked on shop${allVenderData![index]
+                                      .shopName}"),
+                                    /*converting data to data1*/
+                                    data1.id = allVenderData![index].phone
                                         .toString(),
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal,
-                                    fontsize: 10)
-                              ],
-                            ),
+                                    // data1.categoryName = categoriesResponseModel
+                                    //     .data![index].categoryName
+                                    //     .toString(),
+                                    Get.to(SubCategoryNew(
+                                      data: data1,
+                                    ))
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: 71,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Color(0xFFD9EBEB)),
+                                        child: allVenderData == null
+                                            ? Image.asset(
+                                                "assets/images/shop.png",
+                                                fit: BoxFit.cover,
+                                              )
+                                            : UiHelper.CustomImageNetworkShop(
+                                                img: allVenderData![index]
+                                                    .shop_img
+                                                    .toString())),
+                                      UiHelper.CustomText(
+                                          text: allVenderData![index]
+                                              .shopName
+                                              .toString(),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontsize: 10)
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: allVenderData!.length,
+                            scrollDirection: Axis.horizontal,
                           ),
-                        );
-                                            },
-                                            itemCount: allFilteredVenderData!.length,
-                                            scrollDirection: Axis.horizontal,
-                                          ),
-                      ),
+                        ),
                 ),
               ),
               Row(
@@ -309,6 +307,7 @@ class _CategoryState extends State<Category> {
                 ],
               ),
               Expanded(
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: ListView.builder(
@@ -340,38 +339,39 @@ class _CategoryState extends State<Category> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 78,
-                              width: 71,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xFFD9EBEB)),
-                              child: UiHelper.CustomImage(
-                                  img: grocerykitchen[index]["img"].toString()),
-                            ),
-                            UiHelper.CustomText(
-                                text: grocerykitchen[index]["text"].toString(),
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontsize: 10)
-                          ],
-                        ),
-                      );
-                    },
-                    itemCount: grocerykitchen.length,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   flex: 1,
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 20),
+              //     child: ListView.builder(
+              //       itemBuilder: (context, index) {
+              //         return Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: Column(
+              //             children: [
+              //               Container(
+              //                 height: 78,
+              //                 width: 71,
+              //                 decoration: BoxDecoration(
+              //                     borderRadius: BorderRadius.circular(10),
+              //                     color: Color(0xFFD9EBEB)),
+              //                 child: UiHelper.CustomImage(
+              //                     img: grocerykitchen[index]["img"].toString()),
+              //               ),
+              //               UiHelper.CustomText(
+              //                   text: grocerykitchen[index]["text"].toString(),
+              //                   color: Colors.black,
+              //                   fontWeight: FontWeight.normal,
+              //                   fontsize: 10)
+              //             ],
+              //           ),
+              //         );
+              //       },
+              //       itemCount: grocerykitchen.length,
+              //       scrollDirection: Axis.horizontal,
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: 30,
               ),
@@ -389,6 +389,7 @@ class _CategoryState extends State<Category> {
                 ],
               ),
               Expanded(
+                flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: ListView.builder(

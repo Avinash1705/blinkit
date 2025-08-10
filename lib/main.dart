@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BottomNavScreen(index: 1),
+      home: BottomNavScreen(index: 0),
       // home: SubscriptionScreen(),
       // home: PaymentScreen(),
       // home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "4444444444",location: "lko",valid: 0),),

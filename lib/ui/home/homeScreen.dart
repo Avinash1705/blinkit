@@ -9,10 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/cartController.dart';
 
 import '../../controllers/appDetails/appDetails.dart';
+import '../../controllers/subCatgoryController.dart';
 import '../../domain/AppConstants.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../widgets/uihelper.dart';
+import '../../model/GetSubCategoryModel.dart' as mySubcategory;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -82,13 +84,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // var appDetailController = Get.put(AppDetails());
   late AppDetailModel dataLoaded;
+  SubCategoryController subCategoryController = SubCategoryController();
+  late List<mySubcategory.Data>? allSubcategory = [];
 
   @override
   void initState() {
     AppDetails.testApi().then((value) => {
           setState(() {
             dataLoaded = value;
-            print("test api of app config ${jsonEncode(dataLoaded)}");
+            // print("data got dataLOad ${}")
+          })
+        });
+    subCategoryController.fetchSubCategories().then((value) => {
+          setState(() {
+            allSubcategory = value.data;
+            print("got data ${jsonEncode(allSubcategory)}");
           })
         });
     super.initState();
@@ -234,6 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Column(
                                     children: [
                                       UiHelper.CustomText(
+                                          // text: data[index]["text"].toString(),
                                           text: data[index]["text"].toString(),
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
@@ -259,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.builder(
-                    itemCount: categroy.length,
+                    itemCount: 6,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -271,11 +282,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Flexible(
                               child: Column(
                                 children: [
-                                  UiHelper.CustomImage(
-                                      img: categroy[index]["img"].toString()),
+                                  SizedBox(
+                                      height: 78,
+                                      child: UiHelper
+                                          .CustomImageNetworkSubCategory(
+                                              img: allSubcategory![index]
+                                                  .itemImg
+                                                  .toString())),
                                   SizedBox(height: 5),
                                   UiHelper.CustomText(
-                                      text: categroy[index]["text"].toString(),
+                                      text: allSubcategory![index]
+                                          .itemName
+                                          .toString(),
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontsize: 8),
@@ -296,7 +314,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       UiHelper.CustomText(
                                           // text: "₹ ${Random().nextInt(10)}",
                                           text:
-                                              "₹ ${categroy[index]["price"].toString()}",
+                                              "₹ ${allSubcategory![index]
+                                                  .price.toString()}",
                                           color: Color(0xff000000),
                                           fontWeight: FontWeight.bold,
                                           fontsize: 15),
@@ -305,15 +324,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       UiHelper.CustomButton(() {
                                         cartController.addItem(
-                                            categroy[index]["id"].toString(),
-                                            categroy[index]["text"].toString(),
-                                            categroy[index]["img"].toString(),
-                                            double.parse(categroy[index]
-                                                    ["price"]
-                                                .toString()),0);
+                                            allSubcategory![index]
+                                                .id.toString(),
+                                            allSubcategory![index]
+                                                .itemName.toString(),
+                                            allSubcategory![index]
+                                                .itemImg.toString(),
+                                            double.parse(allSubcategory![index]
+                                                .price
+                                                .toString()),
+                                            0);
                                         InteractiveToast.popSuccess(context,
                                             title: Text(
-                                                "${categroy[index]["text"].toString()} "),
+                                                "${allSubcategory![index]
+                                                    .itemName.toString()} "),
                                             toastSetting: PopupToastSetting(
                                                 toastAlignment:
                                                     Alignment.bottomCenter,

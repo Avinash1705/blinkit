@@ -55,11 +55,22 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
       final subCategoryResponse = responses[0] as GetSubCategoryModel;
      final vendorResponse = responses[1] as GetVenderResponseModel;
      setState(() {
+      print("check lenght of id ${widget.data.id!.length}");
+      if(widget.data.id!.length == 10){
+        //filter data using phone number
+        data = subCategoryResponse.data
+            ?.where((element) => element.phone == widget.data.id)
+            .toList();
+
+        allVenderData = vendorResponse.data!;
+      }
+      else {
         data = subCategoryResponse.data
             ?.where((element) => element.categoryId == widget.data.id)
             .toList();
 
         allVenderData = vendorResponse.data!;
+      }
       });
     }
     catch(e){
@@ -69,7 +80,7 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
 
   @override
   Widget build(BuildContext context) {
-    // print("data in subcategory ${jsonEncode(data)}");
+    print("data in subcategory ${jsonEncode(data)}");
     var cartController = Provider.of<CartController>(context);
     return Scaffold(
       appBar: AppBar(
@@ -111,10 +122,12 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: Colors.grey),
                                 ),
-                                child: Image.network(
-                                  data![index].itemImg.toString().trim(),
-                                  fit: BoxFit.cover,
-                                ),
+                                // child: Image.network(
+                                //   data![index].itemImg.toString().trim(),
+                                //   fit: BoxFit.cover,
+                                // ),
+                                child: UiHelper.CustomImageNetworkSubCategory(img :
+                                  data![index].itemImg.toString().trim()),
                               ),
                               SizedBox(height: 5),
                               Row(

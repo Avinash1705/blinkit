@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/model/cartModel.dart';
 
@@ -20,23 +20,24 @@ class Printcontroller extends ChangeNotifier {
 
 
   Future<void> saveCartItems(List<CartItem> cartItems) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
     List<String> jsonList = cartItems.map((item) => jsonEncode(item.toJson()))
         .toList();
     // print("printCart shared pRef ${jsonList}");
-    await prefs.setStringList('cart_items', jsonList);
+    // await prefs.setStringList('cart_items', jsonList);
   }
 
   Future<List<CartItem>> getCartItems() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List<String>? jsonList = prefs.getStringList('cart_items');
+    // List<String>? jsonList = prefs.getStringList('cart_items');
     /*clear old data */
-    prefs.clear();
-    if (jsonList == null) return [];
-
-    return jsonList.map((item) => CartItem.fromJson(jsonDecode(item))).toList();
+    // prefs.clear();
+    // if (jsonList == null) return [];
+    //
+    // return jsonList.map((item) => CartItem.fromJson(jsonDecode(item))).toList();
+    return listItem; // Return the list of CartItem objects
   }
 
 /*Existing quantity update in api and

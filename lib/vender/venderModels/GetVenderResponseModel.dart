@@ -37,6 +37,7 @@ class Data {
   String? phone;
   String? location;
   String? valid;
+  String? shop_img;
 
   Data(
       {this.venderName,
@@ -52,6 +53,7 @@ class Data {
     phone = json['phone'];
     location = json['location'];
     valid = json['valid'];
+    shop_img = json['shop_img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -62,6 +64,7 @@ class Data {
     data['phone'] = this.phone;
     data['location'] = this.location;
     data['valid'] = this.valid;
+    data['shop_img'] = this.shop_img;
     return data;
   }
 }
