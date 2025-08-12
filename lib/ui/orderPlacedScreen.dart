@@ -12,13 +12,16 @@ import '../controllers/checkoutController.dart';
 import 'bottomNav/bottomNavScreen.dart';
 
 class OrderPlacedScreen extends StatefulWidget {
-  const OrderPlacedScreen({super.key});
+  // late int id ;
+  // late int qty ;
+  //  OrderPlacedScreen({super.key,required this.id, required this.qty});
+   OrderPlacedScreen({super.key});
 
   @override
   State<OrderPlacedScreen> createState()  =>_OrderPlacedScreenState();
 }
-void updateQty(){
-  CheckOutController().updateItemQuantity(33121, 1).then((value) =>
+void updateQty(int id, int qty) {
+  CheckOutController().updateItemQuantity(id, qty).then((value) =>
   {
     print("Qty updated successfully $value")
   }).catchError((error) {
@@ -30,14 +33,21 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
 
   @override
   void initState() {
-    updateQty();
+
+
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var printController = Provider.of<Printcontroller>(context);
-
+    print("cartController items in order placed screen ${jsonEncode(cartController.items)}");
+    for(int i=0;i<cartController.itemCount;i++){
+      CartItem item = cartController.items.values.elementAt(i);
+      // print("item id ${item.productId} title ${item.title} price ${item.price} qty ${item.quantity}");
+      updateQty(int.parse(item.productId), item.quantity);
+    }
+   
     printController.addTransition(cartController.items);
     printController.updateExistingQuantity();
     // print("printCart all items  ${jsonEncode(cartController.items)}");

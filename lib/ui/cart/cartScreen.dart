@@ -29,7 +29,9 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var addressController = Provider.of<AddressController>(context);
-
+    // print("cart items Cart Screen ${jsonEncode(cartController.items)}");
+    // print("cart Data title");
+    // print("cart Data CartScreen ${jsonEncode(cartController.items)}");
     return Stack(children: [
       SingleChildScrollView(
         child: SizedBox(
