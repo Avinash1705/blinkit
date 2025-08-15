@@ -13,6 +13,7 @@ import 'package:swiggy/vender/ui/SubscriptionService.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
 import 'package:swiggy/vender/ui/vendor_registration.dart';
 import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart';
+import 'ImagePickerExample.dart';
 import 'controllers/appDetails/appDetails.dart';
 import 'controllers/printController.dart';
 import 'dependency/dependency.dart';
@@ -49,8 +50,9 @@ class MyApp extends StatelessWidget {
       // home: AddProductPage(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
       // home: MyProductsPage(),
       // home: StaticLoginScreen(),
-      home: SplashScreen(),
+      // home: SplashScreen(),
       // home: AddProductPage(vendorDetail: null,),
+      home: ImagePickerWithPermission(),
     );
   }
 }

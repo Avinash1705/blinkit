@@ -19,7 +19,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+#  sdk: '>=3.3.3 <4.0.0'
+  sdk: '>=2.17.6 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -42,8 +43,9 @@ dependencies:
 #  shared_preferences: any
   syncfusion_flutter_charts: any
 #  get_storage: any
-#  image_picker: ^1.1.1
-#  permission_handler: ^11.3.0
+  image_picker: ^1.1.2
+  permission_handler: ^12.0.1
+#  multi_image_picker_view: ^3.0.0
 #  flutter_plugin_android_lifecycle: ^2.0.17
 
 dev_dependencies:
