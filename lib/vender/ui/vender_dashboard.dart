@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../../ui/login/loginScreen.dart';
+import '../../ui/widgets/ImagePickerBoth.dart';
 import '../controller/VenderOrdersController.dart';
 import '../controller/VenderSpecificProductsController.dart';
 import '../controller/addItemsController.dart';
@@ -150,22 +151,6 @@ class VendorDashboard extends StatelessWidget {
                   ),
                 ],
               ),
-              // SfSparkLineChart.custom(
-              //   //Enable the trackball
-              //   trackball: SparkChartTrackball(
-              //     activationMode: SparkChartActivationMode.tap,
-              //   ),
-              //   //Enable marker
-              //   marker: SparkChartMarker(
-              //     displayMode: SparkChartMarkerDisplayMode.all,
-              //   ),
-              //   //Enable data label
-              //   labelDisplayMode: SparkChartLabelDisplayMode.all,
-              //   xValueMapper: (int index) => data[index].year,
-              //   yValueMapper: (int index) => int.parse(data[index].sales.toString()),
-              //   dataCount: 5,
-              // ),
-
             ]),)),
     );
   }
@@ -233,39 +218,50 @@ class _AddProductPageState extends State<AddProductPage> {
                     controller: quantityController,
                     decoration: InputDecoration(labelText: 'Quantity')),
                 SizedBox(height: 20),
-                ElevatedButton(onPressed: (){
-                  // Get.to(CameraFullScreen());
-                  SnackBar(content: Text("Image Picker not implemented yet"));
-                }, child: Text("Image Picker")),
+                ImagepickerBoth(selectedCategory: selectedCategory.toString(),
+                  venderId: widget.vendorDetail.venderId.toString(),
+                  productName: productNameController.text,
+                  price: priceController.text.toString().isEmpty
+                      ? 0
+                      : int.parse(priceController.text),
+                  desc: descController.text,
+                  newPrice: int.parse(newPriceController.text),
+                  weight: weightController.text,
+                  quantity: int.parse(quantityController.text),
+                ),
+                // ElevatedButton(onPressed: (){
+                //   // Get.to(CameraFullScreen());
+                //   SnackBar(content: Text("Image Picker not implemented yet"));
+                // }, child: Text("Image Picker")),
                 SizedBox(height: 20),
 
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      print("Selected CategoryVender: $selectedCategory");
-                    });
-                    AddItemsController.addItem(
-                            selectedCategory.toString(),
-                            widget.vendorDetail.venderId.toString(),
-                            productNameController.text,
-                            widget.vendorDetail.phone.toString(),
-                            descController.text,
-                            priceController.text.toString().isEmpty
-                                ? 0
-                                : int.parse(priceController.text),
-                            int.parse(newPriceController.text),
-                            weightController.text,
-                            int.parse(quantityController.text),
-                            "textImgUrl")
-                        .then((value) {
-                      Get.snackbar("Success", "Product added successfully");
-                      Navigator.pop(context);
-                    }).catchError((error) {
-                      Get.snackbar("Error", "Failed to add product: $error");
-                    });
-                  }, // replace with add logic
-                  child: Text("Submit"),
-                )
+                // ElevatedButton(
+                //   onPressed: () {
+                //     setState(() {
+                //       print("Selected CategoryVender: $selectedCategory");
+                //     });
+                //     AddItemsController.addItem(
+                //             selectedCategory.toString(),
+                //             widget.vendorDetail.venderId.toString(),
+                //             productNameController.text,
+                //             widget.vendorDetail.phone.toString(),
+                //             descController.text,
+                //             priceController.text.toString().isEmpty
+                //                 ? 0
+                //                 : int.parse(priceController.text),
+                //             int.parse(newPriceController.text),
+                //             weightController.text,
+                //             int.parse(quantityController.text),
+                //             "textImgUrl")
+                //         .then((value) {
+                //       Get.snackbar("Success", "Product added successfully");
+                //       Navigator.pop(context);
+                //     }).catchError((error) {
+                //       Get.snackbar("Error", "Failed to add product: $error");
+                //     });
+                //   }, // replace with add logic
+                //   child: Text("Submit"),
+                // )
               ],
             ),
           )),
