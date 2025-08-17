@@ -11,6 +11,7 @@ class AddItemsController {
   static Future addItem(String id, String categoryId, String itemName,
       String phone, String itemDescription, int price, int newPrice,
       String weight, int quantity, File imgUrl) async {
+    print("Adding item with details: ${imgUrl.toString().split('/').last}");
     try {
       var request = http.MultipartRequest(
           'POST',
@@ -37,6 +38,7 @@ class AddItemsController {
       }
       return response.body;
     } catch (e) {
+      print("Error adding item: $e");
       return e.toString();
     }
   }

@@ -42,116 +42,119 @@ class VendorDashboard extends StatelessWidget {
     PieData('Sales Person 5', 534, 'Person 5'),
   ];
 
-
   @override
   Widget build(BuildContext context) {
     print("${vendorDetails.venderId} Dashboard ${vendorDetails.valid}");
     return Scaffold(
-        appBar: AppBar(
-          title: Text('${vendorDetails.venderName} Dashboard ${vendorDetails.valid}'),
-          backgroundColor: Colors.deepPurple,
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+      appBar: AppBar(
+        title: Text(
+            '${vendorDetails.venderName} Dashboard ${vendorDetails.valid}'),
+        backgroundColor: Colors.deepPurple,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.deepPurple,
+              ),
+              child: Text(
+                'Vendor Panel',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
                 ),
-                child: Text(
-                  'Vendor Panel',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
               ),
-              ListTile(
-                leading: const Icon(Icons.add_box),
-                title: const Text('Add Product'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            AddProductPage(vendorDetail: vendorDetails),
-                      ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.store),
-                title: const Text('My Products'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => MyProductsPage(
-                                phone: vendorDetails.phone.toString(),
-                              )));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.shopping_cart),
-                title: const Text('Orders'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            VenderOrdersPage(tableName: "table8700000000"),
-                      ));
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () {
-                  // Implement logout
-                  Get.off(LoginScreen());
-                },
-              ),
-            ],
-          ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.add_box),
+              title: const Text('Add Product'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          AddProductPage(vendorDetail: vendorDetails),
+                    ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.store),
+              title: const Text('My Products'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => MyProductsPage(
+                              phone: vendorDetails.phone.toString(),
+                            )));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('Orders'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          VenderOrdersPage(tableName: "table8700000000"),
+                    ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                // Implement logout
+                Get.off(LoginScreen());
+              },
+            ),
+          ],
         ),
-        body: vendorDetails.valid! == 0 ?SubscriptionScreen(vendorDetails):SingleChildScrollView(
-            child: Expanded(child: Column(children: [
-              Center(
-                  child:SfCircularChart(
-                      title: ChartTitle(text: 'Sales by sales person'),
-                      legend: Legend(isVisible: true),
-                      series: <PieSeries<PieData, String>>[
-                        PieSeries<PieData, String>(
-                            explode: true,
-                            explodeIndex: 0,
-                            dataSource: piedata,
-                            xValueMapper: (PieData data, _) => data.xData,
-                            yValueMapper: (PieData data, _) => data.yData,
-                            dataLabelMapper: (PieData data, _) => data.text,
-                            dataLabelSettings: DataLabelSettings(isVisible: true)),
-                      ]
-                  )
-              ),
-              SfCartesianChart(
-                primaryXAxis: CategoryAxis(),
-                // Chart title
-                title: ChartTitle(text: 'Half yearly sales analysis'),
-                // Enable legend
-                legend: Legend(isVisible: true),
-                // Enable tooltip
-                tooltipBehavior: TooltipBehavior(enable: true),
-                series: <CartesianSeries<SalesData, String>>[
-                  LineSeries<SalesData, String>(
-                    dataSource: data,
-                    xValueMapper: (SalesData sales, _) => sales.year,
-                    yValueMapper: (SalesData sales, _) => sales.sales,
-                    name: 'Sales',
-                    // Enable data label
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
-                  ),
-                ],
-              ),
-            ]),)),
+      ),
+      body: vendorDetails.valid! == 0
+          ? SubscriptionScreen(vendorDetails)
+          : SingleChildScrollView(
+              child: Expanded(
+              child: Column(children: [
+                Center(
+                    child: SfCircularChart(
+                        title: ChartTitle(text: 'Sales by sales person'),
+                        legend: Legend(isVisible: true),
+                        series: <PieSeries<PieData, String>>[
+                      PieSeries<PieData, String>(
+                          explode: true,
+                          explodeIndex: 0,
+                          dataSource: piedata,
+                          xValueMapper: (PieData data, _) => data.xData,
+                          yValueMapper: (PieData data, _) => data.yData,
+                          dataLabelMapper: (PieData data, _) => data.text,
+                          dataLabelSettings:
+                              DataLabelSettings(isVisible: true)),
+                    ])),
+                SfCartesianChart(
+                  primaryXAxis: CategoryAxis(),
+                  // Chart title
+                  title: ChartTitle(text: 'Half yearly sales analysis'),
+                  // Enable legend
+                  legend: Legend(isVisible: true),
+                  // Enable tooltip
+                  tooltipBehavior: TooltipBehavior(enable: true),
+                  series: <CartesianSeries<SalesData, String>>[
+                    LineSeries<SalesData, String>(
+                      dataSource: data,
+                      xValueMapper: (SalesData sales, _) => sales.year,
+                      yValueMapper: (SalesData sales, _) => sales.sales,
+                      name: 'Sales',
+                      // Enable data label
+                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                    ),
+                  ],
+                ),
+              ]),
+            )),
     );
   }
 }
@@ -168,102 +171,22 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
-  String? selectedCategory;
 
-  void handleSelection(String value) {
-    setState(() {
-      selectedCategory = value;
-    });
-    print("Selected in parent: $value");
-  }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController uniqueIdController = TextEditingController();
-    TextEditingController productNameController = TextEditingController();
-    TextEditingController priceController = TextEditingController();
-    TextEditingController descController = TextEditingController();
-    TextEditingController newPriceController = TextEditingController();
-    TextEditingController weightController = TextEditingController();
-    TextEditingController quantityController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(title: const Text("Add Product")),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                /*need to show product id from category api*/
-                TextField(decoration: InputDecoration(labelText: 'Unique id')),
-                /*product id  == category id */
-                CategoryDropdown(onSelected: handleSelection),
-                // This will be replaced with the actual category dropdown widget
-                // TextField(controller: uniqueIdController,decoration: InputDecoration(labelText: 'Product Id')),
-                TextField(
-                    controller: productNameController,
-                    decoration: InputDecoration(labelText: 'Product Name')),
-                TextField(
-                    controller: priceController,
-                    decoration: InputDecoration(labelText: 'Price')),
-                TextField(
-                    controller: descController,
-                    decoration: InputDecoration(labelText: 'Description')),
-                TextField(
-                    controller: newPriceController,
-                    decoration: InputDecoration(labelText: 'New Price')),
-                TextField(
-                    controller: weightController,
-                    decoration: InputDecoration(labelText: 'Weight')),
-                TextField(
-                    controller: quantityController,
-                    decoration: InputDecoration(labelText: 'Quantity')),
-                SizedBox(height: 20),
-                ImagepickerBoth(selectedCategory: selectedCategory.toString(),
-                  venderId: widget.vendorDetail.venderId.toString(),
-                  productName: productNameController.text,
-                  price: priceController.text.toString().isEmpty
-                      ? 0
-                      : int.parse(priceController.text),
-                  desc: descController.text,
-                  newPrice: int.parse(newPriceController.text),
-                  weight: weightController.text,
-                  quantity: int.parse(quantityController.text),
-                ),
-                // ElevatedButton(onPressed: (){
-                //   // Get.to(CameraFullScreen());
-                //   SnackBar(content: Text("Image Picker not implemented yet"));
-                // }, child: Text("Image Picker")),
-                SizedBox(height: 20),
-
-                // ElevatedButton(
-                //   onPressed: () {
-                //     setState(() {
-                //       print("Selected CategoryVender: $selectedCategory");
-                //     });
-                //     AddItemsController.addItem(
-                //             selectedCategory.toString(),
-                //             widget.vendorDetail.venderId.toString(),
-                //             productNameController.text,
-                //             widget.vendorDetail.phone.toString(),
-                //             descController.text,
-                //             priceController.text.toString().isEmpty
-                //                 ? 0
-                //                 : int.parse(priceController.text),
-                //             int.parse(newPriceController.text),
-                //             weightController.text,
-                //             int.parse(quantityController.text),
-                //             "textImgUrl")
-                //         .then((value) {
-                //       Get.snackbar("Success", "Product added successfully");
-                //       Navigator.pop(context);
-                //     }).catchError((error) {
-                //       Get.snackbar("Error", "Failed to add product: $error");
-                //     });
-                //   }, // replace with add logic
-                //   child: Text("Submit"),
-                // )
-              ],
-            ),
+            child: ImagepickerBoth(widget.vendorDetail),
           )),
     );
   }
@@ -314,7 +237,8 @@ class _MyProductsPage extends State<MyProductsPage> {
             child: ListTile(
               // leading: Image.network(product.itemImg ?? '',
               //     width: 50, height: 50, fit: BoxFit.cover),
-              leading: UiHelper.CustomImageNetworkSubCategory(img: product.itemImg.toString()),
+              leading: UiHelper.CustomImageNetworkSubCategory(
+                  img: product.itemImg.toString()),
               title: Text(product.itemName ?? 'No Name'),
               subtitle: Text(
                   'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
@@ -365,39 +289,44 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
   Widget build(BuildContext context) {
     print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
     return Scaffold(
-      body:  orderPlacedModelList == null
+      body: orderPlacedModelList == null
           ? const CircularProgressIndicator()
           : ListView.builder(
-          itemCount: orderPlacedModelList!.length,
-          itemBuilder: (context, index) {
-            if (orderPlacedModelList == null ||
-                orderPlacedModelList!.isEmpty) {
-              return const Center(child: Text("No orders found"));
-            }
-            final product = orderPlacedModelList![index];
-            return Card(
-              margin: EdgeInsets.all(20),
-              color: Colors.greenAccent,
-              child: ListTile(
-                // leading: Image.network(product.itemImg ?? '',
-                //     width: 50, height: 50, fit: BoxFit.cover),
-                leading: SizedBox( width: 50, height: 50,child: UiHelper.CustomImageNetworkSubCategory(img: product.itemImg.toString()),),
-                title: Text(product.itemName ?? 'No Name'),
-                subtitle: Text(
-                    'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
+              itemCount: orderPlacedModelList!.length,
+              itemBuilder: (context, index) {
+                if (orderPlacedModelList == null ||
+                    orderPlacedModelList!.isEmpty) {
+                  return const Center(child: Text("No orders found"));
+                }
+                final product = orderPlacedModelList![index];
+                return Card(
+                  margin: EdgeInsets.all(20),
+                  color: Colors.greenAccent,
+                  child: ListTile(
+                    // leading: Image.network(product.itemImg ?? '',
+                    //     width: 50, height: 50, fit: BoxFit.cover),
+                    leading: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: UiHelper.CustomImageNetworkSubCategory(
+                          img: product.itemImg.toString()),
+                    ),
+                    title: Text(product.itemName ?? 'No Name'),
+                    subtitle: Text(
+                        'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
                         ''
                         '\nNew Price: ${product.newPrice ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    // Implement delete logic here
-                    Get.snackbar(
-                        "Delete", "Delete functionality not implemented yet");
-                  },
-                ),
-              ),
-            );
-          }),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        // Implement delete logic here
+                        Get.snackbar("Delete",
+                            "Delete functionality not implemented yet");
+                      },
+                    ),
+                  ),
+                );
+              }),
     );
   }
 }
