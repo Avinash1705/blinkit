@@ -48,9 +48,6 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
    
     printController.addTransition(cartController.items);
     printController.updateExistingQuantity();
-    // print("printCart all items  ${jsonEncode(cartController.items)}");
-    /*Existing quantity update in api and
-    * make a list of items which has been ordered later using phone filter show to specific vender */
 
     cartController.clear();
     return Scaffold(

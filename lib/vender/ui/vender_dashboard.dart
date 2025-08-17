@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swiggy/domain/AppConstants.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -99,7 +100,7 @@ class VendorDashboard extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          VenderOrdersPage(tableName: "table8700000000"),
+                          VenderOrdersPage(tableName: AppConstants.orderTableFormat(vendorDetails.phone.toString())),
                     ));
               },
             ),
@@ -114,7 +115,7 @@ class VendorDashboard extends StatelessWidget {
           ],
         ),
       ),
-      body: vendorDetails.valid! == 0
+      body: int.parse(vendorDetails.valid.toString()) == 0
           ? SubscriptionScreen(vendorDetails)
           : SingleChildScrollView(
               child: Expanded(

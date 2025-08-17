@@ -15,12 +15,14 @@ class VenderOrdersController {
   // Add your methods and properties here
   // For example, you might have methods to fetch orders, update order status, etc.
 
-  late  OrderPlacedModel orderPlacedModel ;
+   late OrderPlacedModel orderPlacedModel ;
   Future<OrderPlacedModel> fetchOrders(String tableName) async{
     // Logic to fetch orders from the database or API
+    print("table name in fetch orders $tableName");
     String url = "${AppConstants.getOrderedPlaced}?tableName=$tableName";
   try{
     var result =await http.get(Uri.parse(url));
+    print("Response from server: ${result.body}");
      orderPlacedModel = OrderPlacedModel.fromJson(jsonDecode(result.body));
   }
   catch(e) {

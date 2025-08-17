@@ -21,4 +21,10 @@ class AppConstants {
   static const String updateSoldItemLog = "https://$ip/fluxKart/apis/updateSoldItemLog.php";
   static const String updateAppDetail = "https://$ip/fluxKart/apis/updateAppDetail.php";
 
+
+  //Order table Format name
+  static  String orderTableFormat(String tableName){
+    return "orders_$tableName";
+  }
+
 }
