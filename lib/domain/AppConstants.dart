@@ -18,6 +18,7 @@ class AppConstants {
   // http://localhost/fluxkart/apis/getSpecificVenderCategories.php?phone=$phone
   static const String getSpecificVenderCategories = "https://$ip/fluxKart/apis/getSpecificVenderCategories.php";
   static const String updateSubcategoryAndSoldItem = "https://$ip/fluxKart/apis/updateSubcategoryAndSoldItem.php";
+  static const String updateSoldItemLog = "https://$ip/fluxKart/apis/updateSoldItemLog.php";
   static const String updateAppDetail = "https://$ip/fluxKart/apis/updateAppDetail.php";
 
 }

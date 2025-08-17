@@ -12,16 +12,14 @@ import '../controllers/checkoutController.dart';
 import 'bottomNav/bottomNavScreen.dart';
 
 class OrderPlacedScreen extends StatefulWidget {
-  // late int id ;
-  // late int qty ;
-  //  OrderPlacedScreen({super.key,required this.id, required this.qty});
    OrderPlacedScreen({super.key});
 
   @override
   State<OrderPlacedScreen> createState()  =>_OrderPlacedScreenState();
 }
 void updateQty(int id, int qty) {
-  CheckOutController().updateItemQuantity(id, qty).then((value) =>
+  // CheckOutController().updateItemQuantity(id, qty).then((value) =>
+  CheckOutController().updateSubcategoryAndSoldItem(id, qty).then((value) =>
   {
     print("Qty updated successfully $value")
   }).catchError((error) {
