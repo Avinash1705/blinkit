@@ -102,11 +102,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   : () {
                 final selected = plans[selectedPlanIndex];
                 // Proceed to payment or backend call
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Selected: ${selected['title']}'),
-                ));
-                // print("sub ${duration(selected['time'])}");
-              // print("vender Deatil ${jsonEncode(widget.vendorDetails)}");
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                //   content: Text('Selected: ${selected['title']}'),
+                // ));
+                print("${amount(selected['price'])} ${duration(selected['time'])} ");
                 Get.to(PaymentScreen(amount(selected['price']),duration(selected['time']), widget.vendorDetails));
               },
               child: Text("Continue"),
@@ -128,7 +127,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     if(time.contains("month")){
       return int.parse(time.substring(0,time.indexOf(" ")));
     }else if(time.contains("Year")){
-      return int.parse(time.substring(0,time.indexOf(" ")));
+      return int.parse(time.substring(0,time.indexOf(" ")))*12;
     }
     else {
       return 0;

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swiggy/controllers/payementController.dart';
 // import '../venderModels/GetVenderResponseModel.dart' as venderData;
+import '../ui/login/loginScreenStatic.dart';
 import '../vender/venderModels/GetVenderResponseModel.dart' as venderData;
 
 
@@ -15,6 +16,7 @@ class PaymentScreen extends StatelessWidget {
   PaymentScreen(this.payment,this.duration,this.vendorDetails);
   @override
   Widget build(BuildContext context) {
+    print("duration in payment screen $duration");
     return Scaffold(
       appBar: AppBar(
         title: Text("Payment"),
@@ -105,14 +107,14 @@ class PaymentScreen extends StatelessWidget {
                 Future.delayed(Duration(seconds: 3), () {
                   //duration api update in vender column
                   PaymentController().updateSubscription(vendorDetails.phone!, duration);
-                  // Get.offAll(() => BottomNavScreen(index: 1));
+                  Get.offAll(() => StaticLoginScreen());
                 });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 minimumSize: Size(double.infinity, 48),
               ),
-              child: Text("Pay ₹$payment", style: TextStyle(fontSize: 16)),
+              child: Text("Pay ₹$payment", style: TextStyle(fontSize: 16,color: Colors.white)),
             ),
           ],
         ),

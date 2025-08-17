@@ -82,13 +82,13 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
                       controller: otpController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                        labelText: "Enter OTP",
+                        labelText: "Enter OTP (12345)",
                       ),
                     ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: otpSent ? simulateLogin : simulateSendOtp,
-                    child: Text(otpSent ? "Verify OTP" : "Send OTP"),
+                    child: Text(otpSent ? "Login with OTP" : "Send OTP"),
                   ),
                   // ElevatedButton(onPressed: (){
                   //
