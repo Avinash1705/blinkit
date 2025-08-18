@@ -21,6 +21,7 @@ import '../venderModels/OrderPlacedModel.dart' as orderPlacedModelData;
 import '../venderModels/SalesYearDataModel.dart';
 import '../venderModels/VenderSpecificProductsModel.dart'
     as venderSpecificProductsModelData;
+import 'EditAddedProductPage.dart';
 import 'categoryDropdown.dart';
 
 class VendorDashboard extends StatelessWidget {
@@ -252,9 +253,12 @@ class _MyProductsPage extends State<MyProductsPage> {
                   ''
                   '\nNew Price: ${product.new_price ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
               trailing: IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.edit),
                 onPressed: () {
                   // Implement delete logic here
+                  Get.to(EditProductPage(
+                    product: product,
+                  ));
                   Get.snackbar(
                       "Delete", "Delete functionality not implemented yet");
                 },

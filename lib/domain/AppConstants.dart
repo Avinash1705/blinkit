@@ -22,6 +22,7 @@ class AppConstants {
   static  String updateSubcategoryAndSoldItem = "$ssl://$ip/fluxKart/apis/updateSubcategoryAndSoldItem.php";
   static  String updateSoldItemLog = "$ssl://$ip/fluxKart/apis/updateSoldItemLog.php";
   static  String updateAppDetail = "$ssl://$ip/fluxKart/apis/updateAppDetail.php";
+  static  String updateEditProductInVender = "$ssl://$ip/fluxKart/apis/updateEditProductInVender.php";
 
 
   //Order table Format name
