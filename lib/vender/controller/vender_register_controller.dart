@@ -10,7 +10,7 @@ import '../venderModels/vendeRegisterResponseModel.dart';
 class VendorRegisterController {
   final formKey = GlobalKey<FormState>();
 
-  final vendorIdController = TextEditingController();
+  // final vendorIdController = TextEditingController();
   final nameController = TextEditingController();
   final shopNameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -20,7 +20,7 @@ class VendorRegisterController {
       AppConstants.registerVenders; // Replace with your actual URL
 
   void dispose() {
-    vendorIdController.dispose();
+    // vendorIdController.dispose();
     nameController.dispose();
     shopNameController.dispose();
     phoneController.dispose();
@@ -34,8 +34,7 @@ class VendorRegisterController {
 
       var request = await http.MultipartRequest(
           'POST',
-          Uri.parse("$apiUrl?vender_id=${vendorIdController.text.trim()
-          }&vender_name=${nameController.text}"
+          Uri.parse("$apiUrl?vender_name=${nameController.text}"
               "&shop_name=${shopNameController.text}"
               "&phone=${phoneController.text}"
               "&location=${locationController.text}"),

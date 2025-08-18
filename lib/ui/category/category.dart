@@ -139,9 +139,6 @@ class _CategoryState extends State<Category> {
                 height: 40,
               ),
               CustomAppBar(controller: searchController),
-              //working
-              // UiHelper.CustomImageNetworkCategory(img: "BiscuitsBakery.png"),
-              // Image.network("https://royalblue-opossum-328842.hostingersite.com/fluxKart/img/category/AttaDalRice.png"),
               SizedBox(
                 height: 40,
               ),

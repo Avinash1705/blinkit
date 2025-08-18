@@ -102,15 +102,15 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
                 ],
               ),
               SizedBox(height: 20),
-              TextFormField(
-                controller: controller.vendorIdController,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                decoration: InputDecoration(labelText: 'Vendor ID'),
-                validator: (v) => v!.isEmpty ? 'Enter Vendor ID' : null,
-              ),
+              // TextFormField(
+              //   controller: controller.vendorIdController,
+              //   keyboardType: TextInputType.number,
+              //   inputFormatters: [
+              //     FilteringTextInputFormatter.digitsOnly,
+              //   ],
+              //   decoration: InputDecoration(labelText: 'Vendor ID'),
+              //   validator: (v) => v!.isEmpty ? 'Enter Vendor ID' : null,
+              // ),
               TextFormField(
                 controller: controller.nameController,
                 decoration: InputDecoration(labelText: 'Vendor Name'),

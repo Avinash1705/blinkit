@@ -6,6 +6,7 @@ import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/services/payment.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/ui/customerProfile/CustomerProfileScreen.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 import 'package:swiggy/ui/login/loginScreenStatic.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
       // home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "4444444444",location: "lko",valid: "0"),),
       // home: AddProductPage(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
       // home: MyProductsPage(),
-      home: LoginScreen(),
+      home: CustomerProfilePage(),
       // home: SplashScreen(),
       // home: AddProductPage(vendorDetail: null,),
       // home: ImagePickerWithPermission(),

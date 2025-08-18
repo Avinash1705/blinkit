@@ -19,7 +19,26 @@ class CartController with ChangeNotifier {
     });
     return total;
   }
-
+  void removeItemFromCart(String productId, String title, String img, double price,
+      int? existingQuantity) {
+    if (_items.containsKey(productId)) {
+      _items.update(
+        productId,
+        (existing) => CartItem(
+          productId: productId,
+          title: existing.title,
+          img: existing.img,
+          quantity: existing.quantity - 1,
+          price: existing.price,
+          existingQuantity: existingQuantity,
+        ),
+      );
+      if (_items[productId]!.quantity <= 0) {
+        _items.remove(productId);
+      }
+    }
+    notifyListeners();
+  }
   //added from homescreen so need all fields
   void addItem(String productId, String title, String img, double price,
       int? existingQuantity) {

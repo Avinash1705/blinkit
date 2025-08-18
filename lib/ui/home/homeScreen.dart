@@ -269,8 +269,8 @@ class _HomeScreenState extends State<HomeScreen> {
               flex: 3,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                    itemCount: 6,
+                child: allSubcategory == null?const CircularProgressIndicator():ListView.builder(
+                    itemCount: allSubcategory!.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
