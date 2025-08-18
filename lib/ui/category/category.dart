@@ -126,6 +126,9 @@ class _CategoryState extends State<Category> {
 
   @override
   Widget build(BuildContext context) {
+    // print("Anew datat ${jsonEncode(allVenderData)}");
+    print("Anew datat ${jsonEncode(allVenderData)}");
+    var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -163,36 +166,34 @@ class _CategoryState extends State<Category> {
                       ? CircularProgressIndicator()
                       : ListView.builder(
                           itemBuilder: (context, index) {
-                            // print(
-                            //     "ur list ${categoriesResponseModel.data![index].categoryImg.toString()}");
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SingleChildScrollView(
-                                child: InkWell(
-                                  onTap: () => {
-                                    /*converting data to data1*/
-                                    data1.id = categoriesResponseModel
-                                        .data![index].id
-                                        .toString(),
-                                    data1.categoryName = categoriesResponseModel
-                                        .data![index].categoryName
-                                        .toString(),
-                                    Get.to(SubCategoryNew(
-                                      data: data1,
-                                      // grocerykitchen[index]["text"].toString(),
-                                    ))
-                                  },
+                            return SingleChildScrollView(
+                              child: InkWell(
+                                onTap: () => {
+                                  /*converting data to data1*/
+                                  data1.id = categoriesResponseModel
+                                      .data![index].id
+                                      .toString(),
+                                  data1.categoryName = categoriesResponseModel
+                                      .data![index].categoryName
+                                      .toString(),
+                                  Get.to(SubCategoryNew(
+                                    data: data1,
+                                    // grocerykitchen[index]["text"].toString(),
+                                  ))
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5,right: 5),
                                   child: Column(
                                     children: [
                                       Container(
-                                        height: 78,
-                                        width: 71,
+                                        height: size.height * 0.08,
+                                        width: size.width * 0.25,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                             color: Color(0xFFD9EBEB)),
                                         child: UiHelper
-                                            .fullUrlImageNetworkCategory(
+                                            .CustomImageNetworkCategory(
                                                 img: categoriesResponseModel
                                                     .data![index].categoryImg
                                                     .toString()),
@@ -250,9 +251,6 @@ class _CategoryState extends State<Category> {
                                     /*converting data to data1*/
                                     data1.id = allVenderData![index].phone
                                         .toString(),
-                                    // data1.categoryName = categoriesResponseModel
-                                    //     .data![index].categoryName
-                                    //     .toString(),
                                     Get.to(SubCategoryNew(
                                       data: data1,
                                     ))

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -26,20 +27,29 @@ class VendorRegisterController {
     locationController.dispose();
   }
 
-  Future<void> registerVendor(BuildContext context) async {
+  Future<void> registerVendor(BuildContext context,File imgFile) async {
     if (!formKey.currentState!.validate()) return;
     late vendeRegisterResponseModel urRes;
     try {
-      var response = await http
-          .post(
-              Uri.parse(
-                  "${apiUrl}?vender_id=${vendorIdController.text.trim()
-                  }&vender_name=${nameController.text}"
-                      "&shop_name=${shopNameController.text}"
-                      "&phone=${phoneController.text}"
-                      "&location=${locationController.text}"),
-              )
-          .timeout(Duration(seconds: 10));
+
+      var request = await http.MultipartRequest(
+          'POST',
+          Uri.parse("$apiUrl?vender_id=${vendorIdController.text.trim()
+          }&vender_name=${nameController.text}"
+              "&shop_name=${shopNameController.text}"
+              "&phone=${phoneController.text}"
+              "&location=${locationController.text}"),
+      );
+      request.fields['name'] = nameController.text;
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image', // must match $_FILES['image'] in PHP
+          imgFile.path,
+        ),
+      );
+      print("Request URL: ${imgFile.path}");
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
       print("vendor response: ${response.body}");
       urRes = vendeRegisterResponseModel.fromJson(jsonDecode(response.body));
 

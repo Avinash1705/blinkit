@@ -29,7 +29,7 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
  
   //passed values
   String? selectedCategory;
-  TextEditingController uniqueIdController = TextEditingController();
+  // TextEditingController uniqueIdController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController descController = TextEditingController();
@@ -82,7 +82,7 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
   }
   @override
   void dispose() {
-    uniqueIdController.dispose();
+    // uniqueIdController.dispose();
     priceController.dispose();
     productNameController.dispose();
     descController.dispose();
@@ -102,9 +102,9 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
           /*product id  == category id */
           CategoryDropdown(onSelected: handleSelection),
           // This will be replaced with the actual category dropdown widget
-          TextField(controller: uniqueIdController,keyboardType: TextInputType.number,inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly, // only allows 0-9
-          ],decoration: InputDecoration(labelText: 'Unique id')),
+          // TextField(controller: uniqueIdController,keyboardType: TextInputType.number,inputFormatters: [
+          //   FilteringTextInputFormatter.digitsOnly, // only allows 0-9
+          // ],decoration: InputDecoration(labelText: 'Unique id')),
           // TextField(
           //     controller: productNameController,
           //     decoration: InputDecoration(labelText: 'Product Name')),
@@ -173,7 +173,7 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
                 print("Selected CategoryVender: $selectedCategory");
               });
               AddItemsController.addItem(
-                      uniqueIdController.text.toString(),
+                      // uniqueIdController.text.toString(),
                   widget.vendorDetail.venderId.toString(),
                       nameController.text.toString(),
                   widget.vendorDetail.phone.toString(),

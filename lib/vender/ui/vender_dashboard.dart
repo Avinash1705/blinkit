@@ -45,7 +45,7 @@ class VendorDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("${vendorDetails.venderId} Dashboard ${vendorDetails.valid}");
+    print("${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -227,10 +227,16 @@ class _MyProductsPage extends State<MyProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("My product");
     // You would fetch and display vendor products here
     return Scaffold(
       appBar: AppBar(title: const Text("My Products")),
-      body: ListView.builder(
+      body: venderSpecificProductsModelList.isEmpty?SizedBox(
+        child: Center(
+          child: Text("No products found \n  for this vendor",
+              style: TextStyle(fontSize: 20, color: Colors.red)),
+        ),
+      ):ListView.builder(
         itemBuilder: (context, index) {
           print("new Sdata ${jsonEncode(venderSpecificProductsModelList)}");
           final product = venderSpecificProductsModelList[index];
@@ -278,6 +284,7 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
   void initState() {
     VenderOrdersController().fetchOrders(widget.tableName).then((value) {
       setState(() {
+        print("Fetched orders: ${jsonEncode(value.data)}");
         orderPlacedModelList = value.data;
       });
     }).catchError((error) {
@@ -290,8 +297,14 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
   Widget build(BuildContext context) {
     print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
     return Scaffold(
-      body: orderPlacedModelList == null
-          ? const CircularProgressIndicator()
+      body: orderPlacedModelList == null ||
+              orderPlacedModelList!.isEmpty
+          ? SizedBox(
+              child: Center(
+                child: Text("No orders found",
+                    style: TextStyle(fontSize: 20, color: Colors.red)),
+              ),
+            )
           : ListView.builder(
               itemCount: orderPlacedModelList!.length,
               itemBuilder: (context, index) {

@@ -8,7 +8,7 @@ class AddItemsController {
 
   // AddItemsController(this.baseUrl);
 
-  static Future addItem(String id, String categoryId, String itemName,
+  static Future addItem( String categoryId, String itemName,
       String phone, String itemDescription, int price, int newPrice,
       String weight, int quantity, File imgUrl) async {
     print("Adding item with details: ${imgUrl.toString().split('/').last}");
@@ -16,7 +16,7 @@ class AddItemsController {
       var request = http.MultipartRequest(
           'POST',
           Uri.parse('${AppConstants.addItems}'
-              '?id=$id&category_id=$categoryId&item_name=$itemName&phone=$phone&item_description=$itemDescription&price=$price'
+              '?category_id=$categoryId&item_name=$itemName&phone=$phone&item_description=$itemDescription&price=$price'
               '&new_price=$newPrice&weight=$weight&quantity=$quantity'));
 
       request.fields['name'] = itemName;
