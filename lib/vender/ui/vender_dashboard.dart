@@ -248,10 +248,34 @@ class _MyProductsPage extends State<MyProductsPage> {
               leading: UiHelper.CustomImageNetworkSubCategory(
                   img: product.itemImg.toString()),
               title: Text(product.itemName ?? 'No Name'),
-              subtitle: Text(
-                  'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
-                  ''
-                  '\nNew Price: ${product.new_price ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
+                subtitle: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.black, fontSize: 16), // default style
+                    children: [
+                      const TextSpan(text: 'Price: '),
+                      TextSpan(
+                        text: '${product.price ?? 'N/A'}\n',
+                        style: const TextStyle(color: Colors.green), // ✅ value color
+                      ),
+                      const TextSpan(text: 'Description: '),
+                      TextSpan(
+                        text: '${product.itemDescription ?? 'No Description'}\n',
+                        style: const TextStyle(color: Colors.blue), // ✅ value color
+                      ),
+
+                      const TextSpan(text: 'Weight: '),
+                      TextSpan(
+                        text: '${product.weight ?? 'Weight'} \n',
+                        style: const TextStyle(color: Colors.red), // ✅ value color
+                      ),
+                      const TextSpan(text: 'Quantity: '),
+                      TextSpan(
+                        text: '${product.quantity ?? '0'}\n',
+                        style: const TextStyle(color: Colors.purple), // ✅ value color
+                      ),
+                    ],
+                  ),
+                ),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
