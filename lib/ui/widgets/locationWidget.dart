@@ -72,10 +72,20 @@ class _LocationState extends State<LocationWidget> {
         Text("Current Location"),
         TextFormField(
           controller: widget.locationController,
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            hintText: "Enter current location",
-            border: const OutlineInputBorder(),
-            suffixIcon: InkWell(onTap:  _getCurrentLocation,child: const Icon(Icons.location_on)),
+            // prefixIcon: Icon(Icons.place, color: Colors.white),
+            labelText: "Place ",
+            labelStyle: const TextStyle(color: Colors.white),
+            hintText: "Edit current location",
+            hintStyle: const TextStyle(color: Colors.white70),
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.2),
+            suffixIcon: InkWell(onTap:  _getCurrentLocation,child: const Icon(Icons.place, color: Colors.red)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
+            ),
           ),
           validator: (value) => value == null || value.isEmpty
               ? "Enter location"

@@ -11,6 +11,8 @@ class AppConstants {
   static final String appDetail = "$ssl://$ip/fluxKart/apis/app_detail.php";
   static  String getAllVenders = "$ssl://$ip/fluxKart/apis/get_venders.php";
   static  String registerVenders = "$ssl://$ip/fluxKart/apis/register_vender.php";
+  /*Register customer*/
+  static  String registerCustomer = "$ssl://$ip/fluxKart/apis/register_customer.php";
   static  String addItems = "$ssl://$ip/fluxKart/apis/addSubItem.php";
   // httpss://royalblue-opossum-328842.hostingersite.com/fluxKart/apis/get_categories.php
   static  String getAllCategories = "$ssl://$ip/fluxKart/apis/get_categories.php";
