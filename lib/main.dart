@@ -2,12 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/services/payment.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/CustomerLoginRegistrationScreen.dart';
+import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/customerProfile/RegistrationCustomerProfileScreen.dart';
+import 'package:swiggy/ui/customerProfile/profileScreen.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 import 'package:swiggy/ui/login/loginScreenStatic.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
@@ -24,16 +27,25 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   init();
-
+  final loggedIn = await isUserLoggedIn();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => CartController()),
     ChangeNotifierProvider(create: (a) => AddressController()),
     ChangeNotifierProvider(create: (a) => Printcontroller()),
-  ],child: MyApp(),));
+  ],child: MyApp(isLoggedIn: loggedIn),));
+}
+Future<bool> isUserLoggedIn() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.containsKey('customer_id'); // user exists
+}
+Future<void> logout() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear(); // removes all keys
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+   MyApp({super.key,required this.isLoggedIn});
 
   // This widget is the root of your application.
   @override
@@ -46,12 +58,14 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: BottomNavScreen(index: 0),
+      // home: ProfilePage(),
       // home: SubscriptionScreen(),
       // home: PaymentScreen(),
       // home: VendorDashboard(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "4444444444",location: "lko",valid: "0"),),
       // home: AddProductPage(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
       // home: MyProductsPage(),
-      home: RegistrationCustomerProfilePage(),
+      // home: LoginCustomerProfileScreen(),
+      home: isLoggedIn ? BottomNavScreen(index: 0):LoginScreen(),
       // home: SplashScreen(),
       // home: AddProductPage(vendorDetail: null,),
       // home: ImagePickerWithPermission(),

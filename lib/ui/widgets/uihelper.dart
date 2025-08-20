@@ -28,6 +28,11 @@ class UiHelper {
 
     return Image.network("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/shop/$img",fit: BoxFit.cover,);
   }
+  //Profile  image
+  static CustomImageNetworkCustomerProfile({required String img}) {
+    return NetworkImage("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/profile/$img");
+    return Image.network("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/profile/$img",fit: BoxFit.cover,);
+  }
   static fullUrlImageNetworkCategory({required String img}) {
    //getting full url from server
     return Image.network(img);

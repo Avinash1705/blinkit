@@ -13,6 +13,8 @@ class AppConstants {
   static  String registerVenders = "$ssl://$ip/fluxKart/apis/register_vender.php";
   /*Register customer*/
   static  String registerCustomer = "$ssl://$ip/fluxKart/apis/register_customer.php";
+  static  String getRegisterCustomer = "$ssl://$ip/fluxKart/apis/get_customerRegister.php";
+  // https://avitechly.com/fluxKart/apis/get_customerRegister.php?phone=9868868686
   static  String addItems = "$ssl://$ip/fluxKart/apis/addSubItem.php";
   // httpss://royalblue-opossum-328842.hostingersite.com/fluxKart/apis/get_categories.php
   static  String getAllCategories = "$ssl://$ip/fluxKart/apis/get_categories.php";

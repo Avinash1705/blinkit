@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../../controllers/loginCustomerController.dart';
+
 class LoginCustomerProfileScreen extends StatefulWidget {
   const LoginCustomerProfileScreen({super.key});
 
@@ -114,9 +116,10 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
                       } else {
                         // Verify OTP logic
                         if (_otpController.text == "12345") {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Login Successful 🎉")),
-                          );
+                          LoginCustomerController.loginRegisteredCustomer(_phoneController.text.toString(),context);
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   const SnackBar(content: Text("Login Successful 🎉")),
+                          // );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Invalid OTP ❌")),

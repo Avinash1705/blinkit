@@ -40,7 +40,7 @@ dependencies:
   http: any
   provider: ^6.1.5
   flutter_sliding_toast: any
-#  shared_preferences: any
+  shared_preferences: ^2.2.3
   syncfusion_flutter_charts: any
 #  get_storage: any
   image_picker: ^1.1.2

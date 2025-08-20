@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/home/homeScreen.dart';
 import 'package:swiggy/ui/login/loginScreenStatic.dart';
 import 'package:swiggy/ui/print/printScreen.dart';
@@ -14,10 +16,13 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
-
 class _LoginScreenState extends State<LoginScreen> {
+
+
   @override
   Widget build(BuildContext context) {
+    final bool isLoggedIn;
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -70,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             onPressed: () {
-                              Get.to(BottomNavScreen(index: 0));
+                              Get.to(LoginCustomerProfileScreen());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

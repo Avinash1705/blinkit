@@ -13,6 +13,7 @@ import '../../controllers/subCatgoryController.dart';
 import '../../domain/AppConstants.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
+import '../customerProfile/profileScreen.dart';
 import '../widgets/uihelper.dart';
 import '../../model/GetSubCategoryModel.dart' as mySubcategory;
 
@@ -182,13 +183,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Positioned(
                     right: 20,
                     bottom: 100,
-                    child: CircleAvatar(
-                      radius: 15,
-                      backgroundColor: Colors.black,
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 20,
+                    child: InkWell( onTap: () => Get.to(ProfilePage()),
+                      child: CircleAvatar(
+                        radius: 15,
+                        backgroundColor: Colors.black,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
                     )),
                 Positioned(
