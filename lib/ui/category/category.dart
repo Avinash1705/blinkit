@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:swiggy/ui/category/subCategory.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
+import '../../controllers/cartController.dart';
 import '../../controllers/categoriesController.dart';
 import '../../controllers/subCatgoryController.dart';
 import '../../model/GetCategoriesResponseModel.dart';
@@ -33,6 +34,7 @@ class _CategoryState extends State<Category> {
       GetCategoriesResponseModel();
   Data1 data1 = Data1.withValues(
       categoryName: "categoryName", categoryImg: "categoryImg", id: "id");
+
 
   //array cateory
   var data = [
@@ -127,7 +129,7 @@ class _CategoryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
     // print("Anew datat ${jsonEncode(allVenderData)}");
-    print("Anew datat ${jsonEncode(allVenderData)}");
+
     var size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: SizedBox(

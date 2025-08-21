@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/cartModel.dart';
 
@@ -90,5 +91,9 @@ class CartController with ChangeNotifier {
   void clear() {
     _items = {};
     notifyListeners();
+  }
+  getProfileImg() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('customer_profile');
   }
 }

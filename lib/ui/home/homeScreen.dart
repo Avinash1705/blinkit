@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late AppDetailModel dataLoaded;
   SubCategoryController subCategoryController = SubCategoryController();
   late List<mySubcategory.Data>? allSubcategory = [];
-
+  late String profileImgUrl;
   @override
   void initState() {
     AppDetails.testApi().then((value) => {
@@ -99,17 +99,27 @@ class _HomeScreenState extends State<HomeScreen> {
     subCategoryController.fetchSubCategories().then((value) => {
           setState(() {
             allSubcategory = value.data;
-            print("got data ${jsonEncode(allSubcategory)}");
           })
         });
+    getProfileImg();
     super.initState();
+  }
+  Future<String> getProfileImg() async {
+    CartController cartController = CartController();
+    cartController.getProfileImg().then((value) => {
+      profileImgUrl = value,
+          print("profile img $profileImgUrl")
+        });
+    return await cartController.getProfileImg();
   }
 
   @override
   Widget build(BuildContext context) {
     final cartController =
         Provider.of<CartController>(context); // 👈 Access the model
-
+    // print("homeScreen ${cartController.getProfileImg().then((value) => {
+    //       print("profile img $value")
+    //     })}");
     return SingleChildScrollView(
         child: SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -187,11 +197,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircleAvatar(
                         radius: 15,
                         backgroundColor: Colors.black,
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundImage: profileImgUrl == null
+                              ? AssetImage("assets/images/user.png")
+                              : UiHelper.CustomImageNetworkCustomerProfile(img: profileImgUrl)),
+                        // child: Icon(
+                        //   Icons.person,
+                        //   color: Colors.white,
+                        //   size: 20,
+                        // ),
                       ),
                     )),
                 Positioned(

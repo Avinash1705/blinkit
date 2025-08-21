@@ -4,13 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
-class CustomAppBar extends StatelessWidget {
-  TextEditingController controller = TextEditingController();
+import '../../controllers/cartController.dart';
+
+class CustomAppBar extends StatefulWidget {
 
   CustomAppBar({super.key,required TextEditingController controller});
 
   @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+  TextEditingController controller = TextEditingController();
+
+  late String profileImgUrl ;
+
+  Future<String> getProfileImg() async {
+    CartController cartController = CartController();
+    cartController.getProfileImg().then((value) => {
+      profileImgUrl = value,
+      print("profile img $profileImgUrl")
+    });
+    return await cartController.getProfileImg();
+  }
+@override
+  void initState() {
+  getProfileImg();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+
     return Stack(
       children: [
         Container(
@@ -74,14 +98,11 @@ class CustomAppBar extends StatelessWidget {
             right: 20,
             bottom: 100,
             child: CircleAvatar(
-              radius: 15,
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.person,
-                color: Colors.black,
-                size: 20,
-              ),
-            )),
+                radius: 14,
+                backgroundImage: profileImgUrl == null
+                    ? AssetImage("assets/images/user.png")
+                    : UiHelper.CustomImageNetworkCustomerProfile(img: profileImgUrl)),
+        ),
         Positioned(
             bottom: 30,
             left: 20,

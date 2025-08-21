@@ -6,7 +6,8 @@ import 'package:geolocator/geolocator.dart';
 
 class LocationWidget extends StatefulWidget {
    TextEditingController locationController;
-   LocationWidget({super.key,required this.locationController});
+   Color nearcolor;
+   LocationWidget({super.key,required this.locationController,required this.nearcolor});
 
   @override
   State<LocationWidget> createState() => _LocationState();
@@ -63,24 +64,29 @@ class _LocationState extends State<LocationWidget> {
     // ✅ Update controller
     setState(() {
       widget.locationController.text = address;
+
     });
   }
   @override
   Widget build(BuildContext context) {
+    print("test color ${widget.nearcolor}");
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Current Location"),
+        Text("Current Location "),
+        SizedBox(height: 30,),
         TextFormField(
           controller: widget.locationController,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: widget.nearcolor??Colors.white),
           decoration: InputDecoration(
             // prefixIcon: Icon(Icons.place, color: Colors.white),
             labelText: "Place ",
-            labelStyle: const TextStyle(color: Colors.white),
+            labelStyle: TextStyle(color: widget.nearcolor??Colors.white),
             hintText: "Edit current location",
-            hintStyle: const TextStyle(color: Colors.white70),
+            hintStyle: TextStyle(color: widget.nearcolor.withOpacity(0.9)??Colors.white70),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.2),
+            fillColor: widget.nearcolor.withOpacity(0.2),
             suffixIcon: InkWell(onTap:  _getCurrentLocation,child: const Icon(Icons.place, color: Colors.red)),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),

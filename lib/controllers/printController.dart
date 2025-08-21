@@ -3,18 +3,24 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
+import 'package:swiggy/controllers/addressController.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/model/cartModel.dart';
 
 class Printcontroller extends ChangeNotifier {
   List<CartItem> listItem = [];
-
+  AddressController addressController = AddressController();
   void addTransition(Map<String, CartItem> items) {
     for (CartItem tt in items.values) {
       // print("printCart item for loop ${tt.productId} ${tt.title} ${tt.quantity} ${tt.price}");
       listItem.add(tt);
     }
+
+    print("tansition added ${jsonEncode(listItem)}");
+    print("tansition addreess ${addressController.updatedAddress.value}");
+    print("tansition addreess1 ${addressController.getUpdatedAddress()}");
+    listItem.clear();
     saveCartItems(listItem);
   }
 

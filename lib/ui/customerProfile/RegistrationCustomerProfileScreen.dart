@@ -123,7 +123,7 @@ class _CustomerProfilePageState
                   const SizedBox(height: 16),
 
                   // Location Field (Custom Widget)
-                  LocationWidget(locationController: _locationController),
+                  LocationWidget(locationController: _locationController,nearcolor: Colors.white,),
                   const SizedBox(height: 16),
 
                   // Phone Field

@@ -5,15 +5,17 @@ import 'package:get/get_core/src/get_main.dart';
 
 // import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../bottomNav/bottomNavScreen.dart';
+import '../widgets/locationWidget.dart';
 
 class AddressInputForm extends StatefulWidget {
   final Function(String address) onAddressSaved;
 
-  const AddressInputForm({super.key, required this.onAddressSaved});
+   AddressInputForm({super.key,required this.onAddressSaved});
 
   @override
   State<AddressInputForm> createState() => _AddressInputFormState();
@@ -26,6 +28,8 @@ class _AddressInputFormState extends State<AddressInputForm> {
   final _street = TextEditingController();
   final _city = TextEditingController();
   final _pincode = TextEditingController();
+  final _locationController = TextEditingController();
+
   var address = "intial save";
 
 
@@ -59,27 +63,13 @@ class _AddressInputFormState extends State<AddressInputForm> {
     );
   }
 
-  Widget toast = Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(25.0),
-      color: Colors.greenAccent,
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.check),
-        SizedBox(
-          width: 12.0,
-        ),
-        Text("This is a Custom Toast"),
-      ],
-    ),
-  );
+
 
   @override
   Widget build(BuildContext context) {
     var addressController = Provider.of<AddressController>(context);
+    final prefs =  SharedPreferences.getInstance();
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -94,85 +84,42 @@ class _AddressInputFormState extends State<AddressInputForm> {
             fontsize: 20,
             fontfamily: "bold"),
       ),
-      body: Card(
-        margin: const EdgeInsets.all(16),
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Text("Delivery Address",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.teal)),
-                const SizedBox(height: 12),
-                _buildField(
-                    "Full Name",
-                    Icons.person,
-                    _name,
-                    TextInputType.text,
-                    (val) => val!.isEmpty ? "Enter your name" : null),
-                _buildField(
-                    "Phone Number",
-                    Icons.phone,
-                    _phone,
-                    TextInputType.phone,
-                    (val) => val!.length < 10 ? "Enter valid number" : null),
-                _buildField(
-                    "Street Address",
-                    Icons.home,
-                    _street,
-                    TextInputType.streetAddress,
-                    (val) => val!.isEmpty ? "Enter street/area" : null),
-                _buildField(
-                    "City",
-                    Icons.location_city,
-                    _city,
-                    TextInputType.text,
-                    (val) => val!.isEmpty ? "Enter city" : null),
-                _buildField(
-                    "Pincode",
-                    Icons.pin_drop,
-                    _pincode,
-                    TextInputType.number,
-                    (val) => val!.length != 6 ? "Enter 6-digit pin" : null),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () {
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.blueAccent.withOpacity(0.3)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LocationWidget(locationController: _locationController,nearcolor: Colors.black),
+            SizedBox(height: 30,),
 
-                    address =
-                        "${_street.text} - ${_city.text} - ${_pincode.text} ";
-                    if (address.isEmpty) address = "Update Address";
+            ElevatedButton.icon(
+              onPressed: () async{
+                widget.onAddressSaved(_locationController.text);
+               addressController.saveUserLocationData(_locationController.text);
 
-                    // addressController.saveAddress(address);
-                    addressController.saveLocalAddress(address);
-                    // addressController.saveLocalAddress(address);
-                    InteractiveToast.slide(context,
-                        title: Text("Updated"),
-                        toastSetting: SlidingToastSetting(
-                          toastAlignment: Alignment.bottomCenter,
-                        ));
-                    Future.delayed(Duration(seconds: 1), () {
-                      Get.back();
-                    });
-                  },
-                  icon: Icon(Icons.check_circle_outline),
-                  label: Text("Save Address"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                  ),
-                )
-              ],
-            ),
-          ),
+                InteractiveToast.slide(context,
+                    title: Text("Updated"),
+                    toastSetting: SlidingToastSetting(
+                      toastAlignment: Alignment.bottomCenter,
+                    ));
+                Future.delayed(Duration(seconds: 1), () {
+                  print("updatedAdd address btn ${_locationController.text}");
+                  Get.back();
+                });
+              },
+              icon: Icon(Icons.check_circle_outline,color: Colors.white,),
+              label: Text("Save Address",style: TextStyle(color: Colors.white),),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 40, vertical: 14),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+            )
+          ],
         ),
       ),
     );
