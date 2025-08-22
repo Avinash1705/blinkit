@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontsize: 14,
                               fontfamily: "bold"),
                           UiHelper.CustomText(
-                              text: "Kursi Road Lucknow(Avinash)",
+                              text: AppConstant.location,
                               color: Color(0xFFffffff),
                               fontWeight: FontWeight.bold,
                               fontsize: 14,

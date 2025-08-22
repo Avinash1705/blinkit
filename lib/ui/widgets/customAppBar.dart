@@ -70,7 +70,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       fontsize: 14,
                       fontfamily: "bold"),
                   UiHelper.CustomText(
-                      text: "Kursi Road Lucknow(Avinash)",
+                      text: AppConstant.location,
                       color: Color(0xFF000000),
                       fontWeight: FontWeight.bold,
                       fontsize: 14,
