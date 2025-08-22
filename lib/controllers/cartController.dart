@@ -92,8 +92,4 @@ class CartController with ChangeNotifier {
     _items = {};
     notifyListeners();
   }
-  getProfileImg() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('customer_profile');
-  }
 }

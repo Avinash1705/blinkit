@@ -36,12 +36,10 @@ Future<void> main() async {
 }
 Future<bool> isUserLoggedIn() async {
   final prefs = await SharedPreferences.getInstance();
+  loadUserData(prefs) ;
   return prefs.containsKey('customer_id'); // user exists
 }
-Future<void> logout() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.clear(); // removes all keys
-}
+
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
@@ -50,6 +48,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print("is logged in main $isLoggedIn");
     return GetMaterialApp(
       title: 'Flux-it',
       debugShowCheckedModeBanner: false,
@@ -65,7 +64,7 @@ class MyApp extends StatelessWidget {
       // home: AddProductPage(vendorDetails: Data(venderName: "terr",venderId: "12",shopName: "firstShop",phone: "3223",location: "lko"),),
       // home: MyProductsPage(),
       // home: LoginCustomerProfileScreen(),
-      home: isLoggedIn ? BottomNavScreen(index: 0):LoginScreen(),
+      home: isLoggedIn ? BottomNavScreen(index: 0):SplashScreen(),
       // home: SplashScreen(),
       // home: AddProductPage(vendorDetail: null,),
       // home: ImagePickerWithPermission(),

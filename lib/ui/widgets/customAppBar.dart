@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../../controllers/cartController.dart';
@@ -17,21 +18,6 @@ class CustomAppBar extends StatefulWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   TextEditingController controller = TextEditingController();
 
-  late String profileImgUrl ;
-
-  Future<String> getProfileImg() async {
-    CartController cartController = CartController();
-    cartController.getProfileImg().then((value) => {
-      profileImgUrl = value,
-      print("profile img $profileImgUrl")
-    });
-    return await cartController.getProfileImg();
-  }
-@override
-  void initState() {
-  getProfileImg();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
 
@@ -99,9 +85,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
             bottom: 100,
             child: CircleAvatar(
                 radius: 14,
-                backgroundImage: profileImgUrl == null
+                backgroundImage: AppConstant.customer_profile == null
                     ? AssetImage("assets/images/user.png")
-                    : UiHelper.CustomImageNetworkCustomerProfile(img: profileImgUrl)),
+                    : UiHelper.CustomImageNetworkCustomerProfile(img: AppConstant.customer_profile)),
         ),
         Positioned(
             bottom: 30,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
+import '../../controllers/loginCustomerController.dart';
 import '../cart/cartScreen.dart';
 import '../category/category.dart';
 import '../home/homeScreen.dart';
@@ -28,6 +29,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
    currentIndex = widget.index;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

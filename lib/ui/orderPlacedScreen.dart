@@ -29,12 +29,7 @@ void updateQty(int id, int qty) {
 }
 class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
 
-  @override
-  void initState() {
 
-
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);

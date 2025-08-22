@@ -9,8 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/cartController.dart';
 
 import '../../controllers/appDetails/appDetails.dart';
+import '../../controllers/loginCustomerController.dart';
 import '../../controllers/subCatgoryController.dart';
 import '../../domain/ApiConstants.dart';
+import '../../domain/AppConstant.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../customerProfile/profileScreen.dart';
@@ -87,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late AppDetailModel dataLoaded;
   SubCategoryController subCategoryController = SubCategoryController();
   late List<mySubcategory.Data>? allSubcategory = [];
-  late String profileImgUrl;
+  // late String profileImgUrl;
   @override
   void initState() {
     AppDetails.testApi().then((value) => {
@@ -101,17 +103,18 @@ class _HomeScreenState extends State<HomeScreen> {
             allSubcategory = value.data;
           })
         });
-    getProfileImg();
+    // getProfileImg();
+
     super.initState();
   }
-  Future<String> getProfileImg() async {
-    CartController cartController = CartController();
-    cartController.getProfileImg().then((value) => {
-      profileImgUrl = value,
-          print("profile img $profileImgUrl")
-        });
-    return await cartController.getProfileImg();
-  }
+  // Future<String> getProfileImg() async {
+  //   CartController cartController = CartController();
+  //   cartController.getProfileImg().then((value) => {
+  //     profileImgUrl = value,
+  //         print("profile img $profileImgUrl")
+  //       });
+  //   return await cartController.getProfileImg();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -199,9 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.black,
                         child: CircleAvatar(
                           radius: 14,
-                          backgroundImage: profileImgUrl == null
+                          backgroundImage: AppConstant.customer_profile == null
                               ? AssetImage("assets/images/user.png")
-                              : UiHelper.CustomImageNetworkCustomerProfile(img: profileImgUrl)),
+                              : UiHelper.CustomImageNetworkCustomerProfile(img: AppConstant.customer_profile)),
                         // child: Icon(
                         //   Icons.person,
                         //   color: Colors.white,
