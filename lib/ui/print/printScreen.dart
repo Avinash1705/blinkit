@@ -104,7 +104,7 @@ class _PrintScreenState extends State<PrintScreen> {
                               const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
-                                  order["customer_address"] ?? "No address",
+                                  order["customer_location"] ?? "No address",
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,

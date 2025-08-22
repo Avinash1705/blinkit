@@ -25,11 +25,6 @@ class Printcontroller extends ChangeNotifier {
   /*get orders */
   var ordersByDay = <String, List<Map<String, dynamic>>>{}.obs;
   var isLoading = false.obs;
-  // init() {
-  //   _loadUserData();
-  //   print("prf data  ${(customerId) } ${customerName} ${phone} ${location} ${customer_profile}");
-  //   fetchOrders("Terror","4444444444");
-  // }
   void addTransition(Map<String, CartItem> items) {
 
 
@@ -40,12 +35,12 @@ class Printcontroller extends ChangeNotifier {
 
     totalListItem.add(List<CartItem>.from(listItem));
     print("tansition added total ${jsonEncode(totalListItem)}");
-    // print("tansition addreess ${addressController.updatedAddress.value}");
+    print("tansition addreess ${addressController.updatedAddress.value}");
     // print("tansition addreess1 ${addressController.getUpdatedAddress()}");
     placeOrder(
       customerPhone: AppConstant.phone, // Replace with actual phone number
       customerName: AppConstant.customer_name, // Replace with actual customer name
-      customerLocation: addressController.updatedAddress.value, // Use the updated address
+      customerLocation: AppConstant.location, // Use the updated address
       cartItems: listItem, // Pass the current list of cart items
     ).then((response) {
       // Handle the response from the placeOrder method

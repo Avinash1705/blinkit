@@ -124,7 +124,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     )
                   : ElevatedButton(
                       onPressed: () {
-                        Get.off(OrderPlacedScreen());
+                        showDialog(context: context, builder: (context) => AlertDialog(
+                          title: const Text("Confirm Order"),
+                            content: const Text("Are you sure you want to place this order?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(), // Close dialog
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close dialog
+                                Get.off(OrderPlacedScreen()); // Navigate
+                              },
+                              child: const Text("Yes"),
+                            ),
+                          ],
+                        ));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
