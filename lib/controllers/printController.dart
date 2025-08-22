@@ -2,37 +2,49 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/addressController.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/model/cartModel.dart';
 
+import '../domain/AppConstants.dart';
+import '../model/customerOrderResponseModel.dart';
+
 class Printcontroller extends ChangeNotifier {
   List<CartItem> listItem = [];
+  List<List<CartItem>> totalListItem = [];
   AddressController addressController = AddressController();
+  late CustomerOrderResponseModel customerOrderResponse;
   void addTransition(Map<String, CartItem> items) {
     for (CartItem tt in items.values) {
-      // print("printCart item for loop ${tt.productId} ${tt.title} ${tt.quantity} ${tt.price}");
       listItem.add(tt);
     }
-
     print("tansition added ${jsonEncode(listItem)}");
-    print("tansition addreess ${addressController.updatedAddress.value}");
-    print("tansition addreess1 ${addressController.getUpdatedAddress()}");
+
+    totalListItem.add(List<CartItem>.from(listItem));
+    print("tansition added total ${jsonEncode(totalListItem)}");
+    // print("tansition addreess ${addressController.updatedAddress.value}");
+    // print("tansition addreess1 ${addressController.getUpdatedAddress()}");
+    placeOrder(
+      customerPhone: "1234567890", // Replace with actual phone number
+      customerName: "John Doe", // Replace with actual customer name
+      customerLocation: addressController.updatedAddress.value, // Use the updated address
+      cartItems: listItem, // Pass the current list of cart items
+    ).then((response) {
+      // Handle the response from the placeOrder method
+      print("kkkkkOrder response: $response");
+    }).catchError((error) {
+      // Handle any errors that occur during the order placement
+      print("kkkkkError placing order: $error");
+    });
+    // Clear the list after placing the order
     listItem.clear();
-    saveCartItems(listItem);
+   notifyListeners();
   }
 
 
-  Future<void> saveCartItems(List<CartItem> cartItems) async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    List<String> jsonList = cartItems.map((item) => jsonEncode(item.toJson()))
-        .toList();
-    // print("printCart shared pRef ${jsonList}");
-    // await prefs.setStringList('cart_items', jsonList);
-  }
 
   Future<List<CartItem>> getCartItems() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,5 +79,43 @@ class Printcontroller extends ChangeNotifier {
     // This might involve fetching vendor details and filtering the listItem based on that
     // For now, this is a placeholder for the actual implementation
     print("Filtering items based on phone number and vendor");
+  }
+  Future<String> placeOrder({
+    required String customerPhone,
+    required String customerName,
+    required String customerLocation,
+    required List<CartItem> cartItems,
+  }) async {
+    final url = Uri.parse(AppConstants.customersPlacedOrder);
+
+    final body = {
+      "customer_phone": customerPhone,
+      "customer_name": customerName,
+      "customer_location": customerLocation,
+      "cartItems": cartItems.map((e) => e.toJson()).toList(),
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
+      );
+      print("Response pritn: ${response.body}");
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data["success"] == true) {
+          print("✅ Order placed successfully. Order ID: ${data['order_id']}");
+            return response.body;
+        } else {
+          print("❌ Failed: ${data['message']}");
+        }
+      } else {
+        print("❌ Server error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("❌ Error placing order: $e");
+    }
+    return "Error placing order";
   }
 }
