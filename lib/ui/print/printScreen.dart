@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 import '../../controllers/getAllCustomerOrder.dart';
+import '../../controllers/printController.dart';
 import '../widgets/uihelper.dart';
 
 class PrintScreen extends StatefulWidget {
@@ -11,12 +13,12 @@ class PrintScreen extends StatefulWidget {
 }
 
 class _PrintScreenState extends State<PrintScreen> {
-  final OrderController orderController = Get.put(OrderController());
 
+  final Printcontroller printController = Get.put(Printcontroller());
   @override
   void initState() {
     super.initState();
-    orderController.fetchOrders(); // fetch orders grouped by date
+    printController.fetchOrders(AppConstant.customer_name,AppConstant.phone); // fetch orders grouped by date
   }
 
   @override
@@ -35,16 +37,16 @@ class _PrintScreenState extends State<PrintScreen> {
           elevation: 0,
         ),
         body: Obx(() {
-          if (orderController.isLoading.value) {
+          if (printController.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (orderController.ordersByDay.isEmpty) {
+          if (printController.ordersByDay.isEmpty) {
             return const Center(child: Text("No orders found"));
           }
 
           return ListView(
-            children: orderController.ordersByDay.entries.map((entry) {
+            children: printController.ordersByDay.entries.map((entry) {
               String date = entry.key;
               List<Map<String, dynamic>> orders = entry.value;
 

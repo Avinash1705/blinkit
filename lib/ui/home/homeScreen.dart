@@ -10,7 +10,7 @@ import 'package:swiggy/controllers/cartController.dart';
 
 import '../../controllers/appDetails/appDetails.dart';
 import '../../controllers/subCatgoryController.dart';
-import '../../domain/AppConstants.dart';
+import '../../domain/ApiConstants.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../customerProfile/profileScreen.dart';

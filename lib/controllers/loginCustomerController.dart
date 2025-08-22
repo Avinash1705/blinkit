@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 
 import '../ui/bottomNav/bottomNavScreen.dart';
 
@@ -12,7 +12,7 @@ class LoginCustomerController {
 
  static Future loginRegisteredCustomer(String phone,BuildContext context) async {
 
-    var url = "${AppConstants.getRegisterCustomer}?phone=$phone";
+    var url = "${ApiConstants.getRegisterCustomer}?phone=$phone";
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -22,11 +22,6 @@ class LoginCustomerController {
 
         if (data["success"] == true) {
           final customer = data["data"];
-          // String customerName = customer["customer_name"];
-          // String customerId = customer["customer_id"];
-          // String phone = customer["phone"];
-          // String location = customer["location"];
-          // String profile = customer["customer_profile"];
 
           Map<String, dynamic> customerMap = {
             "customer_id": customer["customer_id"],

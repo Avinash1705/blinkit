@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 
 import '../venderModels/vendeRegisterResponseModel.dart';
 
@@ -17,7 +17,7 @@ class VendorRegisterController {
   final locationController = TextEditingController();
 
   final apiUrl =
-      AppConstants.registerVenders; // Replace with your actual URL
+      ApiConstants.registerVenders; // Replace with your actual URL
 
   void dispose() {
     // vendorIdController.dispose();

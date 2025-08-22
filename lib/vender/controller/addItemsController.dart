@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 
 class AddItemsController {
   // final String baseUrl;
@@ -15,7 +15,7 @@ class AddItemsController {
     try {
       var request = http.MultipartRequest(
           'POST',
-          Uri.parse('${AppConstants.addItems}'
+          Uri.parse('${ApiConstants.addItems}'
               '?category_id=$categoryId&item_name=$itemName&phone=$phone&item_description=$itemDescription&price=$price'
               '&new_price=$newPrice&weight=$weight&quantity=$quantity'));
 

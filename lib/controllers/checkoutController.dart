@@ -1,13 +1,13 @@
 
 
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:http/http.dart'as http;
 
 class CheckOutController {
 
 
   Future updateSubcategoryAndSoldItem(int id ,int qty) async{
-    String url  = "${AppConstants.updateSoldItemLog}?id=$id&ordered_qty=$qty";
+    String url  = "${ApiConstants.updateSoldItemLog}?id=$id&ordered_qty=$qty";
   try {
       final response = await http.post(Uri.parse(url));
       print("aavi successfully ${response.body}");
@@ -25,7 +25,7 @@ class CheckOutController {
     }
   }
   Future updateItemQuantity(int id ,int qty) async{
-    String url  = "${AppConstants.updateSubcategoryAndSoldItem}?id=$id&ordered_qty=$qty";
+    String url  = "${ApiConstants.updateSubcategoryAndSoldItem}?id=$id&ordered_qty=$qty";
   //   http://localhost/fluxkart/apis/updateSubcategoryAndSoldItem.php?id=3312111&ordered_qty=1
 
     try {

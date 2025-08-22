@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -101,7 +101,7 @@ class VendorDashboard extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) =>
-                          VenderOrdersPage(tableName: AppConstants.orderTableFormat(vendorDetails.phone.toString())),
+                          VenderOrdersPage(tableName: ApiConstants.orderTableFormat(vendorDetails.phone.toString())),
                     ));
               },
             ),

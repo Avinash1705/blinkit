@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 
 class UiHelper {
 
@@ -15,23 +15,23 @@ class UiHelper {
   //category image
   static CustomImageNetworkCategory({required String img}) {
     // print("test gjgj $img");
-    //   print("test img https://${AppConstants.ip}/img/category/$img");
-    return Image.network("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/category/$img",fit: BoxFit.cover);
+    //   print("test img https://${ApiConstants.ip}/img/category/$img");
+    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/category/$img",fit: BoxFit.cover);
   }
   //Sub category image
   static CustomImageNetworkSubCategory({required String img}) {
 
-    return Image.network("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/subCategory/$img",fit: BoxFit.cover,);
+    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/subCategory/$img",fit: BoxFit.cover,);
   }
   //Sub category image
   static CustomImageNetworkShop({required String img}) {
 
-    return Image.network("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/shop/$img",fit: BoxFit.cover,);
+    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/shop/$img",fit: BoxFit.cover,);
   }
   //Profile  image
   static CustomImageNetworkCustomerProfile({required String img}) {
-    return NetworkImage("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/profile/$img");
-    return Image.network("${AppConstants.ssl}://${AppConstants.ip}/fluxKart/img/profile/$img",fit: BoxFit.cover,);
+    return NetworkImage("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/profile/$img");
+    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/profile/$img",fit: BoxFit.cover,);
   }
   static fullUrlImageNetworkCategory({required String img}) {
    //getting full url from server

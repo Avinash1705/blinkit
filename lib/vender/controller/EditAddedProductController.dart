@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 
 Future<String?> updateProduct(Map<String, dynamic> product) async {
-  var url = Uri.parse(AppConstants.updateEditProductInVender);
+  var url = Uri.parse(ApiConstants.updateEditProductInVender);
 
   print("All data ${product}");
    var response = await http.post(url, body: {

@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/model/GetSubCategoryModel.dart';
 
 class SubCategoryController {
@@ -11,7 +11,7 @@ class SubCategoryController {
   // Add your methods and properties here
   // For example, you might want to fetch subcategories from an API or database
   // and store them in a list or map.
-  String url = AppConstants.getSubCategories;
+  String url = ApiConstants.getSubCategories;
   late var response;
   // Example method to fetch subcategories
   Future<GetSubCategoryModel> fetchSubCategories() async {

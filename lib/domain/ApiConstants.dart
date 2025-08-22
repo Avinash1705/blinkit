@@ -1,6 +1,6 @@
 
 
-class AppConstants {
+class ApiConstants {
 
   // static const String ip = "192.168.1.24:8080";
   // static const String ip = "172.20.10.4:8080";

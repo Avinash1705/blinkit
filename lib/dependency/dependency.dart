@@ -3,8 +3,10 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:get_storage/get_storage.dart';
 
+import '../domain/AppConstant.dart';
 import '../ui/category/searchController.dart';
 
 Future<void> init() async {
@@ -16,6 +18,16 @@ Future<void> init() async {
   // Get.lazyPut(() => LivePageController());
   // Get.lazyPut(() => LiveStreamingController());
   // Get.lazyPut(() => LoginPageController());
+  _loadUserData();
+}
+Future<void> _loadUserData() async {
+  final prefs = await SharedPreferences.getInstance();
+
+  AppConstant.customer_id = prefs.getString('customer_id') ?? '';
+  AppConstant.customer_name = prefs.getString('customer_name') ?? '';
+  AppConstant.phone = prefs.getString('phone') ?? '';
+  AppConstant.location =  prefs.getString('location') ?? '';
+  AppConstant.customer_profile = prefs.getString('customer_profile') ?? '';
 }
 
 

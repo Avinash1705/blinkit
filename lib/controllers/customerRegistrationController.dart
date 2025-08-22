@@ -5,14 +5,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 
 class CustomerRegistrationController {
   // This class will handle customer registration logic
   // For example, it can include methods to validate input, save customer data, etc.
 
   static Future registerCustomer(Map<String, dynamic> product,File imgUrl,BuildContext context) async {
-    var url = Uri.parse(AppConstants.registerCustomer);
+    var url = Uri.parse(ApiConstants.registerCustomer);
     // Logic to register a customer
     var request = http.MultipartRequest(
       'POST',

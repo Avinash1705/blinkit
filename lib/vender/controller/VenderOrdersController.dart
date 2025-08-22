@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:http/http.dart' as http;
 
 import '../venderModels/OrderPlacedModel.dart';
@@ -19,7 +19,7 @@ class VenderOrdersController {
   Future<OrderPlacedModel> fetchOrders(String tableName) async{
     // Logic to fetch orders from the database or API
     print("table name in fetch orders $tableName");
-    String url = "${AppConstants.getOrderedPlaced}?tableName=$tableName";
+    String url = "${ApiConstants.getOrderedPlaced}?tableName=$tableName";
   try{
     var result =await http.get(Uri.parse(url));
     print("Response from server: ${result.body}");

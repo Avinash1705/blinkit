@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-import 'package:swiggy/domain/AppConstants.dart';
+import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:http/http.dart' as http;
 import '../model/GetCategoriesResponseModel.dart';
 
@@ -13,7 +13,7 @@ class GetCategoriesController {
 
     late GetCategoriesResponseModel categoriesResponseModel;
     late var response;
-      String url = AppConstants.getAllCategories;
+      String url = ApiConstants.getAllCategories;
     try {
       response = await http.get(
           Uri.parse(url));

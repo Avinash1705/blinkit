@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 
 import '../widgets/uihelper.dart';
@@ -14,28 +15,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String? customerId;
-  String? customerName;
-  String? phone;
-  String? location;
-  String? customer_profile;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      customerId = prefs.getString('customer_id');
-      customerName = prefs.getString('customer_name');
-      phone = prefs.getString('phone');
-      location = prefs.getString('location');
-      customer_profile = prefs.getString('customer_profile');
-    });
-  }
 
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
@@ -43,7 +23,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
     // Redirect to Login screen
     if (mounted) {
-      // Navigator.pushReplacementNamed(context, '/login');
       Get.off(LoginScreen());
     }
   }
@@ -56,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
       ),
-      body: customerId == null
+      body: AppConstant.customer_name == null
           ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(20.0),
@@ -66,10 +45,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.deepPurple,
-                    backgroundImage: customer_profile == null
+                    backgroundImage: AppConstant.customer_profile == null
                         ? Icon(Icons.person, size: 60, color: Colors.white)
                         : UiHelper.CustomImageNetworkCustomerProfile(
-                            img: customer_profile!),
+                            img: AppConstant.customer_profile),
                     // child: Icon(Icons.person, size: 60, color: Colors.white),
                   //   child: UiHelper.CustomImageNetworkCustomerProfile(
                   //       img: customer_profile),
@@ -88,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Icon(Icons.badge, color: Colors.blueAccent),
                               const SizedBox(width: 8),
-                              Text("ID: $customerId",
+                              Text("ID: ${AppConstant.customer_id}",
                                   style: const TextStyle(fontSize: 16, color: Colors.black87)),
                             ],
                           ),
@@ -98,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Icon(Icons.person, color: Colors.green),
                               const SizedBox(width: 8),
-                              Text("Name: $customerName",
+                              Text("Name: ${AppConstant.customer_name}",
                                   style: const TextStyle(
                                       fontSize: 18, fontWeight: FontWeight.bold)),
                             ],
@@ -109,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Icon(Icons.phone, color: Colors.orange),
                               const SizedBox(width: 8),
-                              Text("Phone: $phone",
+                              Text("Phone: ${AppConstant.phone}",
                                   style: const TextStyle(fontSize: 16, color: Colors.black87)),
                             ],
                           ),
@@ -120,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Icon(Icons.location_on, color: Colors.redAccent),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: Text("Location: $location",
+                                child: Text("Location: ${AppConstant.location}",
                                     style: const TextStyle(fontSize: 16, color: Colors.black87)),
                               ),
                             ],
