@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late AppDetailModel dataLoaded;
   SubCategoryController subCategoryController = SubCategoryController();
   late List<mySubcategory.Data>? allSubcategory = [];
+
   // late String profileImgUrl;
   @override
   void initState() {
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     subCategoryController.fetchSubCategories().then((value) {
-      if (value != null && value.data != null) {
+      if (value.data != null) {
         setState(() {
           allSubcategory = value.data;
         });
@@ -115,14 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print("Error loading subcategories: $error");
     });
   }
-  // Future<String> getProfileImg() async {
-  //   CartController cartController = CartController();
-  //   cartController.getProfileImg().then((value) => {
-  //     profileImgUrl = value,
-  //         print("profile img $profileImgUrl")
-  //       });
-  //   return await cartController.getProfileImg();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -213,11 +206,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? AssetImage("assets/images/user.png")
                               : UiHelper.CustomImageNetworkCustomerProfile(
                                   img: AppConstant.customer_profile)),
-                      // child: Icon(
-                      //   Icons.person,
-                      //   color: Colors.white,
-                      //   size: 20,
-                      // ),
                     ),
                   )),
               Positioned(
@@ -305,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(6.0),
                             child: Container(
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(

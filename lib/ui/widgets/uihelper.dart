@@ -9,6 +9,7 @@ class UiHelper {
   static CustomImage({required String img}) {
     return Image.asset("assets/images/$img");
   }
+  /*https://avitechly.com/fluxKart/img/subCategory*/
   // static CustomImageNetwork({required String img, required int height, required int width}) {
   //   return Image.network(img);
   // }
