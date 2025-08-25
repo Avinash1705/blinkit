@@ -1,13 +1,13 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:swiggy/ui/category/subCategory.dart';
+// import 'package:swiggy/ui/category/subCategory.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
-import '../../controllers/cartController.dart';
+// import '../../controllers/cartController.dart';
 import '../../controllers/categoriesController.dart';
 import '../../controllers/subCatgoryController.dart';
 import '../../model/GetCategoriesResponseModel.dart';
@@ -34,7 +34,6 @@ class _CategoryState extends State<Category> {
       GetCategoriesResponseModel();
   Data1 data1 = Data1.withValues(
       categoryName: "categoryName", categoryImg: "categoryImg", id: "id");
-
 
   //array cateory
   var data = [
@@ -131,287 +130,285 @@ class _CategoryState extends State<Category> {
     // print("Anew datat ${jsonEncode(allVenderData)}");
 
     var size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Scaffold(
-          body: Column(
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+            height: 40,
+          ),
+          CustomAppBar(controller: searchController),
+          SizedBox(
+            height: 40,
+          ),
+          Row(
             children: [
               SizedBox(
-                height: 40,
+                width: 20,
               ),
-              CustomAppBar(controller: searchController),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "Categories Current Present",
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontsize: 14,
-                      fontfamily: "bold")
-                ],
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: categoriesResponseModel.data == null
-                      ? CircularProgressIndicator()
-                      : ListView.builder(
-                          itemBuilder: (context, index) {
-                            return SingleChildScrollView(
-                              child: InkWell(
-                                onTap: () => {
-                                  /*converting data to data1*/
-                                  data1.id = categoriesResponseModel
-                                      .data![index].id
+              UiHelper.CustomText(
+                  text: "Categories Current Present",
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontsize: 14,
+                  fontfamily: "bold")
+            ],
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: categoriesResponseModel.data == null
+                  ? CircularProgressIndicator()
+                  : ListView.builder(
+                      itemBuilder: (context, index) {
+                        return SingleChildScrollView(
+                          child: InkWell(
+                            onTap: () => {
+                              /*converting data to data1*/
+                              Get.to(SubCategoryNew(
+                                data: Data1.withValues(
+                                  id: categoriesResponseModel.data![index].id
                                       .toString(),
-                                  data1.categoryName = categoriesResponseModel
+                                  categoryName: categoriesResponseModel
                                       .data![index].categoryName
                                       .toString(),
-                                  Get.to(SubCategoryNew(
-                                    data: data1,
-                                    // grocerykitchen[index]["text"].toString(),
-                                  ))
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 5,right: 5),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: size.height * 0.08,
-                                        width: size.width * 0.25,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Color(0xFFD9EBEB)),
-                                        child: UiHelper
-                                            .CustomImageNetworkCategory(
-                                                img: categoriesResponseModel
-                                                    .data![index].categoryImg
-                                                    .toString()),
-                                      ),
-                                      UiHelper.CustomText(
-                                          text: categoriesResponseModel
-                                              .data![index].categoryName
-                                              .toString(),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal,
-                                          fontsize: 10)
-                                    ],
-                                  ),
+                                  categoryImg: categoriesResponseModel
+                                      .data![index].categoryImg
+                                      .toString(),
                                 ),
-                              ),
-                            );
-                          },
-                          itemCount: categoriesResponseModel.data!.length,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "Shops Current Present",
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontsize: 14,
-                      fontfamily: "bold")
-                ],
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: allVenderData!.isEmpty
-                      ? CircularProgressIndicator()
-                      : SizedBox(
-                          height: 150,
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () => {
-                                    print("u clicked on shop${allVenderData![index]
-                                      .shopName}"),
-                                    /*converting data to data1*/
-                                    data1.id = allVenderData![index].phone
-                                        .toString(),
-                                    Get.to(SubCategoryNew(
-                                      data: data1,
-                                    ))
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 50,
-                                        width: 71,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Color(0xFFD9EBEB)),
-                                        child: allVenderData == null
-                                            ? Image.asset(
-                                                "assets/images/shop.png",
-                                                fit: BoxFit.cover,
-                                              )
-                                            : UiHelper.CustomImageNetworkShop(
-                                                img: allVenderData![index]
-                                                    .shop_img
-                                                    .toString())),
-                                      UiHelper.CustomText(
-                                          text: allVenderData![index]
-                                              .shopName
-                                              .toString(),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal,
-                                          fontsize: 10)
-                                    ],
-                                  ),
-                                ),
-                              );
+                              ))
                             },
-                            itemCount: allVenderData!.length,
-                            scrollDirection: Axis.horizontal,
-                          ),
-                        ),
-                ),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "Grocery & Kichen",
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontsize: 14,
-                      fontfamily: "bold")
-                ],
-              ),
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 78,
-                              width: 71,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xFFD9EBEB)),
-                              child: UiHelper.CustomImage(
-                                  img: grocerykitchen[index]["img"].toString()),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5, right: 5),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: size.height * 0.08,
+                                    width: size.width * 0.25,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Color(0xFFD9EBEB)),
+                                    child: UiHelper.CustomImageNetworkCategory(
+                                        img: categoriesResponseModel
+                                            .data![index].categoryImg
+                                            .toString()),
+                                  ),
+                                  UiHelper.CustomText(
+                                      text: categoriesResponseModel
+                                          .data![index].categoryName
+                                          .toString(),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontsize: 10)
+                                ],
+                              ),
                             ),
-                            UiHelper.CustomText(
-                                text: grocerykitchen[index]["text"].toString(),
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontsize: 10)
-                          ],
-                        ),
-                      );
-                    },
-                    itemCount: grocerykitchen.length,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
-              ),
-              // Expanded(
-              //   flex: 1,
-              //   child: Padding(
-              //     padding: const EdgeInsets.only(left: 20),
-              //     child: ListView.builder(
-              //       itemBuilder: (context, index) {
-              //         return Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Column(
-              //             children: [
-              //               Container(
-              //                 height: 78,
-              //                 width: 71,
-              //                 decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     color: Color(0xFFD9EBEB)),
-              //                 child: UiHelper.CustomImage(
-              //                     img: grocerykitchen[index]["img"].toString()),
-              //               ),
-              //               UiHelper.CustomText(
-              //                   text: grocerykitchen[index]["text"].toString(),
-              //                   color: Colors.black,
-              //                   fontWeight: FontWeight.normal,
-              //                   fontsize: 10)
-              //             ],
-              //           ),
-              //         );
-              //       },
-              //       itemCount: grocerykitchen.length,
-              //       scrollDirection: Axis.horizontal,
-              //     ),
-              //   ),
-              // ),
+                          ),
+                        );
+                      },
+                      itemCount: categoriesResponseModel.data!.length,
+                      scrollDirection: Axis.horizontal,
+                    ),
+            ),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Row(
+            children: [
               SizedBox(
-                height: 30,
+                width: 20,
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "Household Essentials",
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontsize: 14,
-                      fontfamily: "bold")
-                ],
+              UiHelper.CustomText(
+                  text: "Shops Current Present",
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontsize: 14,
+                  fontfamily: "bold")
+            ],
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: allVenderData!.isEmpty
+                  ? CircularProgressIndicator()
+                  : SizedBox(
+                      height: 150,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () => {
+                                print(
+                                    "u clicked on shop${allVenderData![index].shopName}"),
+                                /*converting data to data1*/
+                                Get.to(SubCategoryNew(
+                                  data: Data1.withValues(
+                                    id: allVenderData![index].phone.toString(),
+                                    categoryName: allVenderData![index]
+                                        .shopName
+                                        .toString(),
+                                  ),
+                                ))
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                      height: 50,
+                                      width: 71,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Color(0xFFD9EBEB)),
+                                      child: allVenderData == null
+                                          ? Image.asset(
+                                              "assets/images/shop.png",
+                                              fit: BoxFit.cover,
+                                            )
+                                          : UiHelper.CustomImageNetworkShop(
+                                              img: allVenderData![index]
+                                                  .shop_img
+                                                  .toString())),
+                                  UiHelper.CustomText(
+                                      text: allVenderData![index]
+                                          .shopName
+                                          .toString(),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontsize: 10)
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: allVenderData!.length,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+            ),
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 20,
               ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
+              UiHelper.CustomText(
+                  text: "Grocery & Kichen",
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontsize: 14,
+                  fontfamily: "bold")
+            ],
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Container(
                           height: 78,
                           width: 71,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Color(0xFFD9EBEB)),
                           child: UiHelper.CustomImage(
-                              img: houseHoldUtentials[index]["img"].toString()),
+                              img: grocerykitchen[index]["img"].toString()),
                         ),
-                      );
-                    },
-                    itemCount: houseHoldUtentials.length,
-                    scrollDirection: Axis.horizontal,
-                  ),
-                ),
+                        UiHelper.CustomText(
+                            text: grocerykitchen[index]["text"].toString(),
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontsize: 10)
+                      ],
+                    ),
+                  );
+                },
+                itemCount: grocerykitchen.length,
+                scrollDirection: Axis.horizontal,
               ),
+            ),
+          ),
+          // Expanded(
+          //   flex: 1,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 20),
+          //     child: ListView.builder(
+          //       itemBuilder: (context, index) {
+          //         return Padding(
+          //           padding: const EdgeInsets.all(8.0),
+          //           child: Column(
+          //             children: [
+          //               Container(
+          //                 height: 78,
+          //                 width: 71,
+          //                 decoration: BoxDecoration(
+          //                     borderRadius: BorderRadius.circular(10),
+          //                     color: Color(0xFFD9EBEB)),
+          //                 child: UiHelper.CustomImage(
+          //                     img: grocerykitchen[index]["img"].toString()),
+          //               ),
+          //               UiHelper.CustomText(
+          //                   text: grocerykitchen[index]["text"].toString(),
+          //                   color: Colors.black,
+          //                   fontWeight: FontWeight.normal,
+          //                   fontsize: 10)
+          //             ],
+          //           ),
+          //         );
+          //       },
+          //       itemCount: grocerykitchen.length,
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
+          SizedBox(
+            height: 30,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 20,
+              ),
+              UiHelper.CustomText(
+                  text: "Household Essentials",
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontsize: 14,
+                  fontfamily: "bold")
             ],
           ),
-        ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 78,
+                      width: 71,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xFFD9EBEB)),
+                      child: UiHelper.CustomImage(
+                          img: houseHoldUtentials[index]["img"].toString()),
+                    ),
+                  );
+                },
+                itemCount: houseHoldUtentials.length,
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

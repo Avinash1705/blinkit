@@ -9,18 +9,26 @@ import '../../model/appDetails.dart';
 
 class AppDetails extends GetxController {
 
-  static Future testApi() async {
+  static Future<AppDetailModel?> testApi() async {
     String url = ApiConstants.appDetail;
 
-    late var response;
-    late AppDetailModel urRes;
     try {
-      response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(url)).timeout(
+        Duration(seconds: 10),
+      );
+      
       print("response isApp Details ${response.body}");
-      urRes = AppDetailModel.fromJson(jsonDecode(response.body));
+      
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        return AppDetailModel.fromJson(jsonData);
+      } else {
+        print("API request failed with status: ${response.statusCode}");
+        return null;
+      }
     } catch (ex) {
       print("testt exception $ex");
+      return null;
     }
-    return urRes;
   }
 }
