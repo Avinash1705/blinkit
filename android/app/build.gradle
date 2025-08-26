@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.swiggy"
+    namespace "com.luffy1705.fluxkart"
 //    compileSdk flutter.compileSdkVersion
     compileSdk 36
 //    ndkVersion flutter.ndkVersion
@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.swiggy"
+        applicationId "com.luffy1705.fluxkart"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
 //        minSdkVersion flutter.minSdkVersion
@@ -55,10 +55,30 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            if (project.hasProperty('KEYSTORE_PASSWORD')) {
+                storeFile file(System.getenv('KEYSTORE_FILE') ?: rootProject.file('upload-keystore.jks'))
+                storePassword System.getenv('KEYSTORE_PASSWORD') ?: (project.findProperty('storePassword') ?: 'avinash@123')
+                keyAlias System.getenv('KEY_ALIAS') ?: (project.findProperty('keyAlias') ?: 'upload')
+                keyPassword System.getenv('KEY_PASSWORD') ?: (project.findProperty('keyPassword') ?: 'avinash@123')
+            } else {
+                def keystorePropertiesFile = rootProject.file("key.properties")
+                def keystoreProperties = new Properties()
+                if (keystorePropertiesFile.exists()) {
+                    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                    storeFile file(keystoreProperties['storeFile'])
+                    storePassword keystoreProperties['storePassword']
+                    keyAlias keystoreProperties['keyAlias']
+                    keyPassword keystoreProperties['keyPassword']
+                }
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
