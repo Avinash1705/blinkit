@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../controllers/loginCustomerController.dart';
+import '../../dependency/dependency.dart';
 import 'RegistrationCustomerProfileScreen.dart';
 
 class LoginCustomerProfileScreen extends StatefulWidget {
@@ -185,8 +186,11 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
                       ),
                       SizedBox(width: 30),
                     ],
-                  )
-
+                  ),
+                  ElevatedButton(onPressed: (){
+                    showNotification();
+                    print("worked" )  ;
+                  }, child: Text("Test Notification"))
                 ],
               ),
             ),
@@ -196,3 +200,4 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
     );
   }
 }
+

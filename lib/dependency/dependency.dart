@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,11 +11,15 @@ import '../controllers/loginCustomerController.dart';
 import '../domain/AppConstant.dart';
 import '../ui/category/searchController.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
 Future<void> init() async {
   // await GetStorage.init();
   // localNotification();
 
   Get.lazyPut(() => SearchController());
+  initNotifications();
   // Get.lazyPut(() => LoginCustomerController());
 
   // await Firebase.initializeApp();
@@ -24,6 +29,39 @@ Future<void> init() async {
   // loadUserData();
 
 }
+
+Future<void> initNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings =
+  InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+}
+
+
+ Future<void> showNotification() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'channel_id',
+    'channel_name',
+    importance: Importance.high,
+    priority: Priority.high,
+  );
+
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    'Hello!',
+    'This is a local notification.',
+    platformChannelSpecifics,
+  );
+}
+
+
 Future<void> loadUserData(SharedPreferences prefs) async {
    // final prefs = await SharedPreferences.getInstance();
   print("test profie inti  Worked");
