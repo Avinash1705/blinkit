@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 
 import '../../controllers/loginCustomerController.dart';
 import '../../dependency/dependency.dart';
+import '../../services/notify.dart';
 import 'RegistrationCustomerProfileScreen.dart';
 
 class LoginCustomerProfileScreen extends StatefulWidget {
@@ -147,7 +149,7 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
-                  SizedBox(height: 50,),
+                  SizedBox(height: 50),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -188,9 +190,18 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
                     ],
                   ),
                   ElevatedButton(onPressed: (){
-                    showNotification();
-                    print("worked" )  ;
-                  }, child: Text("Test Notification"))
+                    AppConstant.notificationGranted?showNotification("dummy"):showStyledPermissionDialog(Get.context!);
+                    print("worked" );
+                  }, child: Text("Test Notification")),
+                  ElevatedButton(onPressed: (){
+                    setupFCM();
+                    print("fcm worked" );
+                  }, child: Text("Setup fcm")),
+                  ElevatedButton(onPressed: (){
+                    remoteFcm();
+                    print("remote fcm worked" );
+                  }, child: Text("Remote fcm"))
+
                 ],
               ),
             ),

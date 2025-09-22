@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/loginCustomerController.dart';
 import '../domain/AppConstant.dart';
+import '../services/notify.dart';
 import '../ui/category/searchController.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -20,6 +22,9 @@ Future<void> init() async {
 
   Get.lazyPut(() => SearchController());
   initNotifications();
+  // requestNotificationPermission();
+  /*Requesting permission */
+  showStyledPermissionDialog(Get.context!);
   // Get.lazyPut(() => LoginCustomerController());
 
   // await Firebase.initializeApp();
@@ -40,26 +45,48 @@ Future<void> initNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-
- Future<void> showNotification() async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
-    'channel_id',
-    'channel_name',
-    importance: Importance.high,
-    priority: Priority.high,
-  );
-
-  const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    'Hello!',
-    'This is a local notification.',
-    platformChannelSpecifics,
-  );
-}
+// Future<void> requestNotificationPermission() async {
+//   // ✅ Request permission on Android 13+
+//   if (Platform.isAndroid) {
+//     final bool? granted = await flutterLocalNotificationsPlugin
+//         .resolvePlatformSpecificImplementation<
+//         AndroidFlutterLocalNotificationsPlugin>()
+//         ?.requestNotificationsPermission();
+//
+//     // print("Notification permission granted: $granted");
+//     AppConstant.notificationGranted = granted ?? false;
+//   }
+// }
+//  Future<void> showNotification() async {
+//
+//    // ✅ Request permission on Android 13+
+//    if (Platform.isAndroid) {
+//      final bool? granted = await flutterLocalNotificationsPlugin
+//          .resolvePlatformSpecificImplementation<
+//          AndroidFlutterLocalNotificationsPlugin>()
+//          ?.requestNotificationsPermission();
+//
+//      print("Notification permission granted: $granted");
+//    }
+//
+//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+//   AndroidNotificationDetails(
+//     'channel_id',
+//     'channel_name',
+//     importance: Importance.high,
+//     priority: Priority.high,
+//   );
+//
+//   const NotificationDetails platformChannelSpecifics =
+//   NotificationDetails(android: androidPlatformChannelSpecifics);
+//
+//   await flutterLocalNotificationsPlugin.show(
+//     0,
+//     'Hello!',
+//     'This is a local notification.',
+//     platformChannelSpecifics,
+//   );
+// }
 
 
 Future<void> loadUserData(SharedPreferences prefs) async {

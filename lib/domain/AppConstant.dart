@@ -6,6 +6,8 @@ class AppConstant {
   static const int timeoutDuration = 30; // in seconds
   static const String defaultLanguage = "en";
   static const String supportEmail = "";
+  static  bool notificationGranted = false;
+
 
 
   /*customer profile */
