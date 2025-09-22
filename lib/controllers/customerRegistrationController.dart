@@ -4,8 +4,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:swiggy/domain/ApiConstants.dart';
+
+import '../ui/customerProfile/LoginCustomerProfileScreen.dart';
 
 class CustomerRegistrationController {
   // This class will handle customer registration logic
@@ -39,6 +43,7 @@ class CustomerRegistrationController {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("${jsonDecode(response.body)['status']}  🎉")),
         );
+        Get.off(LoginCustomerProfileScreen());
         // print("DDDDDD Customer registered successfully: ${response.body}");
       } else {
         print("DDDDDD Failed to register customer: ${response.statusCode}");

@@ -1,8 +1,11 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../controllers/loginCustomerController.dart';
+import 'RegistrationCustomerProfileScreen.dart';
 
 class LoginCustomerProfileScreen extends StatefulWidget {
   const LoginCustomerProfileScreen({super.key});
@@ -143,6 +146,47 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
                       style: const TextStyle(fontSize: 18),
                     ),
                   ),
+                  SizedBox(height: 50,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // Handle register tap
+                          Get.off(RegistrationCustomerProfilePage());
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.orangeAccent, Colors.yellow],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 6,
+                                offset: Offset(2, 3),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 30),
+                    ],
+                  )
+
                 ],
               ),
             ),
