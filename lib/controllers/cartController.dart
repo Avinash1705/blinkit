@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,6 +71,7 @@ class CartController with ChangeNotifier {
             existingQuantity: existingQuantity),
       );
     }
+    print("cart item added ${jsonEncode(_items)}");
     notifyListeners();
   }
 

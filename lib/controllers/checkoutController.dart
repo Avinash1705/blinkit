@@ -14,6 +14,8 @@ class CheckOutController {
       if (response.statusCode == 200) {
         // Handle success
         print("Subcategory and sold item updated successfully ${response.body}");
+        //can show notification to vendors by phone number here
+
         return response.body;
       } else {
         // Handle error

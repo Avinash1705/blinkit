@@ -79,7 +79,7 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
 
   @override
   Widget build(BuildContext context) {
-    print("data in subcategory ${jsonEncode(data)}");
+    // print("data in subcategory ${jsonEncode(data)}");
     var cartController = Provider.of<CartController>(context);
     return Scaffold(
       appBar: AppBar(

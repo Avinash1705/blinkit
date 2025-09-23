@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/controllers/printController.dart';
-import 'package:swiggy/services/notificationService.dart';
+// import 'package:swiggy/services/notificationService.dart';
 import 'package:swiggy/services/notify.dart';
+import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
+import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'dependency/dependency.dart';
 import 'firebase_options.dart';
 
@@ -73,19 +75,12 @@ class MyApp extends StatelessWidget {
                   print("FCM Token Remote: ${messaging.getToken().then((value) => print(value))}");
 
                   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-                    print('Got a message while in the foreground!');
-                    print('Message data: ${message.data}');
                     if (message.notification != null) {
-                      print('dddd Message title: ${message.notification!.title}');
-                      print('dddd Message body: ${message.notification!.body}');
-                      print("dddd name ${message.notification!.android!.channelId}");
                       showNotification(message.notification!.body ?? "No body");
-                      print('Message also contained a notification: ${message.notification}');
                     }
                   });
                   //register background handler
                   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-                    // setupFCM();
                 }
 
                 if (loginSnapshot.hasError) {
@@ -104,8 +99,7 @@ class MyApp extends StatelessWidget {
 
                 // Show the correct screen based on login status
                 return loggedIn
-                    ? LoginCustomerProfileScreen() // or BottomNavScreen
-                    : LoginCustomerProfileScreen(); // or SplashScreen
+                    ? BottomNavScreen(index: 0):SplashScreen(); // or SplashScreen
               },
             );
           }
@@ -128,12 +122,7 @@ class MyApp extends StatelessWidget {
   Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     // Re-initialize Firebase (required in background isolates)
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-    print("BG Message: ${message.messageId}");
     if (message.notification != null) {
-      print("BG title: ${message.notification!.title}");
-      print("BG body: ${message.notification!.body}");
-
       showNotification(message.notification!.body ?? "No body");
     }
   }

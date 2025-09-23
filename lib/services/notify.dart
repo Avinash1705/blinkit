@@ -11,8 +11,30 @@ import 'package:swiggy/domain/ApiConstants.dart';
 import '../dependency/dependency.dart';
 import '../domain/AppConstant.dart';
 
-Future<void> showNotification(String str) async {
+Future<void> showNotificationMessage(String title, String body) async {
+  print("Showing local notification with title: $title and body: $body");
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'channel_id',
+    'channel_name',
+    importance: Importance.high,
+    priority: Priority.high,
+  );
 
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    title,
+    body,
+    platformChannelSpecifics,
+  );
+}
+
+
+Future<void> showNotification(String str) async {
+  print("Showing local notification with message: $str");
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
   AndroidNotificationDetails(
     'channel_id',

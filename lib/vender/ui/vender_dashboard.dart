@@ -57,18 +57,37 @@ class VendorDashboard extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.deepPurple,
               ),
-              child: Text(
-                'Vendor Panel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: UiHelper.CustomImageNetworkShop(
+                        img: vendorDetails.shop_img.toString(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      '${vendorDetails.venderName} Panel',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+
             ListTile(
               leading: const Icon(Icons.add_box),
               title: const Text('Add Product'),

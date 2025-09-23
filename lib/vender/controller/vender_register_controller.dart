@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:swiggy/domain/ApiConstants.dart';
@@ -31,7 +32,9 @@ class VendorRegisterController {
     if (!formKey.currentState!.validate()) return;
     late vendeRegisterResponseModel urRes;
     try {
-
+      // ✅ Get FCM token
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      print("Device FCM Token: $fcmToken");
       var request = await http.MultipartRequest(
           'POST',
           Uri.parse("$apiUrl?vender_name=${nameController.text}"
@@ -40,6 +43,7 @@ class VendorRegisterController {
               "&location=${locationController.text}"),
       );
       request.fields['name'] = nameController.text;
+      request.fields['fcm_token'] = fcmToken ?? '';
       request.files.add(
         await http.MultipartFile.fromPath(
           'image', // must match $_FILES['image'] in PHP
