@@ -72,10 +72,14 @@ class MyApp extends StatelessWidget {
                   );
                 }
                 if (loginSnapshot.connectionState == ConnectionState.done) {
-
+                  //firebase
+                  FirebaseMessaging messaging = FirebaseMessaging.instance;
+                  messaging.getToken().then((token) {
+                    print("Firebase Messaging Token main: $token");
+                  });
                   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
                     if (message.notification != null) {
-                      showNotification(message.notification!.body ?? "No body");
+                      showNotificationMessage(message.notification!.title??"No title",message.notification!.body ?? "No body");
                     }
                   });
                   //register background handler
@@ -129,7 +133,7 @@ class MyApp extends StatelessWidget {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     if (message.notification != null) {
-      showNotification(message.notification!.body ?? "No body");
+      showNotificationMessage(message.notification!.title??"No title",message.notification!.body ?? "No body");
     }
   }
 }

@@ -189,18 +189,7 @@ class _CustomerLoginScreenState extends State<LoginCustomerProfileScreen> {
                       SizedBox(width: 30),
                     ],
                   ),
-                  ElevatedButton(onPressed: (){
-                    AppConstant.notificationGranted?showNotification("dummy"):showStyledPermissionDialog(Get.context!);
-                    print("worked" );
-                  }, child: Text("Test Notification")),
-                  ElevatedButton(onPressed: (){
-                    setupFCM();
-                    print("fcm worked" );
-                  }, child: Text("Setup fcm")),
-                  ElevatedButton(onPressed: (){
-                    remoteFcm();
-                    print("remote fcm worked" );
-                  }, child: Text("Remote fcm"))
+
 
                 ],
               ),

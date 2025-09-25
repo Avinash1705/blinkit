@@ -39,16 +39,11 @@ void updateQty(int id, int qty,List<allVenders.Data>? allVenderData) {
                 print("Matched phone vendor ${allVenderData[i].fcm_token}"),
                 FirebaseMessaging .instance.getToken().then((refreshFcmToken) =>
                     {
+                      print("refreshed fcm token in order placed screen ${refreshFcmToken}"),
                       NotificationController().saveToken("${allVenderData[i].venderId}", refreshFcmToken!),
-                      NotificationController().sendNotification(phone: allVenderData[i].phone.toString(),vendorId: "${allVenderData[i].venderId}", title: 'gitu love tite', body: 'gitu body'),
+                      NotificationController().sendNotification(phone: allVenderData[i].phone.toString(),vendorId: "${allVenderData[i].venderId}", title: 'gitu  tite', body: 'gitu   body'),
                     }
                 ),
-
-                // NotificationController().sendVendorNotification(vendorId: "4", orderId: 'gituOrderId', title: 'gitu titke', body: 'gitu body').then((_) {
-                //   print("Notification sent to vendor ${allVenderData[i].phone}");
-                // }).catchError((error) {
-                //   print("Error sending notification to vendor: $error");
-                // } )
               }
             }
           })

@@ -32,26 +32,26 @@ Future<void> showNotificationMessage(String title, String body) async {
   );
 }
 
-Future<void> showNotification(String str) async {
-  print("Showing local notification with message: $str");
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
-    'channel_id',
-    'channel_name',
-    importance: Importance.high,
-    priority: Priority.high,
-  );
-
-  const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    'Hello!',
-    'This is a local Notify. $str',
-    platformChannelSpecifics,
-  );
-}
+// Future<void> showNotification(String str) async {
+//   print("Showing local notification with message: $str");
+//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+//   AndroidNotificationDetails(
+//     'channel_id',
+//     'channel_name',
+//     importance: Importance.high,
+//     priority: Priority.high,
+//   );
+//
+//   const NotificationDetails platformChannelSpecifics =
+//   NotificationDetails(android: androidPlatformChannelSpecifics);
+//
+//   await flutterLocalNotificationsPlugin.show(
+//     0,
+//     'Hello!',
+//     'This is a local Notify. $str',
+//     platformChannelSpecifics,
+//   );
+// }
 
 
 void showStyledPermissionDialog(BuildContext context) {
@@ -168,7 +168,7 @@ void setupFCM() {
       print('dddd Message title: ${message.notification!.title}');
       print('dddd Message body: ${message.notification!.body}');
       print("dddd name ${message.notification!.android!.channelId}");
-      showNotification(message.notification!.body ?? "No body");
+      showNotificationMessage(message.notification!.body ?? "No body","${message.notification!.title ?? "No title"}");
       print('Message also contained a notification: ${message.notification}');
     }
   });
