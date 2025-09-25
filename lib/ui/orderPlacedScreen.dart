@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -34,6 +35,15 @@ void updateQty(int id, int qty,List<allVenders.Data>? allVenderData) {
               print("Matched phone loop ${allVenderData[i].phone}  == ${jsonDecode(value)['phone']}"),
               if(allVenderData[i].phone==jsonDecode(value)['phone']){
                 print("Matched phone vendor ${allVenderData[i].phone}"),
+                print("Matched phone vendor ${allVenderData[i].venderId}"),
+                print("Matched phone vendor ${allVenderData[i].fcm_token}"),
+                FirebaseMessaging .instance.getToken().then((refreshFcmToken) =>
+                    {
+                      NotificationController().saveToken("${allVenderData[i].venderId}", refreshFcmToken!),
+                      NotificationController().sendNotification(phone: allVenderData[i].phone.toString(),vendorId: "${allVenderData[i].venderId}", title: 'gitu love tite', body: 'gitu body'),
+                    }
+                ),
+
                 // NotificationController().sendVendorNotification(vendorId: "4", orderId: 'gituOrderId', title: 'gitu titke', body: 'gitu body').then((_) {
                 //   print("Notification sent to vendor ${allVenderData[i].phone}");
                 // }).catchError((error) {

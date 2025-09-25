@@ -72,18 +72,6 @@ class MyApp extends StatelessWidget {
                   );
                 }
                 if (loginSnapshot.connectionState == ConnectionState.done) {
-                  print("Firebase Initialized and login check done");
-                  FirebaseMessaging messaging = FirebaseMessaging.instance;
-                  print(
-                      "FCM Token Remote: ${messaging.getToken().then((value) => {
-                            print("nnnn fcm token $value"),
-                            //testing my noti
-                        NotificationController().saveToken("4", value!),
-                       NotificationController().sendNotification(phone: '3333333333',vendorId: "4", title: 'gitu tite', body: 'gitu body'),
-                        print("nnnn send notificatin"),
-                          })}");
-
-                  // print("Token Saved: $saved");
 
                   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
                     if (message.notification != null) {
