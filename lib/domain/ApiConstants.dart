@@ -25,6 +25,7 @@ class ApiConstants {
   static  String getSpecificVenderCategories = "$ssl://$ip/fluxKart/apis/getSpecificVenderCategories.php";
   static  String updateSubcategoryAndSoldItem = "$ssl://$ip/fluxKart/apis/updateSubcategoryAndSoldItem.php";
   static  String updateSoldItemLog = "$ssl://$ip/fluxKart/apis/updateSoldItemLog.php";
+  static  String sendNotification = "$ssl://$ip/fluxKart/apis/sendNotification.php";
   static  String updateAppDetail = "$ssl://$ip/fluxKart/apis/updateAppDetail.php";
   static  String updateEditProductInVender = "$ssl://$ip/fluxKart/apis/updateEditProductInVender.php";
 /* customer order history */

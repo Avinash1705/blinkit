@@ -38,13 +38,14 @@ class Data {
   String? location;
   String? valid;
   String? shop_img;
+  String? fcm_token;
 
   Data(
       {this.venderName,
         this.venderId,
         this.shopName,
         this.phone,
-        this.location,this.valid});
+        this.location,this.valid,this.fcm_token});
 
   Data.fromJson(Map<String, dynamic> json) {
     venderName = json['vender_name'];
@@ -54,6 +55,7 @@ class Data {
     location = json['location'];
     valid = json['valid'];
     shop_img = json['shop_img'];
+    fcm_token = json['fcm_token'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +67,7 @@ class Data {
     data['location'] = this.location;
     data['valid'] = this.valid;
     data['shop_img'] = this.shop_img;
+    data['fcm_token'] = this.fcm_token;
     return data;
   }
 }

@@ -32,7 +32,6 @@ Future<void> showNotificationMessage(String title, String body) async {
   );
 }
 
-
 Future<void> showNotification(String str) async {
   print("Showing local notification with message: $str");
   const AndroidNotificationDetails androidPlatformChannelSpecifics =

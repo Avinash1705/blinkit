@@ -1,7 +1,11 @@
 
 
+import 'dart:convert';
+
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:http/http.dart'as http;
+
+import '../vender/controller/AllVenderController.dart';
 
 class CheckOutController {
 
@@ -15,7 +19,10 @@ class CheckOutController {
         // Handle success
         print("Subcategory and sold item updated successfully ${response.body}");
         //can show notification to vendors by phone number here
-
+        final data = jsonDecode(response.body);
+        for(int i=0;i<data.length;i++){
+          print("data id ${data['vender_id']} phone ${data['phone']} loc ${data['location']}");
+        }
         return response.body;
       } else {
         // Handle error

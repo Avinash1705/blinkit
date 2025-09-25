@@ -7,11 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/controllers/printController.dart';
+
 // import 'package:swiggy/services/notificationService.dart';
 import 'package:swiggy/services/notify.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
+import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
 import 'firebase_options.dart';
 
@@ -31,7 +33,8 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   // Firebase initialization future
-  final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final Future<FirebaseApp> _firebaseInitialization =
+      Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +71,19 @@ class MyApp extends StatelessWidget {
                     body: Center(child: CircularProgressIndicator()),
                   );
                 }
-                if(loginSnapshot.connectionState == ConnectionState.done){
-
+                if (loginSnapshot.connectionState == ConnectionState.done) {
                   print("Firebase Initialized and login check done");
                   FirebaseMessaging messaging = FirebaseMessaging.instance;
-                  print("FCM Token Remote: ${messaging.getToken().then((value) => print(value))}");
+                  print(
+                      "FCM Token Remote: ${messaging.getToken().then((value) => {
+                            print("nnnn fcm token $value"),
+                            //testing my noti
+                        NotificationController().saveToken("4", value!),
+                       NotificationController().sendNotification(phone: '3333333333',vendorId: "4", title: 'gitu tite', body: 'gitu body'),
+                        print("nnnn send notificatin"),
+                          })}");
+
+                  // print("Token Saved: $saved");
 
                   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
                     if (message.notification != null) {
@@ -80,7 +91,11 @@ class MyApp extends StatelessWidget {
                     }
                   });
                   //register background handler
-                  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+                  FirebaseMessaging.onBackgroundMessage(
+                      _firebaseMessagingBackgroundHandler);
+
+                  //notification
+                  // NotificationController().sendVendorNotification(vendorId: "4", orderId: 'gituOrderId', title: 'gitu titke', body: 'gitu body');
                 }
 
                 if (loginSnapshot.hasError) {
@@ -99,11 +114,11 @@ class MyApp extends StatelessWidget {
 
                 // Show the correct screen based on login status
                 return loggedIn
-                    ? BottomNavScreen(index: 0):SplashScreen(); // or SplashScreen
+                    ? BottomNavScreen(index: 0)
+                    : SplashScreen(); // or SplashScreen
               },
             );
           }
-
           // Loading Firebase
           return Scaffold(
             body: Center(child: CircularProgressIndicator()),
@@ -119,12 +134,14 @@ class MyApp extends StatelessWidget {
     loadUserData(prefs); // Your existing function
     return prefs.containsKey('customer_id');
   }
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     // Re-initialize Firebase (required in background isolates)
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
     if (message.notification != null) {
       showNotification(message.notification!.body ?? "No body");
     }
   }
-
 }

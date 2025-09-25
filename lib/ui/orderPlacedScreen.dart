@@ -5,42 +5,75 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/cartController.dart';
+import 'package:swiggy/controllers/notificationSendController.dart';
 import 'package:swiggy/controllers/printController.dart';
 import 'package:swiggy/model/cartModel.dart';
+import 'package:swiggy/vender/controller/AllVenderController.dart';
 
 import '../controllers/checkoutController.dart';
+import '../vender/venderModels/GetVenderResponseModel.dart';
 import 'bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
+    as allVenders;
 
 class OrderPlacedScreen extends StatefulWidget {
-   OrderPlacedScreen({super.key});
+  OrderPlacedScreen({super.key});
 
   @override
-  State<OrderPlacedScreen> createState()  =>_OrderPlacedScreenState();
+  State<OrderPlacedScreen> createState() => _OrderPlacedScreenState();
 }
-void updateQty(int id, int qty) {
-  // CheckOutController().updateItemQuantity(id, qty).then((value) =>
-  CheckOutController().updateSubcategoryAndSoldItem(id, qty).then((value) =>
-  {
-    print("Qty updated successfully $value")
-  }).catchError((error) {
+
+void updateQty(int id, int qty,List<allVenders.Data>? allVenderData) {
+  print("Updating qty ${jsonEncode(allVenderData)}");
+  CheckOutController()
+      .updateSubcategoryAndSoldItem(id, qty)
+      .then((value) => {
+            print("Qty fffupdated successfully ${jsonEncode(value)}"),
+            print("Qty kkkupdated successfully ${jsonDecode(value)['phone']}"),
+            for(int i=0;i<allVenderData!.length;i++){
+              print("Matched phone loop ${allVenderData[i].phone}  == ${jsonDecode(value)['phone']}"),
+              if(allVenderData[i].phone==jsonDecode(value)['phone']){
+                print("Matched phone vendor ${allVenderData[i].phone}"),
+                // NotificationController().sendVendorNotification(vendorId: "4", orderId: 'gituOrderId', title: 'gitu titke', body: 'gitu body').then((_) {
+                //   print("Notification sent to vendor ${allVenderData[i].phone}");
+                // }).catchError((error) {
+                //   print("Error sending notification to vendor: $error");
+                // } )
+              }
+            }
+          })
+      .catchError((error) {
     print("Error updating quantity: $error");
   });
-
 }
-class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
 
+class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
+  AllVenderController allVenderController = AllVenderController();
+  late List<allVenders.Data>? allVenderData;
+
+  @override
+  void initState() {
+    AllVenderController().fetchVendors().then((value) => {
+          setState(() {
+            allVenderData = value.data;
+            print(
+                "all vender data in order placed screen ${jsonEncode(allVenderData)}");
+          }),
+        });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var printController = Provider.of<Printcontroller>(context);
     print("cartController items in order placed screen ${jsonEncode(cartController.items)}");
-    for(int i=0;i<cartController.itemCount;i++){
+    for (int i = 0; i < cartController.itemCount; i++) {
       CartItem item = cartController.items.values.elementAt(i);
       // print("item id ${item.productId} title ${item.title} price ${item.price} qty ${item.quantity}");
-      updateQty(int.parse(item.productId), item.quantity);
+      updateQty(int.parse(item.productId), item.quantity,allVenderData);
     }
-   
+
     printController.addTransition(cartController.items);
     printController.updateExistingQuantity();
 
