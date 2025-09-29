@@ -47,7 +47,7 @@ class VendorDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
+    print("dashboardVender ${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -345,8 +345,7 @@ class _MyProductsPage extends State<MyProductsPage> {
                   Get.to(EditProductPage(
                     product: product,
                   ));
-                  Get.snackbar(
-                      "Delete", "Delete functionality not implemented yet");
+                  setState(() {});
                 },
               ),
             ),

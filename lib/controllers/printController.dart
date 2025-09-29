@@ -87,7 +87,7 @@ class Printcontroller extends ChangeNotifier {
       "customer_location": AppConstant.location,
       "cartItems": cartItems.map((e) => e.toJson()).toList(),
     };
-
+      print("Order body: ${jsonEncode(body)}");
     try {
       final response = await http.post(
         url,

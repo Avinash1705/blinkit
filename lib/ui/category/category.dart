@@ -134,9 +134,9 @@ class _CategoryState extends State<Category> {
           height: size.height,
           child: Column(
             children: [
-              SizedBox(
-                height: 40,
-              ),
+              // SizedBox(
+              //   height: 40,
+              // ),
               CustomAppBar(controller: searchController),
               SizedBox(
                 height: 10,

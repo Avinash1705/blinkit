@@ -3,9 +3,12 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:swiggy/domain/ApiConstants.dart';
 
+import '../../ui/login/loginScreenStatic.dart';
 import '../venderModels/vendeRegisterResponseModel.dart';
 
 class VendorRegisterController {
@@ -58,8 +61,8 @@ class VendorRegisterController {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(urRes.status ?? 'Vendor registered successfully')),
-        );
+          SnackBar(content: Text(urRes.status ?? 'Vendor registered successfully')));
+        Get.off(StaticLoginScreen());
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to register vendor')),

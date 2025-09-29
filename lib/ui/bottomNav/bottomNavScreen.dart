@@ -7,9 +7,11 @@ import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../../controllers/loginCustomerController.dart';
+import '../../domain/appConsatant.dart';
 import '../cart/cartScreen.dart';
 import '../category/category.dart';
 import '../home/homeScreen.dart';
+import '../login/loginScreenStatic.dart';
 import '../print/printScreen.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -62,6 +64,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     return WillPopScope(
       onWillPop: () =>  _onWillPop(context),
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.yellowAppColor.withOpacity(0.9),
+          title: const Text("FluxKart"), // or dynamic title per tab
+        ),
         body: IndexedStack(
           index: currentIndex,
           children: pages,
@@ -88,16 +94,40 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         ),
         floatingActionButton: Visibility(
           visible: _cartController.getItemCount() != 0,
-          child: FloatingActionButton(onPressed: (){
-            Get.to(CartScreen());
-          },child: Selector<CartController,int>(
-            selector: (context,cartController) =>cartController.getItemCount(),
-            builder: (context,itemCount,child){
-              return Text(itemCount.toString());
+          child: FloatingActionButton(
+            onPressed: () {
+              Get.to(CartScreen());
             },
-          )),
+            child: Selector<CartController, int>(
+              selector: (context, cartController) =>
+                  cartController.getItemCount(),
+              builder: (context, itemCount, child) {
+                return Text(itemCount.toString());
+              },
+            ),
+          ),
         ),
-      ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(color: AppColors.yellowAppColor),
+                child: Text(
+                  "Menu",
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
+              ),
+              InkWell( onTap: () => Get.off(StaticLoginScreen()),
+                child: const ListTile(
+                  leading: Icon(Icons.login),
+                  title: Text("Sign in as Vendor"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
     );
   }
 }

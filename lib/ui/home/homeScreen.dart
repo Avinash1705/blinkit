@@ -9,6 +9,7 @@ import 'package:swiggy/controllers/cartController.dart';
 import '../../controllers/appDetails/appDetails.dart';
 import '../../controllers/subCatgoryController.dart';
 import '../../domain/AppConstant.dart';
+import '../../domain/appConsatant.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../customerProfile/profileScreen.dart';
@@ -127,30 +128,29 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 40,
-          ),
+          // SizedBox(
+          //   height: 40,
+          // ),
           Stack(
             children: [
               Container(
                 height: 190,
                 width: double.infinity,
-                color: Color(0xffec0505),
+                color: AppColors.yellowAppColor,
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 30,
-                    ),
+                    // SizedBox(
+                    //   height: 30,
+                    // ),
                     Row(
                       children: [
                         SizedBox(
                           width: 20,
                         ),
                         dataLoaded.data == null || dataLoaded.data!.isEmpty
-                            ? CircularProgressIndicator()
+                            ? Center(child: CircularProgressIndicator())
                             : UiHelper.CustomText(
-                                text:
-                                    dataLoaded.data![0].appName ?? "Loading...",
+                                text: dataLoaded.data![0].appName ?? "Loading...",
                                 color: Color(0xFFffffff),
                                 fontWeight: FontWeight.bold,
                                 fontsize: 15,
@@ -229,14 +229,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     UiHelper.CustomImage(img: "image 60.png"),
-                    UiHelper.CustomImage(img: "image 55.png"),
+                    // UiHelper.CustomImage(img: "image 55.png"),
                     UiHelper.CustomText(
                         text: "Mega Diwali Sale",
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontsize: 20,
                         fontfamily: "bold"),
-                    UiHelper.CustomImage(img: "image 55.png"),
+                    // UiHelper.CustomImage(img: "image 55.png"),
                     UiHelper.CustomImage(img: "image 61.png"),
                   ],
                 ),
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: allSubcategory == null
-                  ? const CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : ListView.builder(
                       itemCount: allSubcategory!.length,
                       scrollDirection: Axis.horizontal,
@@ -382,55 +382,55 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 width: 20,
               ),
-              UiHelper.CustomText(
-                  text: "Grocery & Kichen",
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontsize: 14,
-                  fontfamily: "bold")
+              // UiHelper.CustomText(
+              //     text: "Grocery & Kichen",
+              //     color: Colors.black,
+              //     fontWeight: FontWeight.bold,
+              //     fontsize: 14,
+              //     fontfamily: "bold")
             ],
           ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: InkWell(
-                        onTap: () => Get.to(Subcategory(
-                          categoryName:
-                              grocerykitchen[index]["text"].toString(),
-                        )),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 78,
-                              width: 71,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xFFD9EBEB)),
-                              child: UiHelper.CustomImage(
-                                  img: grocerykitchen[index]["img"].toString()),
-                            ),
-                            UiHelper.CustomText(
-                                text: grocerykitchen[index]["text"].toString(),
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontsize: 10)
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                itemCount: grocerykitchen.length,
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-          ),
+          // Expanded(
+          //   flex: 2,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 20),
+          //     child: ListView.builder(
+          //       itemBuilder: (context, index) {
+          //         return Padding(
+          //           padding: const EdgeInsets.all(8.0),
+          //           child: SingleChildScrollView(
+          //             child: InkWell(
+          //               onTap: () => Get.to(Subcategory(
+          //                 categoryName:
+          //                     grocerykitchen[index]["text"].toString(),
+          //               )),
+          //               child: Column(
+          //                 children: [
+          //                   Container(
+          //                     height: 78,
+          //                     width: 71,
+          //                     decoration: BoxDecoration(
+          //                         borderRadius: BorderRadius.circular(10),
+          //                         color: Color(0xFFD9EBEB)),
+          //                     child: UiHelper.CustomImage(
+          //                         img: grocerykitchen[index]["img"].toString()),
+          //                   ),
+          //                   UiHelper.CustomText(
+          //                       text: grocerykitchen[index]["text"].toString(),
+          //                       color: Colors.black,
+          //                       fontWeight: FontWeight.normal,
+          //                       fontsize: 10)
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //       itemCount: grocerykitchen.length,
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

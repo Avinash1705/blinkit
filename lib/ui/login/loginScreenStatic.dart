@@ -55,7 +55,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.yellow.shade50,
       appBar: AppBar(title: const Text(" Login")),
       body: Padding(
         padding: const EdgeInsets.all(24.0),

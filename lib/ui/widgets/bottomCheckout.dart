@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/ui/address/addressScreen.dart';
+import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/orderPlacedScreen.dart';
 import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
 import '../../controllers/checkoutController.dart';
+import '../../dependency/dependency.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -18,28 +20,15 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   String localAddress = '';
   AddressController addressController = AddressController();
-
-  // void loadPrefs() async {
-  //
-  //   final prefs = await SharedPreferences.getInstance();
-  //  setState(() {
-  //    localAddress = prefs.getString('location') ?? "No Address Found";
-  //    print("updatedAdd bottom load $localAddress");
-  //    print("locAddress ${localAddress}");
-  //  });
-  //   // try {
-  //   //
-  //   //
-  //   // } catch (e) {
-  //   //   localAddress = e.toString();
-  //   // }
-  // }
+  bool loggedIn = false;
 
   @override
   initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-     
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+       loggedIn = await isUserLoggedIn();
+       print("loggedIn: $loggedIn");
+       setState(() {}); // Refresh UI after checking login status
     });
   }
 
@@ -54,7 +43,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     var cartController = Provider.of<CartController>(context);
     // var addressController = Provider.of<AddressController>(context);
     print("addressController updatedAddress: ${addressController.updatedAddress.value}");
-    String _selectedPayment = "online"; // default selected
+     // default selected
     // addressController.saveLocData();
     print("update ");
     return Container(
@@ -122,80 +111,176 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       child: Text("Checkout", style: TextStyle(fontSize: 16)),
                     )
-                  : ElevatedButton(
-                      onPressed: () {
-                        showDialog(context: context, builder: (context) => AlertDialog(
-                          title: const Text("Confirm Order"),
-                            content: Column(
-                              children: [
-                                const Text(
-                                  "Are you sure you want to place this order?",
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 10),
+                  :  loggedIn   ?ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      String _selectedPayment = "online"; // local state for dialog
 
-                                // Radio buttons
-                                RadioListTile<String>(
-                                  title: const Text("Online Payment"),
-                                  value: "online",
-                                  groupValue: _selectedPayment,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedPayment = value!;
-                                    });
-                                  },
-                                ),
-                                RadioListTile<String>(
-                                  title: const Text("Cash on Delivery"),
-                                  value: "cod",
-                                  groupValue: _selectedPayment,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedPayment = value!;
-                                    });
-                                  },
-                                ),
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return AlertDialog(
+                            title: const Text("Confirm Order"),
+                            insetPadding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 24), // reduce width
+                            content: SizedBox(
+                              height: 170,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    "Are you sure you want to place this order?",
+                                    style:
+                                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 10),
 
-                                const SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Do your order placing logic here
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text("Selected: $_selectedPayment")),
-                                    );
-                                  },
-                                  child: const Text("Confirm Order"),
-                                ),
-                              ],
+                                  // Radio buttons
+                                  RadioListTile<String>(
+                                    title: const Text("Online Payment"),
+                                    value: "online",
+                                    groupValue: _selectedPayment,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedPayment = value!;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile<String>(
+                                    title: const Text("Cash on Delivery"),
+                                    value: "cod",
+                                    groupValue: _selectedPayment,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedPayment = value!;
+                                      });
+                                    },
+                                  ),
+
+                                  const SizedBox(height: 10),
+                                  // ElevatedButton(
+                                  //   onPressed: () {
+                                  //     Navigator.of(context).pop(); // close dialog
+                                  //     ScaffoldMessenger.of(context).showSnackBar(
+                                  //       SnackBar(
+                                  //           content: Text("Selected: $_selectedPayment")),
+                                  //     );
+                                  //   },
+                                  //   child: const Text("Confirm Order"),
+                                  // ),
+                                ],
+                              ),
                             ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(), // Close dialog
-                              child: const Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close dialog
-                                Get.off(OrderPlacedScreen()); // Navigate
-                              },
-                              child: const Text("Yes"),
-                            ),
-                          ],
-                        ));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text("Checkout", style: TextStyle(fontSize: 16)),
-                    ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Get.off(OrderPlacedScreen()); // Navigate
+                                },
+                                child: const Text("Yes"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                child: const Text("Checkout", style: TextStyle(fontSize: 16)),
+              ):ElevatedButton(onPressed: ()=>Get.off(const LoginCustomerProfileScreen()), child: Text("Login to buy")),
+              // : ElevatedButton(
+                  //     onPressed: () {
+                  //       String _selectedPayment = "online";
+                  //       showDialog(context: context, builder: (context) => AlertDialog(
+                  //         title: const Text("Confirm Order"),
+                  //           content: SizedBox(
+                  //             height: 170, // Adjust height as needed
+                  //             child: Column(
+                  //               children: [
+                  //                 const Text(
+                  //                   "Are you sure you want to place this order?",
+                  //                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  //                 ),
+                  //                 const SizedBox(height: 10),
+                  //
+                  //                 // Radio buttons
+                  //                 RadioListTile<String>(
+                  //                   title: const Text("Online Payment"),
+                  //                   value: "online",
+                  //                   groupValue: _selectedPayment,
+                  //                   onChanged: (value) {
+                  //                     setState(() {
+                  //                       _selectedPayment = value!;
+                  //                     });
+                  //                   },
+                  //                 ),
+                  //                 RadioListTile<String>(
+                  //                   title: const Text("Cash on Delivery"),
+                  //                   value: "cod",
+                  //                   groupValue: _selectedPayment,
+                  //                   onChanged: (value) {
+                  //                     setState(() {
+                  //                       _selectedPayment = value!;
+                  //                     });
+                  //                   },
+                  //                 ),
+                  //
+                  //                 const SizedBox(height: 10),
+                  //                 // ElevatedButton(
+                  //                 //   onPressed: () {
+                  //                 //     // Do your order placing logic here
+                  //                 //     ScaffoldMessenger.of(context).showSnackBar(
+                  //                 //       SnackBar(content: Text("Selected: $_selectedPayment")),
+                  //                 //     );
+                  //                 //   },
+                  //                 //   child: const Text("Confirm Order"),
+                  //                 // ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         actions: [
+                  //           TextButton(
+                  //             onPressed: () => Navigator.of(context).pop(), // Close dialog
+                  //             child: const Text("Cancel"),
+                  //           ),
+                  //           TextButton(
+                  //             onPressed: () {
+                  //               Navigator.of(context).pop(); // Close dialog
+                  //               Get.off(OrderPlacedScreen()); // Navigate
+                  //             },
+                  //             child: const Text("Yes"),
+                  //           ),
+                  //         ],
+                  //       ));
+                  //     },
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.green,
+                  //       padding:
+                  //           EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  //       shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(8)),
+                  //     ),
+                  //     child: Text("Checkout", style: TextStyle(fontSize: 16)),
+                  //   ),
             ],
           ),
         ],
       ),
     );
   }
+}
+Future<bool> isUserLoggedIn() async {
+  final prefs = await SharedPreferences.getInstance();
+  loadUserData(prefs); // Your existing function
+  return prefs.containsKey('customer_id');
 }
