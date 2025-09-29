@@ -19,6 +19,7 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  init();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => CartController()),
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
             return Scaffold(
               body: Center(
                 child: Text(
-                  'Error initializing Firebase\n${snapshot.error}',
+                  'Error initializing 78\n${snapshot.error}',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.red, fontSize: 18),
                 ),
@@ -73,10 +74,10 @@ class MyApp extends StatelessWidget {
                 }
                 if (loginSnapshot.connectionState == ConnectionState.done) {
                   //firebase
-                  FirebaseMessaging messaging = FirebaseMessaging.instance;
-                  messaging.getToken().then((token) {
-                    print("Firebase Messaging Token main: $token");
-                  });
+                  // FirebaseMessaging messaging = FirebaseMessaging.instance;
+                  // messaging.getToken().then((token) {
+                  //   print("Firebase Messaging Token main: $token");
+                  // });
                   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
                     if (message.notification != null) {
                       showNotificationMessage(message.notification!.title??"No title",message.notification!.body ?? "No body");

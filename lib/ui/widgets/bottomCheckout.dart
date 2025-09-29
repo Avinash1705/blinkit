@@ -54,7 +54,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     var cartController = Provider.of<CartController>(context);
     // var addressController = Provider.of<AddressController>(context);
     print("addressController updatedAddress: ${addressController.updatedAddress.value}");
-
+    String _selectedPayment = "online"; // default selected
     // addressController.saveLocData();
     print("update ");
     return Container(
@@ -126,7 +126,48 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       onPressed: () {
                         showDialog(context: context, builder: (context) => AlertDialog(
                           title: const Text("Confirm Order"),
-                            content: const Text("Are you sure you want to place this order?"),
+                            content: Column(
+                              children: [
+                                const Text(
+                                  "Are you sure you want to place this order?",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+
+                                // Radio buttons
+                                RadioListTile<String>(
+                                  title: const Text("Online Payment"),
+                                  value: "online",
+                                  groupValue: _selectedPayment,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedPayment = value!;
+                                    });
+                                  },
+                                ),
+                                RadioListTile<String>(
+                                  title: const Text("Cash on Delivery"),
+                                  value: "cod",
+                                  groupValue: _selectedPayment,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedPayment = value!;
+                                    });
+                                  },
+                                ),
+
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Do your order placing logic here
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Selected: $_selectedPayment")),
+                                    );
+                                  },
+                                  child: const Text("Confirm Order"),
+                                ),
+                              ],
+                            ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(), // Close dialog

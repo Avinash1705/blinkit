@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
+import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../../controllers/loginCustomerController.dart';
@@ -18,6 +22,8 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   late int currentIndex ;
+  // CartController _cartController = Get.find<CartController>();
+
   List<Widget> pages = [
     HomeScreen(),
     Category(),
@@ -51,6 +57,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   }
   @override
   Widget build(BuildContext context) {
+  CartController _cartController = Provider.of<CartController>(context);
+  print("cartddddd  homeCart${_cartController.getItemCount()}");
     return WillPopScope(
       onWillPop: () =>  _onWillPop(context),
       child: Scaffold(
@@ -77,6 +85,17 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               currentIndex = index;
             });
           },
+        ),
+        floatingActionButton: Visibility(
+          visible: _cartController.getItemCount() != 0,
+          child: FloatingActionButton(onPressed: (){
+            Get.to(CartScreen());
+          },child: Selector<CartController,int>(
+            selector: (context,cartController) =>cartController.getItemCount(),
+            builder: (context,itemCount,child){
+              return Text(itemCount.toString());
+            },
+          )),
         ),
       ),
     );

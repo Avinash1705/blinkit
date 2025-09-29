@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiggy/controllers/cartController.dart';
 // import 'package:get_storage/get_storage.dart';
 
 import '../controllers/loginCustomerController.dart';
@@ -21,6 +22,8 @@ Future<void> init() async {
   // localNotification();
 
   Get.lazyPut(() => SearchController());
+  Get.lazyPut(() => CartController());
+  requestNotificationPermission();
   initNotifications();
   // requestNotificationPermission();
   /*Requesting permission */
@@ -45,18 +48,18 @@ Future<void> initNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
-// Future<void> requestNotificationPermission() async {
-//   // ✅ Request permission on Android 13+
-//   if (Platform.isAndroid) {
-//     final bool? granted = await flutterLocalNotificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//         AndroidFlutterLocalNotificationsPlugin>()
-//         ?.requestNotificationsPermission();
-//
-//     // print("Notification permission granted: $granted");
-//     AppConstant.notificationGranted = granted ?? false;
-//   }
-// }
+Future<void> requestNotificationPermission() async {
+  // ✅ Request permission on Android 13+
+  if (Platform.isAndroid) {
+    final bool? granted = await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
+
+    // print("Notification permission granted: $granted");
+    AppConstant.notificationGranted = granted ?? false;
+  }
+}
 //  Future<void> showNotification() async {
 //
 //    // ✅ Request permission on Android 13+

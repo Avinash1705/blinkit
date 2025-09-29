@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 // import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +17,7 @@ import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
     as allVenders;
 import '../../vender/controller/AllVenderController.dart';
 import '../../vender/venderModels/GetVenderResponseModel.dart';
+import '../cart/cartScreen.dart';
 import '../widgets/uihelper.dart';
 
 class SubCategoryNew extends StatefulWidget {
@@ -86,7 +89,18 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
           title: Text(widget.data.categoryName.toString()),
           toolbarHeight: 100,
           backgroundColor: Color(0xfff7Cb45)),
-      body: data == null
+      floatingActionButton: Visibility(
+        visible: cartController.getItemCount() != 0,
+        child: FloatingActionButton(onPressed: (){
+          Get.to(CartScreen());
+        },child: Selector<CartController,int>(
+          selector: (context,cartController) =>cartController.getItemCount(),
+          builder: (context,itemCount,child){
+            return Text(itemCount.toString());
+          },
+        )),
+        ),
+        body: data == null
           // ? data!.isNotEmpty
           ? Center(child: CircularProgressIndicator())
           // : Center(child: Text("No item added in this category"))

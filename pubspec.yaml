@@ -41,7 +41,8 @@ dependencies:
   provider: ^6.1.5
   flutter_sliding_toast: any
   shared_preferences: ^2.2.3
-  syncfusion_flutter_charts: any
+#  syncfusion_flutter_charts: any
+  material_charts: ^0.0.38
 #  get_storage: any
   image_picker: ^1.1.2
   permission_handler: ^12.0.1

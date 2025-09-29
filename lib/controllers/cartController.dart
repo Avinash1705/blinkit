@@ -22,6 +22,13 @@ class CartController with ChangeNotifier {
     });
     return total;
   }
+  int getItemCount() {
+    int totalQuantity = 0;
+    _items.forEach((key, item) {
+      totalQuantity += item.quantity;
+    });
+    return totalQuantity;
+  }
   void removeItemFromCart(String productId, String title, String img, double price,
       int? existingQuantity) {
     if (_items.containsKey(productId)) {

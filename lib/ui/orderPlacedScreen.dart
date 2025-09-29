@@ -24,28 +24,33 @@ class OrderPlacedScreen extends StatefulWidget {
   State<OrderPlacedScreen> createState() => _OrderPlacedScreenState();
 }
 
-void updateQty(int id, int qty,List<allVenders.Data>? allVenderData) {
+void updateQty(int id, int qty, List<allVenders.Data>? allVenderData) {
   print("Updating qty ${jsonEncode(allVenderData)}");
   CheckOutController()
       .updateSubcategoryAndSoldItem(id, qty)
       .then((value) => {
             print("Qty fffupdated successfully ${jsonEncode(value)}"),
             print("Qty kkkupdated successfully ${jsonDecode(value)['phone']}"),
-            for(int i=0;i<allVenderData!.length;i++){
-              print("Matched phone loop ${allVenderData[i].phone}  == ${jsonDecode(value)['phone']}"),
-              if(allVenderData[i].phone==jsonDecode(value)['phone']){
-                print("Matched phone vendor ${allVenderData[i].phone}"),
-                print("Matched phone vendor ${allVenderData[i].venderId}"),
-                print("Matched phone vendor ${allVenderData[i].fcm_token}"),
-                FirebaseMessaging .instance.getToken().then((refreshFcmToken) =>
-                    {
-                      print("refreshed fcm token in order placed screen ${refreshFcmToken}"),
-                      NotificationController().saveToken("${allVenderData[i].venderId}", refreshFcmToken!),
-                      NotificationController().sendNotification(phone: allVenderData[i].phone.toString(),vendorId: "${allVenderData[i].venderId}", title: 'gitu  tite', body: 'gitu   body'),
-                    }
-                ),
+            for (int i = 0; i < allVenderData!.length; i++)
+              {
+                print(
+                    "Matched phone loop ${allVenderData[i].phone}  == ${jsonDecode(value)['phone']}"),
+                if (allVenderData[i].phone == jsonDecode(value)['phone'])
+                  {
+                    print("Matched phone vendor ${allVenderData[i].phone}"),
+                    print("Matched phone vendor ${allVenderData[i].venderId}"),
+                    print("Matched phone vendor ${allVenderData[i].fcm_token}"),
+                    NotificationController().saveToken(
+                        "${allVenderData[i].venderId}",
+                        allVenderData[i].fcm_token!),
+                    NotificationController().sendNotification(
+                        phone: allVenderData[i].phone.toString(),
+                        vendorId: "${allVenderData[i].venderId}",
+                        title: 'Order Placed',
+                        body: '${jsonDecode(value)['item_name']} x $qty'),
+                        // body: 'Notification body'),
+                  }
               }
-            }
           })
       .catchError((error) {
     print("Error updating quantity: $error");
@@ -72,11 +77,12 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
     var printController = Provider.of<Printcontroller>(context);
-    print("cartController items in order placed screen ${jsonEncode(cartController.items)}");
+    print(
+        "cartController items in order placed screen ${jsonEncode(cartController.items)}");
     for (int i = 0; i < cartController.itemCount; i++) {
       CartItem item = cartController.items.values.elementAt(i);
       // print("item id ${item.productId} title ${item.title} price ${item.price} qty ${item.quantity}");
-      updateQty(int.parse(item.productId), item.quantity,allVenderData);
+      updateQty(int.parse(item.productId), item.quantity, allVenderData);
     }
 
     printController.addTransition(cartController.items);

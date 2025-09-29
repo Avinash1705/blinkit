@@ -4,11 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:material_charts/material_charts.dart';
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+// import 'package:syncfusion_flutter_charts/charts.dart';
+// import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../../ui/login/loginScreen.dart';
 import '../../ui/widgets/ImagePickerBoth.dart';
@@ -140,40 +141,82 @@ class VendorDashboard extends StatelessWidget {
           : SingleChildScrollView(
               child: Expanded(
               child: Column(children: [
-                Center(
-                    child: SfCircularChart(
-                        title: ChartTitle(text: 'Sales by sales person'),
-                        legend: Legend(isVisible: true),
-                        series: <PieSeries<PieData, String>>[
-                      PieSeries<PieData, String>(
-                          explode: true,
-                          explodeIndex: 0,
-                          dataSource: piedata,
-                          xValueMapper: (PieData data, _) => data.xData,
-                          yValueMapper: (PieData data, _) => data.yData,
-                          dataLabelMapper: (PieData data, _) => data.text,
-                          dataLabelSettings:
-                              DataLabelSettings(isVisible: true)),
-                    ])),
-                SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  // Chart title
-                  title: ChartTitle(text: 'Half yearly sales analysis'),
-                  // Enable legend
-                  legend: Legend(isVisible: true),
-                  // Enable tooltip
-                  tooltipBehavior: TooltipBehavior(enable: true),
-                  series: <CartesianSeries<SalesData, String>>[
-                    LineSeries<SalesData, String>(
-                      dataSource: data,
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales,
-                      name: 'Sales',
-                      // Enable data label
-                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                MaterialChartLine(
+                    data: [
+                    ChartData(value: 15, label: 'Jan'),
+                ChartData(value: 32, label: 'Feb'),
+                ChartData(value: 28, label: 'Mar'),
+                ChartData(value: 45, label: 'Apr'),
+              ],
+                  width: 600,
+                  height: 400,
+                  style: LineChartStyle(
+                    lineColor: Colors.blue,
+                    pointColor: Colors.red,
+                    backgroundColor: Colors.white,
+                    gridColor: Colors.grey.withValues(alpha: 0.3),
+                    strokeWidth: 3.0,
+                    pointRadius: 6.0,
+                    useCurvedLines: true,
+                    curveIntensity: 0.5,
+                    roundedPoints: true,
+                    labelStyle: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
+                    animationDuration: Duration(milliseconds: 2000),
+                    animationCurve: Curves.easeOutCubic,
+                    verticalLineColor: Colors.blue.withOpacity(0.7),
+                    verticalLineWidth: 2.0,
+                    verticalLineStyle: LineStyle.dashed,
+                    showTooltips: true,
+                    tooltipStyle: TooltipStyle(
+                      backgroundColor: Colors.blueGrey[50]!,
+                      borderColor: Colors.blue,
+                      textStyle: TextStyle(color: Colors.black87),
+                    ),
+                  ),
+                  showPoints: true,
+                  showGrid: true,
+                  showTooltips: true,
+                  padding: EdgeInsets.all(20),
                 ),
+                // Center(
+                //     child:
+                //     SfCircularChart(
+                //         title: ChartTitle(text: 'Sales by sales person'),
+                //         legend: Legend(isVisible: true),
+                //         series: <PieSeries<PieData, String>>[
+                //       PieSeries<PieData, String>(
+                //           explode: true,
+                //           explodeIndex: 0,
+                //           dataSource: piedata,
+                //           xValueMapper: (PieData data, _) => data.xData,
+                //           yValueMapper: (PieData data, _) => data.yData,
+                //           dataLabelMapper: (PieData data, _) => data.text,
+                //           dataLabelSettings:
+                //               DataLabelSettings(isVisible: true)),
+                //     ])),
+                // SfCartesianChart(
+                //   primaryXAxis: CategoryAxis(),
+                //   // Chart title
+                //   title: ChartTitle(text: 'Half yearly sales analysis'),
+                //   // Enable legend
+                //   legend: Legend(isVisible: true),
+                //   // Enable tooltip
+                //   tooltipBehavior: TooltipBehavior(enable: true),
+                //   series: <CartesianSeries<SalesData, String>>[
+                //     LineSeries<SalesData, String>(
+                //       dataSource: data,
+                //       xValueMapper: (SalesData sales, _) => sales.year,
+                //       yValueMapper: (SalesData sales, _) => sales.sales,
+                //       name: 'Sales',
+                //       // Enable data label
+                //       dataLabelSettings: DataLabelSettings(isVisible: true),
+                //     ),
+                //   ],
+                // ),
               ]),
             )),
     );
