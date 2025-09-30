@@ -7,6 +7,7 @@ import 'package:swiggy/vender/controller/AllVenderController.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
 import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart';
 
+import '../../services/notify.dart';
 import '../../vender/ui/vendor_registration.dart';
 
 class StaticLoginScreen extends StatefulWidget {
@@ -37,6 +38,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
     setState(() {
       otpSent = true;
     });
+    showNotificationMessage("OTP Sent", "Your OTP is 12345");
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("OTP sent (simulated)")),
     );
@@ -82,7 +84,7 @@ class _StaticLoginScreenState extends State<StaticLoginScreen> {
                       controller: otpController,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                        labelText: "Enter OTP (12345)",
+                        labelText: "Enter OTP",
                       ),
                     ),
                   const SizedBox(height: 20),

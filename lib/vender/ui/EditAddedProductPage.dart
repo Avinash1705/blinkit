@@ -64,12 +64,12 @@ class _EditProductPageState extends State<EditProductPage> {
         updateProduct(updatedProduct)
         .then((response) {
       if (response != null) {
-        print("Product updated successfully: $response");
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Product updated successfully!")),
         );
       } else {
-        print("Product updated successfully: $response");
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Failed to update product.")),
         );

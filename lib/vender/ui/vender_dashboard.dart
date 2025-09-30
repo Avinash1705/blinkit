@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:material_charts/material_charts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/domain/ApiConstants.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
 // import 'package:syncfusion_flutter_charts/charts.dart';
@@ -130,6 +133,7 @@ class VendorDashboard extends StatelessWidget {
               title: const Text('Logout'),
               onTap: () {
                 // Implement logout
+
                 Get.off(LoginScreen());
               },
             ),
@@ -345,7 +349,6 @@ class _MyProductsPage extends State<MyProductsPage> {
                   Get.to(EditProductPage(
                     product: product,
                   ));
-                  setState(() {});
                 },
               ),
             ),

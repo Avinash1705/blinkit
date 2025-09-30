@@ -13,6 +13,7 @@ import 'package:swiggy/services/notify.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
+import 'package:swiggy/vender/ui/vender_dashboard.dart';
 import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
 import 'firebase_options.dart';
