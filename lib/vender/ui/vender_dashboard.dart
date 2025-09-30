@@ -14,6 +14,7 @@ import 'package:swiggy/vender/ui/SubscriptionService.dart';
 // import 'package:syncfusion_flutter_charts/charts.dart';
 // import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
+import '../../domain/appConsatant.dart';
 import '../../ui/login/loginScreen.dart';
 import '../../ui/widgets/ImagePickerBoth.dart';
 import '../controller/VenderOrdersController.dart';
@@ -52,6 +53,7 @@ class VendorDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     print("dashboardVender ${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
     return Scaffold(
+      backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
       appBar: AppBar(
         title: Text(
             '${vendorDetails.venderName} Dashboard ${vendorDetails.valid}'),
@@ -240,12 +242,6 @@ class AddProductPage extends StatefulWidget {
 
 class _AddProductPageState extends State<AddProductPage> {
 
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -297,16 +293,16 @@ class _MyProductsPage extends State<MyProductsPage> {
     print("My product");
     // You would fetch and display vendor products here
     return Scaffold(
+      backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
       appBar: AppBar(title: const Text("My Products")),
       body: venderSpecificProductsModelList.isEmpty?SizedBox(
         child: Center(
           child: Text("No products found \n  for this vendor",
               style: TextStyle(fontSize: 20, color: Colors.red)),
-        ),
-      ):ListView.builder(
+        )):ListView.builder(
         itemBuilder: (context, index) {
           print("new Sdata ${jsonEncode(venderSpecificProductsModelList)}");
-          final product = venderSpecificProductsModelList[index];
+          venderSpecificProductsModelData.Data product = venderSpecificProductsModelList[index];
           return Card(
             child: ListTile(
               // leading: Image.network(product.itemImg ?? '',
@@ -331,7 +327,7 @@ class _MyProductsPage extends State<MyProductsPage> {
 
                       const TextSpan(text: 'Weight: '),
                       TextSpan(
-                        text: '${product.weight ?? 'Weight'} \n',
+                        text: '${product.weight ?? 'Weight'} ${product.weightQuantity} \n',
                         style: const TextStyle(color: Colors.red), // ✅ value color
                       ),
                       const TextSpan(text: 'Quantity: '),
@@ -389,6 +385,8 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
   Widget build(BuildContext context) {
     print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
     return Scaffold(
+      appBar: AppBar(title: const Text("Orders")),
+      backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
       body: orderPlacedModelList == null ||
               orderPlacedModelList!.isEmpty
           ? SizedBox(
@@ -407,7 +405,6 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
                 final product = orderPlacedModelList![index];
                 return Card(
                   margin: EdgeInsets.all(20),
-                  color: Colors.greenAccent,
                   child: ListTile(
                     // leading: Image.network(product.itemImg ?? '',
                     //     width: 50, height: 50, fit: BoxFit.cover),

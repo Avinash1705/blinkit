@@ -41,6 +41,7 @@ class Data {
   String? new_price;
   String? weight;
   String? quantity;
+  String? weightQuantity;
 
   Data(
       {this.categoryId,
@@ -52,6 +53,7 @@ class Data {
         this.new_price,
         this.weight,
         this.quantity,
+        this.weightQuantity,
         this.itemDescription});
 
  factory Data.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,7 @@ class Data {
      new_price: json['new_price']?? '',
      weight: json['weight']?? '',
      quantity: json['quantity']?? '',
+     weightQuantity: json['weightQuantity']?? '',
      itemDescription: json['item_description']?? '',
    );
   }
@@ -79,6 +82,7 @@ class Data {
     data['price'] = this.price;
     data['quantity'] = this.quantity;
     data['weight'] = this.weight;
+    data['weightQuantity'] = this.weightQuantity;
     data['new_price'] = this.new_price;
     data['item_description'] = this.itemDescription;
     return data;

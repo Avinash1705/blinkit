@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../../domain/appConsatant.dart';
 import '../controller/EditAddedProductController.dart';
+import '../venderModels/VenderSpecificProductsModel.dart';
+import '../venderModels/VenderSpecificProductsModel.dart'
+as venderSpecificProductsModelData;
 
 class EditProductPage extends StatefulWidget {
-  final dynamic product; // Pass your product object here
+  venderSpecificProductsModelData.Data product; // Pass your product object here
 
-  const EditProductPage({super.key, required this.product});
+   EditProductPage({super.key, required this.product});
 
   @override
   _EditProductPageState createState() => _EditProductPageState();
@@ -20,6 +24,10 @@ class _EditProductPageState extends State<EditProductPage> {
   late TextEditingController newPriceController;
   late TextEditingController weightController;
   late TextEditingController quantityController;
+  late TextEditingController quantityWeightController;
+  final List<String> units = ['kg', 'g', 'liter', 'ml'];
+  // String? selectedCategory;
+  String selectedUnit = 'kg'; // default value
 
   @override
   void initState() {
@@ -36,6 +44,13 @@ class _EditProductPageState extends State<EditProductPage> {
         TextEditingController(text: widget.product.weight?.toString() ?? '');
     quantityController = TextEditingController(
         text: widget.product.quantity?.toString() ?? '');
+    quantityWeightController = TextEditingController(
+        text: widget.product.weightQuantity?.toString() ?? '');
+    selectedUnit = widget.product.weightQuantity != null
+        ? widget.product.weightQuantity.toString()
+        : 'kg';
+
+
   }
 
   @override
@@ -46,6 +61,7 @@ class _EditProductPageState extends State<EditProductPage> {
     newPriceController.dispose();
     weightController.dispose();
     quantityController.dispose();
+    quantityWeightController.dispose();
     super.dispose();
   }
 
@@ -56,7 +72,7 @@ class _EditProductPageState extends State<EditProductPage> {
       "itemName": nameController.text,
       "price": priceController.text,
       "itemDescription": descController.text,
-      // "newPrice": newPriceController.text,
+      "weightQuantity": quantityWeightController.text,
       "weight": weightController.text,
       "quantity": quantityController.text,
     };
@@ -80,8 +96,10 @@ class _EditProductPageState extends State<EditProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("Editing product: ${jsonEncode(widget.product)}");
+    print("Editing product: ${jsonEncode(widget.product.weightQuantity)}");
+
     return Scaffold(
+      backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
       appBar: AppBar(
         title: const Text("Edit Product"),
         actions: [
@@ -105,10 +123,27 @@ class _EditProductPageState extends State<EditProductPage> {
               decoration: const InputDecoration(labelText: "Price"),
             ),
             // TextField(
-            //   controller: newPriceController,
-            //   keyboardType: TextInputType.number,
-            //   decoration: const InputDecoration(labelText: "New Price"),
+            //   controller: quantityWeightController,
+            //   keyboardType: TextInputType.text,
+            //   decoration: const InputDecoration(labelText: "Amount unit"),
             // ),
+            DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: selectedUnit,
+                items: units.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedUnit = newValue!;
+                    quantityWeightController.text = newValue;
+                  });
+                },
+              ),
+            ),
             TextField(
               controller: descController,
               decoration: const InputDecoration(labelText: "Description"),
@@ -126,7 +161,11 @@ class _EditProductPageState extends State<EditProductPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveProduct,
-              child: const Text("Save"),
+              child:  Text("Save",style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: AppColors.blue.withOpacity(0.6),
+              ),
             ),
           ],
         ),

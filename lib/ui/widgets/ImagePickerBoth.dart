@@ -29,6 +29,7 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
  
   //passed values
   String? selectedCategory;
+  String selectedUnit = 'kg'; // default value
   // TextEditingController uniqueIdController = TextEditingController();
   TextEditingController productNameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -95,6 +96,8 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
   @override
   Widget build(BuildContext context) {
     print("Vendor Details: ${jsonEncode(widget.vendorDetail)}");
+
+    final List<String> units = ['kg', 'g', 'liter', 'ml'];
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +130,30 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
             FilteringTextInputFormatter.allow(
               RegExp(r'^\d*\.?\d{0,2}'),) // only allows 0-9
           ],
-              decoration: InputDecoration(labelText: 'Weight')),
+              // decoration: InputDecoration(labelText: 'Weight')
+            decoration: InputDecoration(
+              labelText: 'Weight',
+              suffixIcon: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: selectedUnit,
+                  items: units.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedUnit = newValue!;
+                      print("selectedValye $selectedUnit");
+                      print("selectedValye2 $newValue");
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+
           TextField(
               controller: quantityController,
               keyboardType: TextInputType.number,inputFormatters: [
@@ -174,13 +200,14 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
               });
               AddItemsController.addItem(
                       // uniqueIdController.text.toString(),
-                  widget.vendorDetail.venderId.toString(),
+                      widget.vendorDetail.venderId.toString(),
                       nameController.text.toString(),
-                  widget.vendorDetail.phone.toString(),
+                      widget.vendorDetail.phone.toString(),
                       descController.text.toString(),
                       int.parse(priceController.text.toString()),
                       0,
                       weightController.text.toString(),
+                      selectedUnit,
                       int.parse(quantityController.text.toString()),
                       _image!)
                   .then((value) {

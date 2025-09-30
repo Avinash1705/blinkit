@@ -40,6 +40,7 @@ class Data {
   String? itemDescription;
   String? new_price;
   String? weight;
+  String? weightQuantity;
   String? quantity;
 
   Data(
@@ -51,6 +52,7 @@ class Data {
         this.price,
         this.new_price,
         this.weight,
+        this.weightQuantity,
         this.quantity,
         this.itemDescription});
 
@@ -63,6 +65,7 @@ class Data {
     price = json['price'];
     new_price = json['new_price'];
     weight = json['weight'];
+    weightQuantity = json['weightQuantity'];
     quantity = json['quantity'];
     itemDescription = json['item_description'];
   }
@@ -77,6 +80,7 @@ class Data {
     data['price'] = this.price;
     data['quantity'] = this.quantity;
     data['weight'] = this.weight;
+    data['weightQuantity'] = this.weightQuantity;
     data['new_price'] = this.new_price;
     data['item_description'] = this.itemDescription;
     return data;

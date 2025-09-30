@@ -59,7 +59,6 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
       final subCategoryResponse = responses[0] as GetSubCategoryModel;
       final vendorResponse = responses[1] as GetVenderResponseModel;
       setState(() {
-        print("check lenght of id ${widget.data.id!.length}");
         if (widget.data.id!.length == 10) {
           //filter data using phone number
           data = subCategoryResponse.data
@@ -142,6 +141,7 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                   ),
                   itemCount: data!.length,
                   itemBuilder: (context, index) {
+
                     return Visibility(
                       child: Container(
                         color:
@@ -193,7 +193,7 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                                   SizedBox(width: 5),
                                   UiHelper.CustomText(
                                       text:
-                                          "Qty ${data![index].quantity.toString()}",
+                                          "Qty ${data![index].quantity.toString()} ${data![index].weightQuantity}",
                                       color: Color(0xff9c9c9c),
                                       fontWeight: FontWeight.normal,
                                       fontsize: 10)

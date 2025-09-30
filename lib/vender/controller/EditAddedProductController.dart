@@ -13,6 +13,7 @@ Future<String?> updateProduct(Map<String, dynamic> product) async {
      "price": product["price"].toString(),
      "item_description": product["itemDescription"],
      "weight": product["weight"].toString(),
+     "weightQuantity": product["weightQuantity"].toString(),
      "quantity": product["quantity"].toString(),
    });
    print("Response status: ${response.statusCode}");

@@ -10,14 +10,15 @@ class AddItemsController {
 
   static Future addItem( String categoryId, String itemName,
       String phone, String itemDescription, int price, int newPrice,
-      String weight, int quantity, File imgUrl) async {
+      String weight,String weightQuantity, int quantity, File imgUrl) async {
     print("Adding item with details: ${imgUrl.toString().split('/').last}");
+    print("ram ji $weightQuantity");
     try {
       var request = http.MultipartRequest(
           'POST',
           Uri.parse('${ApiConstants.addItems}'
               '?category_id=$categoryId&item_name=$itemName&phone=$phone&item_description=$itemDescription&price=$price'
-              '&new_price=$newPrice&weight=$weight&quantity=$quantity'));
+              '&new_price=$newPrice&weight=$weight&weightQuantity=$weightQuantity&quantity=$quantity'));
 
       request.fields['name'] = itemName;
       // Add file field
