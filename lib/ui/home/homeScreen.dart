@@ -147,14 +147,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                           width: 20,
                         ),
-                        dataLoaded.data == null || dataLoaded.data!.isEmpty
-                            ? Center(child: CircularProgressIndicator())
-                            : UiHelper.CustomText(
-                                text: dataLoaded.data![0].appName ?? "Loading...",
-                                color: Color(0xFFffffff),
-                                fontWeight: FontWeight.bold,
-                                fontsize: 15,
-                                fontfamily: "bold")
+                        // dataLoaded.data == null || dataLoaded.data!.isEmpty
+                        //     ? Center(child: CircularProgressIndicator())
+                        //     : UiHelper.CustomText(
+                        //         text: dataLoaded.data![0].appName ?? "Loading...",
+                        //         color: Color(0xFFffffff),
+                        //         fontWeight: FontWeight.bold,
+                        //         fontsize: 15,
+                        //         fontfamily: "bold")
                       ],
                     ),
                     Row(
@@ -230,9 +230,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     UiHelper.CustomImage(img: "image 60.png"),
                     // UiHelper.CustomImage(img: "image 55.png"),
-                    UiHelper.CustomText(
-                        text: "Mega Diwali Sale",
-                        color: Colors.white,
+                    dataLoaded.data == null || dataLoaded.data!.isEmpty
+                        ? Center(child: CircularProgressIndicator())
+                        : UiHelper.CustomText(
+                        text: dataLoaded.data![0].appName ?? "Sale",
+                        color: Color(0xFFffffff),
                         fontWeight: FontWeight.bold,
                         fontsize: 20,
                         fontfamily: "bold"),
