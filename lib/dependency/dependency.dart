@@ -60,37 +60,6 @@ Future<void> requestNotificationPermission() async {
     AppConstant.notificationGranted = granted ?? false;
   }
 }
-//  Future<void> showNotification() async {
-//
-//    // ✅ Request permission on Android 13+
-//    if (Platform.isAndroid) {
-//      final bool? granted = await flutterLocalNotificationsPlugin
-//          .resolvePlatformSpecificImplementation<
-//          AndroidFlutterLocalNotificationsPlugin>()
-//          ?.requestNotificationsPermission();
-//
-//      print("Notification permission granted: $granted");
-//    }
-//
-//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
-//   AndroidNotificationDetails(
-//     'channel_id',
-//     'channel_name',
-//     importance: Importance.high,
-//     priority: Priority.high,
-//   );
-//
-//   const NotificationDetails platformChannelSpecifics =
-//   NotificationDetails(android: androidPlatformChannelSpecifics);
-//
-//   await flutterLocalNotificationsPlugin.show(
-//     0,
-//     'Hello!',
-//     'This is a local notification.',
-//     platformChannelSpecifics,
-//   );
-// }
-
 
 Future<void> loadUserData(SharedPreferences prefs) async {
    // final prefs = await SharedPreferences.getInstance();

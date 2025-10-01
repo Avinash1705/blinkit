@@ -14,6 +14,7 @@ import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
+import 'PhoneAuthScreen.dart';
 import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
 import 'firebase_options.dart';
@@ -107,7 +108,8 @@ class MyApp extends StatelessWidget {
                 final loggedIn = loginSnapshot.data ?? false;
 
                 // Show the correct screen based on login status
-                return SplashScreen();
+                return const SplashScreen();
+                // return PhoneAuthScreen();
                 // return loggedIn
                 //     ? BottomNavScreen(index: 0)
                 //     : SplashScreen(); // or SplashScreen
