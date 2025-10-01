@@ -6,12 +6,12 @@ import '../../domain/appConsatant.dart';
 import '../controller/EditAddedProductController.dart';
 import '../venderModels/VenderSpecificProductsModel.dart';
 import '../venderModels/VenderSpecificProductsModel.dart'
-as venderSpecificProductsModelData;
+    as venderSpecificProductsModelData;
 
 class EditProductPage extends StatefulWidget {
   venderSpecificProductsModelData.Data product; // Pass your product object here
 
-   EditProductPage({super.key, required this.product});
+  EditProductPage({super.key, required this.product});
 
   @override
   _EditProductPageState createState() => _EditProductPageState();
@@ -26,6 +26,7 @@ class _EditProductPageState extends State<EditProductPage> {
   late TextEditingController quantityController;
   late TextEditingController quantityWeightController;
   final List<String> units = ['kg', 'g', 'liter', 'ml'];
+
   // String? selectedCategory;
   String selectedUnit = 'kg'; // default value
 
@@ -38,19 +39,17 @@ class _EditProductPageState extends State<EditProductPage> {
         TextEditingController(text: widget.product.price?.toString() ?? '');
     descController =
         TextEditingController(text: widget.product.itemDescription ?? '');
-    newPriceController = TextEditingController(
-        text: widget.product.new_price?.toString() ?? '');
+    newPriceController =
+        TextEditingController(text: widget.product.new_price?.toString() ?? '');
     weightController =
         TextEditingController(text: widget.product.weight?.toString() ?? '');
-    quantityController = TextEditingController(
-        text: widget.product.quantity?.toString() ?? '');
+    quantityController =
+        TextEditingController(text: widget.product.quantity?.toString() ?? '');
     quantityWeightController = TextEditingController(
         text: widget.product.weightQuantity?.toString() ?? '');
     selectedUnit = widget.product.weightQuantity != null
         ? widget.product.weightQuantity.toString()
         : 'kg';
-
-
   }
 
   @override
@@ -77,21 +76,23 @@ class _EditProductPageState extends State<EditProductPage> {
       "quantity": quantityController.text,
     };
 
-        updateProduct(updatedProduct)
-        .then((response) {
-      if (response != null) {
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Product updated successfully!")),
-        );
-      } else {
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to update product.")),
-        );
-      }
+    updateProduct(updatedProduct).then((response) {
+      print("Update response: $response");
+      // if (response != null) {
+      //
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text("Product updated successfully!")),
+      //   );
+      // } else {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text("Failed to update product.")),
+      //   );
+      // }
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Product updated successfully!")));
     });
-    Navigator.pop(context, updatedProduct); // Send back edited product
+    Navigator.pop(context, updatedProduct);
+    Navigator.pop(context); // Send back edited product
   }
 
   @override
@@ -161,7 +162,7 @@ class _EditProductPageState extends State<EditProductPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: saveProduct,
-              child:  Text("Save",style: TextStyle(color: Colors.white)),
+              child: Text("Save", style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 backgroundColor: AppColors.blue.withOpacity(0.6),

@@ -9,6 +9,7 @@ import 'package:material_charts/material_charts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/domain/AppConstant.dart';
+import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
 // import 'package:syncfusion_flutter_charts/charts.dart';
@@ -49,9 +50,25 @@ class VendorDashboard extends StatelessWidget {
     PieData('Sales Person 5', 534, 'Person 5'),
   ];
 
+  void setVendorId(venderData.Data vendorDetails) async {
+    final pref = await SharedPreferences.getInstance();
+    String jsonString = jsonEncode(vendorDetails.toJson());
+    pref.setString(AppConstant.customer_id, "v${vendorDetails.venderId}");
+    pref.setString(AppConstant.vendorDetails, jsonString);
+    print("Vendor ID set in SharedPreferences: ${AppConstant.customer_id}");
+    print("Vendor ID set in SharedPreferences:2 ${pref.getString(AppConstant.vendorDetails)}");
+  }
+  // Clear VendorDetails
+  static Future<void> clearVendor() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(AppConstant.vendorDetails);
+  }
   @override
   Widget build(BuildContext context) {
     print("dashboardVender ${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
+
+    setVendorId(vendorDetails);
+
     return Scaffold(
       backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
       appBar: AppBar(
@@ -135,7 +152,7 @@ class VendorDashboard extends StatelessWidget {
               title: const Text('Logout'),
               onTap: () {
                 // Implement logout
-
+                clearVendor();
                 Get.off(LoginScreen());
               },
             ),

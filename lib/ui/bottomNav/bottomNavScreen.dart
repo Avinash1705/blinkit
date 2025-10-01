@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swiggy/controllers/cartController.dart';
+import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../../controllers/loginCustomerController.dart';
@@ -124,6 +125,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                   title: Text("Sign in as Vendor"),
                 ),
               ),
+
             ],
           ),
         ),

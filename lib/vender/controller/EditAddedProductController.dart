@@ -6,7 +6,7 @@ import 'package:swiggy/domain/ApiConstants.dart';
 Future<String?> updateProduct(Map<String, dynamic> product) async {
   var url = Uri.parse(ApiConstants.updateEditProductInVender);
 
-  print("All data ${product}");
+  print("All data updateProducts ${jsonEncode(product)}");
    var response = await http.post(url, body: {
      "id": product["id"].toString(),
      "item_name": product["itemName"],

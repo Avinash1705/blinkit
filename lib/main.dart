@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
                 final loggedIn = loginSnapshot.data ?? false;
 
                 // Show the correct screen based on login status
-                return BottomNavScreen(index: 0);
+                return SplashScreen();
                 // return loggedIn
                 //     ? BottomNavScreen(index: 0)
                 //     : SplashScreen(); // or SplashScreen
