@@ -134,6 +134,14 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
                 validator: (v) => v!.isEmpty ? 'Enter Location' : null,
               ),
               SizedBox(height: 24),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                 maxLength: 6,
+                controller: controller.pincodeController,
+                decoration: InputDecoration(labelText: 'PinCode'),
+                validator: (v) => v!.isEmpty ? 'Enter PinCode' : null,
+              ),
+              SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => {
                   // print("Registering Vendor$_image"),

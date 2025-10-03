@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/controllers/printController.dart';
+import 'package:swiggy/pay/PhonePayScreen.dart';
+import 'package:swiggy/pay/RazorpayPaymentScreen.dart';
+import 'package:swiggy/pay/UpiPaymentScreen.dart';
 
 // import 'package:swiggy/services/notificationService.dart';
 import 'package:swiggy/services/notify.dart';
@@ -18,6 +21,9 @@ import 'PhoneAuthScreen.dart';
 import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
 import 'firebase_options.dart';
+import '2factorOpt/otpScreen.dart';
+// import 'gpay/GpayScreen.dart';
+// import 'gpay/PhonePayScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,14 +115,15 @@ class MyApp extends StatelessWidget {
 
                 // Show the correct screen based on login status
                 return const SplashScreen();
-                // return PhoneAuthScreen();
+                // return  OtpScreen();
+                return RazorpayPaymentScreen();
                 // return loggedIn
                 //     ? BottomNavScreen(index: 0)
                 //     : SplashScreen(); // or SplashScreen
               },
             );
           }
-          // Loading Firebase
+          // Loading Firebase 
           return Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );

@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 <!--    for 13+-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
@@ -63,10 +63,17 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
-<!--    <queries>
+    <queries>
         <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-&lt;!&ndash;            <action android:name="android.media.action.IMAGE_CAPTURE" />&ndash;&gt;
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi" />
         </intent>
-    </queries>-->
+    </queries>
+
+    <!--    <queries>
+            <intent>
+                <action android:name="android.media.action.IMAGE_CAPTURE" />
+    &lt;!&ndash;            <action android:name="android.media.action.IMAGE_CAPTURE" />&ndash;&gt;
+            </intent>
+        </queries>-->
 </manifest>

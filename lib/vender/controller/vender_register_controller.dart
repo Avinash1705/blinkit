@@ -19,6 +19,7 @@ class VendorRegisterController {
   final shopNameController = TextEditingController();
   final phoneController = TextEditingController();
   final locationController = TextEditingController();
+  final pincodeController = TextEditingController();
 
   final apiUrl =
       ApiConstants.registerVenders; // Replace with your actual URL
@@ -29,6 +30,7 @@ class VendorRegisterController {
     shopNameController.dispose();
     phoneController.dispose();
     locationController.dispose();
+    pincodeController.dispose();
   }
 
   Future<void> registerVendor(BuildContext context,File imgFile) async {
@@ -43,6 +45,7 @@ class VendorRegisterController {
           Uri.parse("$apiUrl?vender_name=${nameController.text}"
               "&shop_name=${shopNameController.text}"
               "&phone=${phoneController.text}"
+              "&pincode=${pincodeController.text}"
               "&location=${locationController.text}"),
       );
       request.fields['name'] = nameController.text;

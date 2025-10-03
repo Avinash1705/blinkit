@@ -32,7 +32,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.swiggy"
+    namespace "com.luffy1705.swiggy"
 //    compileSdk flutter.compileSdkVersion
     compileSdk 36
 //    ndkVersion flutter.ndkVersion

@@ -71,6 +71,7 @@ class UiHelper {
       ),
       child: TextField(
         controller: controller,
+        enabled: false,
         decoration: InputDecoration(
             hintText: "Search 'ice-cream'",
             prefixIcon: Image.asset("assets/images/search.png"),

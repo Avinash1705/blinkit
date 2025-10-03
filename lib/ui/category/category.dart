@@ -19,6 +19,7 @@ import 'SubCategoryNew.dart';
 import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
     as allVenders;
 import '../../model/GetSubCategoryModel.dart' as mySubcategory;
+import 'filteredListScreen.dart';
 
 class Category extends StatefulWidget {
   Category({super.key});
@@ -131,13 +132,16 @@ class _CategoryState extends State<Category> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
-          height: size.height,
+          height: size.height * 1.3,
           child: Column(
             children: [
-              // SizedBox(
-              //   height: 40,
-              // ),
-              CustomAppBar(controller: searchController),
+              CustomAppBar(controller: searchController, allVenderData: allVenderData),
+              // ElevatedButton(onPressed: (){
+              //   Get.to(CustomSearchAppBar(
+              //     allVenderData: allVenderData
+              //   ));
+              // }, child: Text("Search")),
+
               SizedBox(
                 height: 10,
               ),
