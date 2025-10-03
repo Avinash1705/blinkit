@@ -18,6 +18,7 @@ import 'PhoneAuthScreen.dart';
 import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
 import 'firebase_options.dart';
+import '2factorOpt/otpScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -108,8 +109,9 @@ class MyApp extends StatelessWidget {
                 final loggedIn = loginSnapshot.data ?? false;
 
                 // Show the correct screen based on login status
-                return const SplashScreen();
-                // return PhoneAuthScreen();
+                // return const SplashScreen();
+                // return  OtpScreen();
+                return BottomNavScreen(index: 0);
                 // return loggedIn
                 //     ? BottomNavScreen(index: 0)
                 //     : SplashScreen(); // or SplashScreen

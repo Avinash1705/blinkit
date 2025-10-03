@@ -8,6 +8,7 @@ class ApiConstants {
   static const String ip = "avitechly.com";
   // static const String ip = "localhost:80";
   static String ssl =  "https";
+  static final String baseUrl = "$ssl://$ip/fluxKart/apis";
   static final String appDetail = "$ssl://$ip/fluxKart/apis/app_detail.php";
   static  String getAllVenders = "$ssl://$ip/fluxKart/apis/get_venders.php";
   static  String registerVenders = "$ssl://$ip/fluxKart/apis/register_vender.php";
@@ -31,6 +32,8 @@ class ApiConstants {
 /* customer order history */
   static  String customersPlacedOrder = "$ssl://$ip/fluxKart/apis/customersPlacedOrder.php";
   static  String getAllCustomerOrders = "$ssl://$ip/fluxKart/apis/getAllCustomerOrders.php";
+  static  String otpVerify = "$ssl://$ip/fluxKart/apis/verifyOtp.php";
+  static  String otpSend = "$ssl://$ip/fluxKart/apis/sendOtp.php";
 
 
   //Order table Format name
