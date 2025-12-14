@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/pay/RazorpayPaymentScreen.dart';
 import 'package:swiggy/ui/address/addressScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/PhoneNumberPage.dart';
 import 'package:swiggy/ui/orderPlacedScreen.dart';
 import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
@@ -170,7 +171,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           ],
                                         ),
                                       ),
-                                      actions: [
+                                      actions:   [
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(),
@@ -210,7 +211,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         )
                       : ElevatedButton(
                           onPressed: () =>
-                              Get.off(const LoginCustomerProfileScreen()),
+                              Get.off(PhoneNumberPage()),
                           child: Text("Login to buy")),
             ],
           ),

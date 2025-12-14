@@ -12,7 +12,7 @@ class ApiConstants {
   static final String appDetail = "$ssl://$ip/fluxKart/apis/app_detail.php";
   static  String getAllVenders = "$ssl://$ip/fluxKart/apis/get_venders.php";
   static  String registerVenders = "$ssl://$ip/fluxKart/apis/register_vender.php";
-  /*Register customer*/
+  /*Register customer*/     //getRegisterCustomer    getSpecificVenderCategories
   static  String registerCustomer = "$ssl://$ip/fluxKart/apis/register_customer.php";
   static  String getRegisterCustomer = "$ssl://$ip/fluxKart/apis/get_customerRegister.php";
   // https://avitechly.com/fluxKart/apis/get_customerRegister.php?phone=9868868686
@@ -31,7 +31,7 @@ class ApiConstants {
   static  String updateEditProductInVender = "$ssl://$ip/fluxKart/apis/updateEditProductInVender.php";
 /* customer order history */
   static  String customersPlacedOrder = "$ssl://$ip/fluxKart/apis/customersPlacedOrder.php";
-  static  String getAllCustomerOrders = "$ssl://$ip/fluxKart/apis/getAllCustomerOrders.php";
+    static  String getAllCustomerOrders = "$ssl://$ip/fluxKart/apis/getAllCustomerOrders.php";
   static  String otpVerify = "$ssl://$ip/fluxKart/apis/verifyOtp.php";
   static  String otpSend = "$ssl://$ip/fluxKart/apis/sendOtp.php";
 

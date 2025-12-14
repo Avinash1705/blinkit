@@ -14,7 +14,7 @@ class AllVenderController {
        late GetVenderResponseModel getdas ;
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      // print("My all Vender ${jsonDecode(response.body)}");
+      print("My all Vender ${jsonDecode(response.body)}");
       getdas = GetVenderResponseModel.fromJson(jsonDecode(response.body));
       return getdas;
     } else {

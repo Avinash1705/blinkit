@@ -70,6 +70,7 @@ Future<void> loadUserData(SharedPreferences prefs) async {
   AppConstant.location =  prefs.getString('location') ?? '';
   AppConstant.customer_profile = prefs.getString('customer_profile') ?? '';
   print("test profie inti  ${AppConstant.customer_id}");
+  print("test vendor details ${AppConstant.vendorDetails}");
 }
 
 

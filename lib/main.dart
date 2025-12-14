@@ -13,17 +13,20 @@ import 'package:swiggy/pay/UpiPaymentScreen.dart';
 
 // import 'package:swiggy/services/notificationService.dart';
 import 'package:swiggy/services/notify.dart';
+import 'package:swiggy/testMyCode/PhoneAuthFlow.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
+import 'package:swiggy/ui/login/loginScreen.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/PhoneNumberPage.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/RoleSelectionPage.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
 import 'PhoneAuthScreen.dart';
 import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
+import 'domain/AppConstant.dart';
 import 'firebase_options.dart';
 import '2factorOpt/otpScreen.dart';
-// import 'gpay/GpayScreen.dart';
-// import 'gpay/PhonePayScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,7 +85,7 @@ class MyApp extends StatelessWidget {
                 }
                 if (loginSnapshot.connectionState == ConnectionState.done) {
                   //firebase
-                  // FirebaseMessaging messaging = FirebaseMessaging.instance;
+                  // FirebaseMessaging messaging =   FirebaseMessaging.instance;
                   // messaging.getToken().then((token) {
                   //   print("Firebase Messaging Token main: $token");
                   // });
@@ -114,7 +117,10 @@ class MyApp extends StatelessWidget {
                 final loggedIn = loginSnapshot.data ?? false;
 
                 // Show the correct screen based on login status
+                // return PhoneNumberPage();
                 return const SplashScreen();
+                // return RegistrationCustomerProfilePage();
+                // return const PhoneAuthFlow();
                 // return  OtpScreen();
                 return RazorpayPaymentScreen();
                 // return loggedIn
@@ -136,7 +142,7 @@ class MyApp extends StatelessWidget {
   Future<bool> isUserLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     loadUserData(prefs); // Your existing function
-    return prefs.containsKey('customer_id');
+    return prefs.containsKey('customer_id')|| prefs.containsKey(AppConstant.vendorDetails);
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(

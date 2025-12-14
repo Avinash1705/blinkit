@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swiggy/controllers/payementController.dart';
+import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 // import '../venderModels/GetVenderResponseModel.dart' as venderData;
 import '../ui/login/loginScreenStatic.dart';
 import '../vender/venderModels/GetVenderResponseModel.dart' as venderData;
@@ -107,7 +108,7 @@ class PaymentScreen extends StatelessWidget {
                 Future.delayed(Duration(seconds: 3), () {
                   //duration api update in vender column
                   PaymentController().updateSubscription(vendorDetails.phone!, duration);
-                  Get.offAll(() => StaticLoginScreen());
+                  Get.offAll(() => BottomNavScreen(index: 0));
                 });
               },
               style: ElevatedButton.styleFrom(

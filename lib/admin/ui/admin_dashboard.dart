@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 
+import '../../ui/bottomNav/bottomNavScreen.dart';
+
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
 
@@ -60,7 +62,7 @@ class AdminDashboard extends StatelessWidget {
               title: const Text('Logout'),
               onTap: () {
                 // implement logout logic
-                Get.off(LoginScreen());
+                Get.off(BottomNavScreen(index: 0));
               },
             ),
           ],

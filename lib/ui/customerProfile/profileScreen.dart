@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 
+import '../bottomNav/bottomNavScreen.dart';
 import '../widgets/uihelper.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     // Redirect to Login screen
     if (mounted) {
-      Get.off(LoginScreen());
+      Get.off(BottomNavScreen(index: 0));
     }
   }
 

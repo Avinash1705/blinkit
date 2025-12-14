@@ -14,6 +14,8 @@ import '../cart/cartScreen.dart';
 import '../category/category.dart';
 import '../home/homeScreen.dart';
 import '../login/loginScreenStatic.dart';
+import '../login/roleBasedLogin/OTPVerificationPage.dart';
+import '../login/roleBasedLogin/PhoneNumberPage.dart';
 import '../print/printScreen.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -120,13 +122,18 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               ),
-              InkWell( onTap: () => Get.off(StaticLoginScreen()),
+              // InkWell( onTap: () => Get.off(StaticLoginScreen()),
+              //   child: const ListTile(
+              //     leading: Icon(Icons.login),
+              //     title: Text("Sign in as Vendor"),
+              //   ),
+              // ),
+              InkWell( onTap: () => Get.off(PhoneNumberPage()),
                 child: const ListTile(
                   leading: Icon(Icons.login),
-                  title: Text("Sign in as Vendor"),
+                  title: Text("Login in as"),
                 ),
               ),
-
             ],
           ),
         ),

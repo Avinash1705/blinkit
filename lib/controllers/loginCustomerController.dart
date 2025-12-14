@@ -6,18 +6,62 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/domain/AppConstant.dart';
+import 'package:swiggy/ui/customerProfile/CustomerLoginRegistrationScreen.dart';
 
 import '../ui/bottomNav/bottomNavScreen.dart';
+import '../ui/customerProfile/RegistrationCustomerProfileScreen.dart';
 
 class LoginCustomerController extends ChangeNotifier {
+  static Future returnLoginRegisteredCustomer(String phone,
+      BuildContext context) async {
+    var url = "${ApiConstants.getRegisterCustomer}?phone=$phone";
+    // var url = "${ApiConstants.getRegisterCustomer}?phone=8700000000";
 
+    try {
+      final response = await http.get(Uri.parse(url));
+      print("my login response ${response.body}");
+
+      final data = json.decode(response.body);
+
+      if (data["success"] == true) {
+        final customer = data["data"];
+
+        Map<String, dynamic> customerMap = {
+          "customer_id": customer["customer_id"],
+          "customer_name": customer["customer_name"],
+          "phone": customer["phone"],
+          "location": customer["location"],
+          "customer_profile": customer["customer_profile"],
+        };
+        print("test profie1  ${customerMap}");
+        saveUserDataToAppConstant(customerMap);
+        await saveUserData(customerMap);
+        Get.offAll(BottomNavScreen(index: 0));
+       return customerMap;
+      }
+      // else {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text(
+      //         "Failed to update subscription: ${response.statusCode}")),
+      //   );
+      // }
+    else {
+    Get.to(RegistrationCustomerProfilePage());
+    }
+    } catch (e) {
+      // Handle exceptions
+      print("Error updating subscription: $e");
+    }
+    // notifyListeners();
+  }
   static Future loginRegisteredCustomer(String phone,
       BuildContext context) async {
+    // var url = "${ApiConstants.getRegisterCustomer}?phone=$phone";
     var url = "${ApiConstants.getRegisterCustomer}?phone=$phone";
 
     try {
       final response = await http.get(Uri.parse(url));
-      // print("my login response ${response.body}");
+      print("my login response ${response.body}");
 
       final data = json.decode(response.body);
 
@@ -42,6 +86,9 @@ class LoginCustomerController extends ChangeNotifier {
               "Failed to update subscription: ${response.statusCode}")),
         );
       }
+      // else {
+      //   Get.to(RegistrationCustomerProfilePage());
+      // }
     } catch (e) {
       // Handle exceptions
       print("Error updating subscription: $e");

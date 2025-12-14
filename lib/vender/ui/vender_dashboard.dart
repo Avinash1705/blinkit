@@ -18,6 +18,7 @@ import 'package:swiggy/vender/ui/SubscriptionService.dart';
 // import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../../domain/appConsatant.dart';
+import '../../ui/bottomNav/bottomNavScreen.dart';
 import '../../ui/login/loginScreen.dart';
 import '../../ui/widgets/ImagePickerBoth.dart';
 import '../controller/VenderOrdersController.dart';
@@ -178,12 +179,24 @@ class VendorDashboard extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  leading: const Icon(Icons.shopping_cart),
+                  title: const Text('customerApp'),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BottomNavScreen(index: 0),
+                        ));
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Logout'),
                   onTap: () {
                     // Implement logout
                     clearVendor();
-                    Get.off(LoginScreen());
+                    // Get.off(LoginScreen());
+                    Get.off(BottomNavScreen(index: 0));
                   },
                 ),
               ],
@@ -203,14 +216,7 @@ class VendorDashboard extends StatelessWidget {
                           foreground: Paint()..shader = linearGradient,
                         ),
                       ),
-                      // Text(
-                      //   "Vendor ID: ${vendorDetails.phone.toString()}",
-                      //   style: TextStyle(
-                      //     fontSize: 22,
-                      //     fontWeight: FontWeight.bold,
-                      //     foreground: Paint()..shader = linearGradient,
-                      //   ),
-                      // ),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
