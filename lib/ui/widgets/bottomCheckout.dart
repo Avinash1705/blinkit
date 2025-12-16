@@ -13,6 +13,7 @@ import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
 import '../../controllers/checkoutController.dart';
 import '../../dependency/dependency.dart';
+import '../../testMyCode/OtpMsg91.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -143,8 +144,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            //
-
                                             // Radio buttons
                                             RadioListTile<String>(
                                               title:
@@ -183,6 +182,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             if(_selectedPayment == "online"){
                                               // Navigate to Razorpay payment screen
                                               Get.off(RazorpayPaymentScreen());
+                                              // Get.off(CashfreePaymentPage());
                                             } else {
                                               // Handle Cash on Delivery order placement
                                               Get.off(OrderPlacedScreen());
@@ -211,7 +211,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         )
                       : ElevatedButton(
                           onPressed: () =>
-                              Get.off(PhoneNumberPage()),
+                              Get.off(OtpMsg91()),
                           child: Text("Login to buy")),
             ],
           ),

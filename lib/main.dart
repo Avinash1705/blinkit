@@ -13,7 +13,9 @@ import 'package:swiggy/pay/UpiPaymentScreen.dart';
 
 // import 'package:swiggy/services/notificationService.dart';
 import 'package:swiggy/services/notify.dart';
+import 'package:swiggy/testMyCode/OtpFrontendMsg91.dart';
 import 'package:swiggy/testMyCode/PhoneAuthFlow.dart';
+import 'package:swiggy/testMyCode/OtpMsg91.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
@@ -117,12 +119,13 @@ class MyApp extends StatelessWidget {
                 final loggedIn = loginSnapshot.data ?? false;
 
                 // Show the correct screen based on login status
-                // return PhoneNumberPage();
+                return PhoneMsg91UI();
+                // return OtpMsg91();
                 return const SplashScreen();
                 // return RegistrationCustomerProfilePage();
-                // return const PhoneAuthFlow();
+                // return const PhoneAuthFlow();    // no
                 // return  OtpScreen();
-                return RazorpayPaymentScreen();
+                // return RazorpayPaymentScreen();
                 // return loggedIn
                 //     ? BottomNavScreen(index: 0)
                 //     : SplashScreen(); // or SplashScreen

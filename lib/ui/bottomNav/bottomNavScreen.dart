@@ -10,11 +10,12 @@ import 'package:swiggy/ui/widgets/uihelper.dart';
 
 import '../../controllers/loginCustomerController.dart';
 import '../../domain/appConsatant.dart';
+import '../../testMyCode/OtpMsg91.dart';
 import '../cart/cartScreen.dart';
 import '../category/category.dart';
 import '../home/homeScreen.dart';
 import '../login/loginScreenStatic.dart';
-import '../login/roleBasedLogin/OTPVerificationPage.dart';
+import '../login/roleBasedLogin/verifyOtpMsg91.dart';
 import '../login/roleBasedLogin/PhoneNumberPage.dart';
 import '../print/printScreen.dart';
 
@@ -128,7 +129,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               //     title: Text("Sign in as Vendor"),
               //   ),
               // ),
-              InkWell( onTap: () => Get.off(PhoneNumberPage()),
+              InkWell( onTap: () => Get.off(OtpMsg91()),
                 child: const ListTile(
                   leading: Icon(Icons.login),
                   title: Text("Login in as"),

@@ -12,21 +12,7 @@ class PrintScreen extends StatefulWidget {
 }
 
 class _PrintScreenState extends State<PrintScreen> {
-  @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //
-  //   /// IMPORTANT → Delay fetch so order gets stored before loading
-  //   Future.delayed(const Duration(milliseconds: 250), () {
-  //     final printController =
-  //     Provider.of<Printcontroller>(context, listen: false);
-  //
-  //     printController.fetchOrders(
-  //       AppConstant.customer_name,
-  //       AppConstant.phone,
-  //     );
-  //   });
-  // }
+
   @override
   void initState() {
     super.initState();

@@ -31,6 +31,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
   void _openCheckout() {
     var options = {
       'key': 'rzp_test_RcxP2McpmMmsXQ', // your Razorpay Test Key
+      // 'key': 'rzp_live_RieABQDvK5VhlF', // your Razorpay live
       'amount': 1, // amount in paise => 100 INR
       'name': 'FluxKart Store',
       'description': 'Test Payment',
@@ -40,7 +41,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
         'email': 'test@fluxkart.com',
       },
       'external': {
-        'wallets': ['paytm'] // optional
+        // 'wallets': ['paytm'] // optional
       }
     };
 
@@ -48,10 +49,12 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
       _razorpay.open(options);
     } catch (e) {
       debugPrint('Error: $e');
+      print("handlePay error $e");
     }
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print("handlePay Success ${response.paymentId}");
     debugPrint('✅ Payment Successful: ${response.paymentId}');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Payment Successful! ID: ${response.paymentId}')),
@@ -60,6 +63,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     debugPrint('❌ Payment Failed: ${response.code} | ${response.message}');
+    print("handlePay failed ${response.message}");
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Payment Failed: ${response.message}')),
     );
@@ -67,6 +71,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     debugPrint('💰 External Wallet: ${response.walletName}');
+    print("handlePay wallet ${response.walletName}");
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('External Wallet: ${response.walletName}')),
     );
@@ -80,7 +85,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
         child: ElevatedButton.icon(
           onPressed: _openCheckout,
           icon: const Icon(Icons.payment),
-          label: const Text('Pay ₹100 via Razorpay (Test)'),
+          label: const Text('Pay ₹1 via Razorpay (Test)'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
