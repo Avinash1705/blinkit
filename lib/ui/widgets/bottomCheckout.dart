@@ -13,6 +13,7 @@ import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
 import '../../controllers/checkoutController.dart';
 import '../../dependency/dependency.dart';
+import '../../testMyCode/OtpFrontendMsg91.dart';
 import '../../testMyCode/OtpMsg91.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -211,7 +212,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         )
                       : ElevatedButton(
                           onPressed: () =>
-                              Get.off(OtpMsg91()),
+                              Get.off(PhoneMsg91UI()),
                           child: Text("Login to buy")),
             ],
           ),

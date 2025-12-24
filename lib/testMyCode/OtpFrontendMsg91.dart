@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sendotp_flutter_sdk/sendotp_flutter_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/RoleSelectionPage.dart';
+import '../dependency/dependency.dart';
+import '../domain/AppConstant.dart';
 import 'VerifyMsg91UI.dart';
 
 
@@ -39,17 +45,28 @@ class _PhoneMsg91UIState extends State<PhoneMsg91UI> {
     setState(() => loading = true);
 
     try {
-      final response = await OTPWidget.sendOTP({
-        "identifier": "91$phone",
-      });
+      // final response = await OTPWidget.sendOTP({
+      //   "identifier": "91$phone",
+      // });
 
-      debugPrint("OTP SEND RESPONSE → $response");
+      // debugPrint("OTP SEND RESPONSE → $response");
 
       setState(() => loading = false);
-      // ✅ IMPORTANT
-      reqId = response?['message'];
-      // ✅ Redirect to verification screen
-      Get.to(() => VerifyMsg91UI(phoneNumber: phone,reqId: reqId!,));
+      //check from loginuser phone if it exit
+      final isLoggedIn = await isUserLoggedInWithPhone(phone);
+
+      // 🔹 If same phone → skip OTP
+      if (isLoggedIn) {
+        Get.offAll(() => RoleSelectionPage(phone));
+        return;
+      }
+      else {
+        // ✅ IMPORTANT
+        // reqId = response?['message'];
+        reqId = "response?['message']";
+        // ✅ Redirect to verification screen
+        Get.to(() => VerifyMsg91UI(phoneNumber: phone, reqId: reqId!,));
+      }
     } catch (e) {
       setState(() => loading = false);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -57,7 +74,23 @@ class _PhoneMsg91UIState extends State<PhoneMsg91UI> {
       );
     }
   }
+  Future<bool> isUserLoggedInWithPhone(String inputPhone) async {
+    final prefs = await SharedPreferences.getInstance();
 
+    // 🔹 Customer phone
+    final String? customerPhone = prefs.getString('phone');
+
+    // 🔹 Vendor phone (stored as JSON)
+    String? vendorPhone;
+    final vendorJson = prefs.getString(AppConstant.vendorDetails);
+
+    if (vendorJson != null && vendorJson.isNotEmpty) {
+      final Map<String, dynamic> vendorMap = jsonDecode(vendorJson);
+      vendorPhone = vendorMap['phone'];
+    }
+
+    return inputPhone == customerPhone || inputPhone == vendorPhone;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

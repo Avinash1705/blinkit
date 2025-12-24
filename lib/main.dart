@@ -145,6 +145,8 @@ class MyApp extends StatelessWidget {
   Future<bool> isUserLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     loadUserData(prefs); // Your existing function
+    // print("loginDetail ${prefs.getString('customer_id')}");
+    // print("loginDetail ven${prefs.getString(AppConstant.vendorDetails)}");
     return prefs.containsKey('customer_id')|| prefs.containsKey(AppConstant.vendorDetails);
   }
 
