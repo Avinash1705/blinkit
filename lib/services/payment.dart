@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swiggy/controllers/payementController.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/RoleSelectionPage.dart';
 // import '../venderModels/GetVenderResponseModel.dart' as venderData;
 import '../ui/login/loginScreenStatic.dart';
+import '../vender/ui/vender_dashboard.dart';
 import '../vender/venderModels/GetVenderResponseModel.dart' as venderData;
 
 
@@ -18,6 +22,7 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("duration in payment screen $duration");
+    print("duration in payment screen $payment");
     return Scaffold(
       appBar: AppBar(
         title: Text("Payment"),
@@ -107,8 +112,10 @@ class PaymentScreen extends StatelessWidget {
                 );
                 Future.delayed(Duration(seconds: 3), () {
                   //duration api update in vender column
+                  print("vendor DD payment${jsonEncode(vendorDetails)}");
                   PaymentController().updateSubscription(vendorDetails.phone!, duration);
-                  Get.offAll(() => BottomNavScreen(index: 0));
+                  // Get.offAll(() => BottomNavScreen(index: 0));
+                  Get.off(() => RoleSelectionPage(vendorDetails.phone!));
                 });
               },
               style: ElevatedButton.styleFrom(

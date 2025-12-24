@@ -50,28 +50,28 @@ class _VerifyMsg91UIState extends State<VerifyMsg91UI> {
       );
       return;
     }
-    if(otp.length == 6){
-      Get.off(() => RoleSelectionPage(widget.phoneNumber));
-    }
-    // final response = await OTPWidget.verifyOTP({
-    //   "reqId": widget.reqId, // 🔥 REQUIRED
-    //   "otp": otp,
-    // });
-
-    // debugPrint("OTP VERIFY RESPONSE → $response");
-
-    // if (response?['type'] == 'success') {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text("OTP Verified")),
-    //   );
-    //   String accRole = "";    //temp define no need
-    //   // ✅ Redirect after verification
-    //   Get.off(() => RoleSelectionPage( widget.phoneNumber));
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text(response?['message'] ?? "Invalid OTP")),
-    //   );
+    // if(otp.length == 6){
+    //   Get.off(() => RoleSelectionPage(widget.phoneNumber));
     // }
+    final response = await OTPWidget.verifyOTP({
+      "reqId": widget.reqId, // 🔥 REQUIRED
+      "otp": otp,
+    });
+
+    debugPrint("OTP VERIFY RESPONSE → $response");
+
+    if (response?['type'] == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("OTP Verified")),
+      );
+      String accRole = "";    //temp define no need
+      // ✅ Redirect after verification
+      Get.off(() => RoleSelectionPage( widget.phoneNumber));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response?['message'] ?? "Invalid OTP")),
+      );
+    }
   }
 
   Future<void> resendOtp() async {

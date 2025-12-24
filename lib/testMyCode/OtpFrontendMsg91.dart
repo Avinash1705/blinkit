@@ -22,8 +22,8 @@ class _PhoneMsg91UIState extends State<PhoneMsg91UI> {
   bool loading = false;
 
   // ❌ Frontend keys (NOT SAFE – demo/testing only)
-  final String widgetId = "356c6f684232393832373134";
-  final String authToken = "483075AcTbs2eIf694a882cP1";
+  final String widgetId = "356c78674e41363138323234";
+  final String authToken = "484416T4ibNHxf694b9838P1";
   String? reqId;
 
   @override
@@ -45,11 +45,6 @@ class _PhoneMsg91UIState extends State<PhoneMsg91UI> {
     setState(() => loading = true);
 
     try {
-      // final response = await OTPWidget.sendOTP({
-      //   "identifier": "91$phone",
-      // });
-
-      // debugPrint("OTP SEND RESPONSE → $response");
 
       setState(() => loading = false);
       //check from loginuser phone if it exit
@@ -61,9 +56,15 @@ class _PhoneMsg91UIState extends State<PhoneMsg91UI> {
         return;
       }
       else {
+        final response = await OTPWidget.sendOTP({
+          "identifier": "91$phone",
+        });
+
+        debugPrint("OTP SEND RESPONSE → $response");
+
+        setState(() => loading = false);
         // ✅ IMPORTANT
-        // reqId = response?['message'];
-        reqId = "response?['message']";
+        reqId = response?['message'];
         // ✅ Redirect to verification screen
         Get.to(() => VerifyMsg91UI(phoneNumber: phone, reqId: reqId!,));
       }

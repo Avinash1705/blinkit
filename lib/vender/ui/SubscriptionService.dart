@@ -21,7 +21,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     {
       'title': 'Basic',
       'time': '1 month',
-      'price': '₹99',
+      'price': '₹0',
       'features': ['Feature A', 'Feature B']
     },
     {
