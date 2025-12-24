@@ -61,17 +61,38 @@ class _PrintScreenState extends State<PrintScreen> {
                 ),
               ),
               children: orders.map((order) {
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 6, horizontal: 10),
+                return  Card(
+                  margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                   child: ListTile(
-                    title: Text(order["customer_name"] ?? "Unknown"),
-                    subtitle:
-                    Text(order["customer_location"] ?? "No address"),
-                    trailing:
-                    Text("Qty: ${order["item_quantity"]}"),
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: 55,
+                        height: 55,
+                        child: order["item_img"] != null &&
+                            order["item_img"].toString().isNotEmpty
+                            ? UiHelper.CustomImageNetworkSubCategory(img: order['item_img'])
+                            : const Icon(Icons.image, size: 40),
+                      ),
+                    ),
+                    title: Text(
+                      order["item_name"] ?? order["customer_name"] ?? "Unknown",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(order["customer_location"] ?? "No address"),
+                        const SizedBox(height: 4),
+                        Text(
+                          "Qty: ${order["item_quantity"]}",
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
                 );
+
               }).toList(),
             );
           }).toList(),

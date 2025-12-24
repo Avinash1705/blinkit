@@ -22,7 +22,9 @@ class UiHelper {
   //Sub category image
   static CustomImageNetworkSubCategory({required String img}) {
 
-    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/subCategory/$img",fit: BoxFit.cover,);
+    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/subCategory/$img",fit: BoxFit.cover,errorBuilder: (context, error, stackTrace) {
+      return const Icon(Icons.image_not_supported);
+    });
   }
   //Sub category image
   static CustomImageNetworkShop({required String img}) {
