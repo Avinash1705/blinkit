@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/RoleSelectionPage.dart';
 
 import '../../ui/login/loginScreenStatic.dart';
 import '../venderModels/vendeRegisterResponseModel.dart';
@@ -66,7 +67,8 @@ class VendorRegisterController {
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(urRes.status ?? 'Vendor registered successfully')));
-        Get.off(BottomNavScreen(index: 0));
+        // Get.off(BottomNavScreen(index: 0));
+        Get.off(RoleSelectionPage(phoneController.text));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to register vendor')),

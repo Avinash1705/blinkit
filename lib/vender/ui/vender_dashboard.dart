@@ -91,6 +91,7 @@ class VendorDashboard extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    print("vendor DD dashboard${jsonEncode(vendorDetails)}");
     print(
         "dashboardVender ${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
 

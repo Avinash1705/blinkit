@@ -72,5 +72,8 @@ Future<void> loadUserData(SharedPreferences prefs) async {
   print("test profie inti  ${AppConstant.customer_id}");
   print("test vendor details ${AppConstant.vendorDetails}");
 }
+Future<void> loadSecretKeys()async {
+
+}
 
 

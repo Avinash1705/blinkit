@@ -30,8 +30,8 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
 
   void _openCheckout() {
     var options = {
-      'key': 'rzp_test_RcxP2McpmMmsXQ', // your Razorpay Test Key
-      // 'key': 'rzp_live_RieABQDvK5VhlF', // your Razorpay live
+      // 'key': 'rzp_test_RcxP2McpmMmsXQ', // your Razorpay Test Key
+      'key': 'rzp_live_RieABQDvK5VhlF', // your Razorpay live
       'amount': 1, // amount in paise => 100 INR
       'name': 'FluxKart Store',
       'description': 'Test Payment',
@@ -85,7 +85,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
         child: ElevatedButton.icon(
           onPressed: _openCheckout,
           icon: const Icon(Icons.payment),
-          label: const Text('Pay ₹1 via Razorpay (Test)'),
+          label: const Text('Pay ₹1 via Razorpay'),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
