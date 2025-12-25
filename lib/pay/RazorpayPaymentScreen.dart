@@ -1,98 +1,150 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:swiggy/domain/AppConstant.dart';
 
+import '../ui/orderPlacedScreen.dart';
+
 class RazorpayPaymentScreen extends StatefulWidget {
-  const RazorpayPaymentScreen({super.key});
+  final double totalAmount; // in rupees
+
+  const RazorpayPaymentScreen(this.totalAmount, {super.key});
 
   @override
-  State<RazorpayPaymentScreen> createState() => _RazorpayPaymentScreenState();
+  State<RazorpayPaymentScreen> createState() =>
+      _RazorpayPaymentScreenState();
 }
 
 class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
   late Razorpay _razorpay;
+  bool isProcessing = false;
 
   @override
   void initState() {
     super.initState();
     _razorpay = Razorpay();
 
-    // Handle callbacks
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.on(
+        Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(
+        Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(
+        Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
   void dispose() {
-    _razorpay.clear(); // VERY IMPORTANT: removes listeners
+    _razorpay.clear();
     super.dispose();
   }
 
   void _openCheckout() {
+    if (isProcessing) return;
+
+    setState(() => isProcessing = true);
+
+    final int amountInPaise =
+    (widget.totalAmount * 100).round();
+
     var options = {
-      // 'key': 'rzp_test_RcxP2McpmMmsXQ', // your Razorpay Test Key
-      'key': AppConstant.razrorPayLiveKey, // your Razorpay live
-      'amount': 1, // amount in paise => 100 INR
-      'name': 'FluxKart Store',
-      'description': 'Test Payment',
-      'timeout': 120, // in seconds
+      'key': AppConstant.razrorPayLiveKey,
+      'amount': amountInPaise,
+      'name': 'FluxKart',
+      'description': 'Order Payment',
+      'timeout': 120,
       'prefill': {
-        'contact': '9999999999',
-        'email': 'test@fluxkart.com',
+        'contact': AppConstant.phone ?? '',
+        'email': 'test@fluxkart.com' ?? '',
       },
-      'external': {
-        // 'wallets': ['paytm'] // optional
+      'theme': {
+        'color': '#000000',
       }
     };
 
     try {
       _razorpay.open(options);
     } catch (e) {
-      debugPrint('Error: $e');
-      print("handlePay error $e");
+      setState(() => isProcessing = false);
+      Get.snackbar("Error", "Unable to start payment");
     }
   }
 
+  // ---------------- CALLBACKS ----------------
+
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print("handlePay Success ${response.paymentId}");
-    debugPrint('✅ Payment Successful: ${response.paymentId}');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Payment Successful! ID: ${response.paymentId}')),
+    setState(() => isProcessing = false);
+
+    debugPrint("✅ Payment Success: ${response.paymentId}");
+
+    Get.offAll(
+          () => const OrderPlacedScreen(),
+      transition: Transition.fadeIn,
     );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    debugPrint('❌ Payment Failed: ${response.code} | ${response.message}');
-    print("handlePay failed ${response.message}");
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Payment Failed: ${response.message}')),
+    setState(() => isProcessing = false);
+
+    debugPrint(
+        "❌ Payment Failed: ${response.code} | ${response.message}");
+
+    Get.snackbar(
+      "Payment Failed",
+      response.message ?? "Something went wrong",
+      backgroundColor: Colors.red.shade100,
+      colorText: Colors.black,
     );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    debugPrint('💰 External Wallet: ${response.walletName}');
-    print("handlePay wallet ${response.walletName}");
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('External Wallet: ${response.walletName}')),
+    setState(() => isProcessing = false);
+
+    debugPrint("💰 Wallet: ${response.walletName}");
+
+    Get.snackbar(
+      "Wallet Selected",
+      response.walletName ?? '',
     );
   }
+
+  // ---------------- UI ----------------
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Razorpay Test Payment')),
-      body: Center(
-        child: ElevatedButton.icon(
-          onPressed: _openCheckout,
-          icon: const Icon(Icons.payment),
-          label: const Text('Pay ₹1 via Razorpay'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
+      appBar: AppBar(
+        title: const Text('Complete Payment'),
+        backgroundColor: Colors.black,
+      ),
+      body: Stack(
+        children: [
+          Center(
+            child: ElevatedButton.icon(
+              onPressed: isProcessing ? null : _openCheckout,
+              icon: const Icon(Icons.lock),
+              label: Text(
+                'Pay ₹${widget.totalAmount.toStringAsFixed(2)}',
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30, vertical: 14),
+              ),
+            ),
           ),
-        ),
+
+          // 🔒 BLOCKING LOADER
+          if (isProcessing)
+            Container(
+              color: Colors.black.withOpacity(0.4),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

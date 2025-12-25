@@ -182,7 +182,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             print("Selected Payment: $_selectedPayment");
                                             if(_selectedPayment == "online"){
                                               // Navigate to Razorpay payment screen
-                                              Get.off(RazorpayPaymentScreen());
+                                              Get.off(RazorpayPaymentScreen(cartController.totalAmount));
                                               // Get.off(CashfreePaymentPage());
                                             } else {
                                               // Handle Cash on Delivery order placement
