@@ -22,8 +22,8 @@ class _PhoneMsg91UIState extends State<PhoneMsg91UI> {
   bool loading = false;
 
   // ❌ Frontend keys (NOT SAFE – demo/testing only)
-  final String widgetId = "356c78674e41363138323234";
-  final String authToken = "484416T4ibNHxf694b9838P1";
+  final String widgetId = AppConstant.msgWidgetKey;
+  final String authToken = AppConstant.msgAuthKey;
   String? reqId;
 
   @override

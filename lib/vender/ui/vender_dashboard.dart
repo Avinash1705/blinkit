@@ -71,24 +71,25 @@ class VendorDashboard extends StatelessWidget {
 
   Future<bool> _onWillPop(BuildContext context) async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Exit App"),
-        content: const Text("Are you sure you want to exit?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text("No"),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Exit App"),
+            content: const Text("Are you sure you want to exit?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () => SystemNavigator.pop(),
+                child: const Text("Yes"),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () =>  SystemNavigator.pop(),
-            child: const Text("Yes"),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false; // Default to false if dismissed
   }
+
   @override
   Widget build(BuildContext context) {
     print("vendor DD dashboard${jsonEncode(vendorDetails)}");
@@ -100,7 +101,7 @@ class VendorDashboard extends StatelessWidget {
       colors: <Color>[Color(0xFFFEE2AD), Color(0xFFEC0505)],
     ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
     return WillPopScope(
-     onWillPop: () =>  _onWillPop(context),
+      onWillPop: () => _onWillPop(context),
       child: Scaffold(
           backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
           appBar: AppBar(
@@ -227,7 +228,9 @@ class VendorDashboard extends StatelessWidget {
                             backgroundColor: Colors.deepPurple.shade50,
                             label: Text(
                               "Phone: ${vendorDetails.phone}",
-                              style: const TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -241,7 +244,9 @@ class VendorDashboard extends StatelessWidget {
                             backgroundColor: Colors.deepPurple.shade50,
                             label: Text(
                               "Shop: ${vendorDetails.shopName}",
-                              style: const TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -249,13 +254,16 @@ class VendorDashboard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.location_city, color: Colors.deepPurple),
+                          const Icon(Icons.location_city,
+                              color: Colors.deepPurple),
                           const SizedBox(width: 8),
                           Chip(
                             backgroundColor: Colors.deepPurple.shade50,
                             label: Text(
                               "Location: ${vendorDetails.location}",
-                              style: const TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -494,76 +502,114 @@ class _MyProductsPage extends State<MyProductsPage> {
 class VenderOrdersPage extends StatefulWidget {
   final String tableName;
 
-  VenderOrdersPage({super.key, required this.tableName});
+  const VenderOrdersPage({super.key, required this.tableName});
 
   @override
   State<VenderOrdersPage> createState() => _VenderOrdersPageState();
 }
 
 class _VenderOrdersPageState extends State<VenderOrdersPage> {
-  List<orderPlacedModelData.Data>? orderPlacedModelList = [];
+  final VenderOrdersController _controller = VenderOrdersController();
+
+  List<orderPlacedModelData.Data> orderPlacedModelList = [];
+  bool isLoading = true;
 
   @override
   void initState() {
-    VenderOrdersController().fetchOrders(widget.tableName).then((value) {
-      setState(() {
-        print("Fetched orders: ${jsonEncode(value.data)}");
-        orderPlacedModelList = value.data;
-      });
-    }).catchError((error) {
-      Get.snackbar("Error", "Failed to fetch orders: $error");
-    });
     super.initState();
+    _fetchOrders();
+  }
+
+  Future<void> _fetchOrders() async {
+    try {
+      final value = await _controller.fetchOrders(widget.tableName);
+
+      if (!mounted) return;
+
+      setState(() {
+        orderPlacedModelList = value.data ?? [];
+        isLoading = false;
+      });
+
+      debugPrint("Fetched orders: ${jsonEncode(value.data)}");
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() => isLoading = false);
+
+      // Get.snackbar(
+      //   "Error",
+      //   "Failed to fetch orders",
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
+
+      debugPrint("Order fetch error: $error");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
     return Scaffold(
       appBar: AppBar(title: const Text("Orders")),
       backgroundColor: AppColors.backgroundAppColor.withOpacity(0.9),
-      body: orderPlacedModelList == null || orderPlacedModelList!.isEmpty
-          ? SizedBox(
-              child: Center(
-                child: Text("No orders found",
-                    style: TextStyle(fontSize: 20, color: Colors.red)),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (orderPlacedModelList.isEmpty) {
+      return const Center(
+        child: Text(
+          "No orders found",
+          style: TextStyle(fontSize: 20, color: Colors.red),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: orderPlacedModelList.length,
+      itemBuilder: (context, index) {
+        final product = orderPlacedModelList[index];
+
+        return Card(
+          margin: const EdgeInsets.all(16),
+          elevation: 3,
+          child: ListTile(
+            leading: SizedBox(
+              width: 50,
+              height: 50,
+              child: UiHelper.CustomImageNetworkSubCategory(
+                img: product.itemImg ?? '',
               ),
-            )
-          : ListView.builder(
-              itemCount: orderPlacedModelList!.length,
-              itemBuilder: (context, index) {
-                if (orderPlacedModelList == null ||
-                    orderPlacedModelList!.isEmpty) {
-                  return const Center(child: Text("No orders found"));
-                }
-                final product = orderPlacedModelList![index];
-                return Card(
-                  margin: EdgeInsets.all(20),
-                  child: ListTile(
-                    // leading: Image.network(product.itemImg ?? '',
-                    //     width: 50, height: 50, fit: BoxFit.cover),
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: UiHelper.CustomImageNetworkSubCategory(
-                          img: product.itemImg.toString()),
-                    ),
-                    title: Text(product.itemName ?? 'No Name'),
-                    subtitle: Text(
-                        'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
-                        ''
-                        '\nNew Price: ${product.newPrice ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        // Implement delete logic here
-                        Get.snackbar("Delete",
-                            "Delete functionality not implemented yet");
-                      },
-                    ),
-                  ),
+            ),
+            title: Text(
+              product.itemName ?? 'No Name',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              'Price: ${product.price ?? 'N/A'}'
+                  '\nNew Price: ${product.newPrice ?? 'N/A'}'
+                  '\nQuantity: ${product.quantity ?? '0'}'
+                  '\nWeight: ${product.weight ?? 'N/A'}'
+                  '\nDescription: ${product.itemDescription ?? 'No Description'}',
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                Get.snackbar(
+                  "Delete",
+                  "Delete functionality not implemented yet",
+                  snackPosition: SnackPosition.BOTTOM,
                 );
-              }),
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

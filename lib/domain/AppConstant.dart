@@ -17,8 +17,9 @@ class AppConstant {
   static  String location = "";
   static  String customer_profile = "";
   static  String vendorDetails = "vendorKey";
-  // void setCustomerData(String customerId, String customerName, String phone, String location, String customerProfile) {
-  //   // This method can be used to set customer data if needed
-  //   customerId = customerId;
-  // }
+
+  //secretKey
+  static  String msgAuthKey = "";
+  static  String msgWidgetKey = "";
+  static  String razrorPayLiveKey = "";
 }

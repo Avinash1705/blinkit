@@ -39,7 +39,8 @@ class ApiConstants {
   static String sendOtpMsg91 = "$ssl://$ip/fluxKart/apis/msg91/send-otp.php";
   static String verifyOtpMsg91 = "$ssl://$ip/fluxKart/apis/msg91/verify-otp.php";
 
-
+  //secretKeys
+  static String secretKey = "$ssl://$ip/fluxKart/apis/getSecretKeyApi/getConfig.php";
 
   //Order table Format name
   static  String orderTableFormat(String tableName){

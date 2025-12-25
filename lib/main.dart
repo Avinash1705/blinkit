@@ -24,6 +24,7 @@ import 'package:swiggy/ui/login/roleBasedLogin/RoleSelectionPage.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
 import 'PhoneAuthScreen.dart';
+import 'controllers/appSecretKey/getAppSecretKeyController.dart';
 import 'controllers/notificationSendController.dart';
 import 'dependency/dependency.dart';
 import 'domain/AppConstant.dart';
@@ -38,6 +39,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => CartController()),
       ChangeNotifierProvider(create: (_) => AddressController()),
       ChangeNotifierProvider(create: (_) => Printcontroller()),
+      ChangeNotifierProvider(create: (_) => ConfigController())
     ],
     child: MyApp(),
   ));
@@ -52,6 +54,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //call secret key api
+    context.read<ConfigController>().fetchConfig();
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flux-it',

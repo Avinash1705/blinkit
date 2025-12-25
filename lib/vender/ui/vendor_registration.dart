@@ -1,21 +1,25 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:get/get.dart';
+
 import '../controller/vender_register_controller.dart';
 
-
 class VendorRegistrationPage extends StatefulWidget {
+  const VendorRegistrationPage({super.key});
+
   @override
-  _VendorRegistrationPageState createState() => _VendorRegistrationPageState();
+  State<VendorRegistrationPage> createState() =>
+      _VendorRegistrationPageState();
 }
 
 class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
-  final controller = VendorRegisterController();
-  File? _image;
+  final VendorRegisterController controller = VendorRegisterController();
   final ImagePicker _picker = ImagePicker();
+
+  File? _image;
 
   @override
   void dispose() {
@@ -23,32 +27,33 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
     super.dispose();
   }
 
-  Future<bool> _requestPermission(ImageSource source) async {
+  Future<void> _pickImage(ImageSource source) async {
+    PermissionStatus status;
+
     if (source == ImageSource.camera) {
-      return await Permission.camera.request().isGranted;
+      status = await Permission.camera.request();
     } else {
       if (Platform.isAndroid) {
-        if (await Permission.storage.isGranted ||
-            await Permission.photos.isGranted ||
-            await Permission.mediaLibrary.isGranted) {
-          return true;
+        if (await Permission.photos.isGranted ||
+            await Permission.storage.isGranted) {
+          status = PermissionStatus.granted;
+        } else {
+          // Android 13+ prefers photos
+          status = await Permission.photos.request();
+          if (!status.isGranted) {
+            status = await Permission.storage.request();
+          }
         }
-
-        // Android 13+ specific
-        if (await Permission.photos.request().isGranted ||
-            await Permission.storage.request().isGranted) {
-          return true;
-        }
+      } else {
+        // iOS
+        status = await Permission.photos.request();
       }
-      return false;
     }
-  }
-  //permission handling is not needed here as we are not using camera or gallery
-  Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Permission denied')),
+
+    if (!status.isGranted) {
+      Get.snackbar(
+        "Permission denied",
+        "Please allow gallery permission from settings",
       );
       return;
     }
@@ -61,93 +66,117 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
     }
   }
 
+
+  Future<void> _onRegisterPressed() async {
+    if (_image == null) {
+      Get.snackbar("Image", "Please select an image");
+      return;
+    }
+
+    // 🔥 BLOCKING LOADER (industry standard)
+    Get.dialog(
+      const Center(child: CircularProgressIndicator()),
+      barrierDismissible: false,
+    );
+
+    await controller.registerVendor(
+      context: context,
+      imgFile: _image!,
+    );
+
+    // ❌ Do NOT close loader manually
+    // Navigation removes it automatically
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Vendor Registration')),
+      appBar: AppBar(title: const Text('Vendor Registration')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: controller.formKey,
           child: ListView(
             children: [
-             Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 ElevatedButton(
-                   onPressed: () => {
-                     _pickImage(ImageSource.gallery),
-                   },
-                   child: Text('Pick from Gallery'),
-                 ),
-                 ElevatedButton(
-                   onPressed: () => _pickImage(ImageSource.camera),
-                   child: Text('Take a Photo'),
-                 ),
-               ],
-             ),
-              _image == null
-                  ? Text('No image selected')
-              // : Image.file(_image!, height: 200),
-                  : Column(
                 children: [
-                  Image.file(
-                    _image!,
-                    height: 200,
+                  ElevatedButton(
+                    onPressed: () => _pickImage(ImageSource.gallery),
+                    child: const Text('Pick from Gallery'),
                   ),
-                  SizedBox(height: 10),
-
-                  Text('Image Path: ${_image!.path.split('/').last}'),
-                  // Text('Image Path:absoluit  ${_image!.absolute.path}'),
+                  ElevatedButton(
+                    onPressed: () => _pickImage(ImageSource.camera),
+                    child: const Text('Take Photo'),
+                  ),
                 ],
               ),
-              SizedBox(height: 20),
-              // TextFormField(
-              //   controller: controller.vendorIdController,
-              //   keyboardType: TextInputType.number,
-              //   inputFormatters: [
-              //     FilteringTextInputFormatter.digitsOnly,
-              //   ],
-              //   decoration: InputDecoration(labelText: 'Vendor ID'),
-              //   validator: (v) => v!.isEmpty ? 'Enter Vendor ID' : null,
-              // ),
+              const SizedBox(height: 12),
+
+              _image == null
+                  ? const Text('No image selected')
+                  : Column(
+                children: [
+                  Image.file(_image!, height: 200),
+                  const SizedBox(height: 6),
+                  Text(
+                    _image!.path.split('/').last,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
               TextFormField(
                 controller: controller.nameController,
-                decoration: InputDecoration(labelText: 'Vendor Name'),
-                validator: (v) => v!.isEmpty ? 'Enter Vendor Name' : null,
+                decoration:
+                const InputDecoration(labelText: 'Vendor Name'),
+                validator: (v) =>
+                v!.isEmpty ? 'Enter Vendor Name' : null,
               ),
+
               TextFormField(
                 controller: controller.shopNameController,
-                decoration: InputDecoration(labelText: 'Shop Name'),
-                validator: (v) => v!.isEmpty ? 'Enter Shop Name' : null,
+                decoration:
+                const InputDecoration(labelText: 'Shop Name'),
+                validator: (v) =>
+                v!.isEmpty ? 'Enter Shop Name' : null,
               ),
+
               TextFormField(
                 controller: controller.phoneController,
-                maxLength: 10,
-                decoration: InputDecoration(labelText: 'Phone'),
                 keyboardType: TextInputType.phone,
-                validator: (v) => v!.length != 10 ? 'Enter 10-digit phone' : null,
+                maxLength: 10,
+                decoration:
+                const InputDecoration(labelText: 'Phone'),
+                validator: (v) =>
+                v!.length != 10 ? 'Enter 10-digit phone' : null,
               ),
+
               TextFormField(
                 controller: controller.locationController,
-                decoration: InputDecoration(labelText: 'Location'),
-                validator: (v) => v!.isEmpty ? 'Enter Location' : null,
+                decoration:
+                const InputDecoration(labelText: 'Location'),
+                validator: (v) =>
+                v!.isEmpty ? 'Enter Location' : null,
               ),
-              SizedBox(height: 24),
+
               TextFormField(
-                keyboardType: TextInputType.number,
-                 maxLength: 6,
                 controller: controller.pincodeController,
-                decoration: InputDecoration(labelText: 'PinCode'),
-                validator: (v) => v!.isEmpty ? 'Enter PinCode' : null,
+                keyboardType: TextInputType.number,
+                maxLength: 6,
+                decoration:
+                const InputDecoration(labelText: 'PinCode'),
+                validator: (v) =>
+                v!.isEmpty ? 'Enter PinCode' : null,
               ),
-              SizedBox(height: 24),
+
+              const SizedBox(height: 24),
+
               ElevatedButton(
-                onPressed: () => {
-                  // print("Registering Vendor$_image"),
-                 controller.registerVendor(context,_image!)
-                },
-                child: Text('Register Vendor'),
+                onPressed: _onRegisterPressed,
+                child: const Text('Register Vendor'),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 
 class RazorpayPaymentScreen extends StatefulWidget {
   const RazorpayPaymentScreen({super.key});
@@ -31,7 +32,7 @@ class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
   void _openCheckout() {
     var options = {
       // 'key': 'rzp_test_RcxP2McpmMmsXQ', // your Razorpay Test Key
-      'key': 'rzp_live_RieABQDvK5VhlF', // your Razorpay live
+      'key': AppConstant.razrorPayLiveKey, // your Razorpay live
       'amount': 1, // amount in paise => 100 INR
       'name': 'FluxKart Store',
       'description': 'Test Payment',

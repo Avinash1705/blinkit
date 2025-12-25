@@ -9,7 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/cartController.dart';
 // import 'package:get_storage/get_storage.dart';
 
+import '../controllers/appSecretKey/getAppSecretKeyController.dart';
 import '../controllers/loginCustomerController.dart';
+import '../domain/ApiConstants.dart';
 import '../domain/AppConstant.dart';
 import '../services/notify.dart';
 import '../ui/category/searchController.dart';
@@ -23,6 +25,7 @@ Future<void> init() async {
 
   Get.lazyPut(() => SearchController());
   Get.lazyPut(() => CartController());
+
   requestNotificationPermission();
   initNotifications();
   // requestNotificationPermission();
@@ -35,7 +38,6 @@ Future<void> init() async {
   // Get.lazyPut(() => LiveStreamingController());
   // Get.lazyPut(() => LoginPageController());
   // loadUserData();
-
 }
 
 Future<void> initNotifications() async {
@@ -72,8 +74,6 @@ Future<void> loadUserData(SharedPreferences prefs) async {
   print("test profie inti  ${AppConstant.customer_id}");
   print("test vendor details ${AppConstant.vendorDetails}");
 }
-Future<void> loadSecretKeys()async {
 
-}
 
 
