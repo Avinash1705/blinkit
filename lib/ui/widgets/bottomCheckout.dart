@@ -42,6 +42,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   //   super.didUpdateWidget(oldWidget);
   // }
 
+
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
@@ -98,12 +99,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               SizedBox(
                 height: 20,
               ),
-              cartController.itemCount == 0
+              (cartController.itemCount == 0 ||  addressController.updatedAddress.value == "")
                   ? ElevatedButton(
                       onPressed: () {
-                        // Get.off(OrderPlacedScreen());
+
+                        String message;
+
+                        if (cartController.itemCount == 0 && addressController.updatedAddress.value == "") {
+                          message = "Please add items and delivery address";
+                        } else if (cartController.itemCount == 0) {
+                          message = "Please add items to cart";
+                        } else {
+                          message = "Please add delivery address";
+                        }
                         InteractiveToast.popError(context,
-                            title: Text("Please Add Items"),
+                            title: Text(message) ,
                             toastSetting: PopupToastSetting(
                                 toastAlignment: Alignment.center,
                                 displayDuration: Duration(seconds: 1)));
