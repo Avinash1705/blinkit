@@ -51,7 +51,7 @@ class _PrintScreenState extends State<PrintScreen> {
           children: printController.ordersByDay.entries.map((entry) {
             String date = entry.key;
             List<Map<String, dynamic>> orders = entry.value;
-
+            print("orderValue $orders");
             return ExpansionTile(
               title: Text(
                 "📅 $date",

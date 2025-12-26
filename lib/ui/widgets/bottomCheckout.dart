@@ -36,11 +36,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
-  @override
-  void didUpdateWidget(covariant CheckoutScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
+  // @override
+  // void didUpdateWidget(covariant CheckoutScreen oldWidget) {
+  //   // TODO: implement didUpdateWidget
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         "addressController updatedAddress: ${addressController.updatedAddress.value}");
     // default selected
     // addressController.saveLocData();
-    print("update ");
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),

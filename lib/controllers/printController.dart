@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/model/cartModel.dart';
@@ -28,12 +29,19 @@ class Printcontroller extends ChangeNotifier {
       listItem.add(item);
     }
 
-    print("🧾 Items to be saved as order: ${jsonEncode(listItem)}");
+    // ✅ LOAD ADDRESS HERE (CRITICAL FIX)
+    final prefs = await SharedPreferences.getInstance();
+    final address =
+        prefs.getString('location') ?? "No Address Found";
 
+    debugPrint("📍 Address used for order: $address");
+
+    // print("🧾 Items to be saved as order: ${jsonEncode(listItem)}");
+    // print("placing order printController addTransiion  ${addressController.updatedAddress.value}");
     await placeOrder(
       customerPhone: AppConstant.phone,
       customerName: AppConstant.customer_name,
-      customerLocation: addressController.updatedAddress.value.toString(),
+      customerLocation: address,
       cartItems: listItem,
     );
 
@@ -53,6 +61,7 @@ class Printcontroller extends ChangeNotifier {
   // ------------------------------------------------------------
   // PLACE ORDER API
   // ------------------------------------------------------------
+  //api to customerOrderPlaced -
   Future<String> placeOrder({
     required String customerPhone,
     required String customerName,
@@ -67,7 +76,7 @@ class Printcontroller extends ChangeNotifier {
       "customer_location": customerLocation,
       "cartItems": cartItems.map((e) => e.toJson()).toList(),
     };
-
+    print("placing order printController $body");
     print("📦 Sending order data: ${jsonEncode(body)}");
 
     try {
