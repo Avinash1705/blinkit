@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swiggy/domain/appConsatant.dart';
-import 'package:swiggy/ui/widgets/uihelper.dart';
+import 'package:swiggy/domain/app_constants.dart';
+import 'package:swiggy/ui/widgets/ui_helper.dart';
 
-import '../login/loginScreen.dart';
+import '../login/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
