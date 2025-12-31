@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
@@ -17,84 +16,107 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            UiHelper.CustomImage(img: "Blinkit Onboarding Screen.png"),
-            SizedBox(height: 10),
-            UiHelper.CustomImage(img: "image 10.png"),
-            SizedBox(height: 10),
-            UiHelper.CustomText(
-                text: "India last min app",
-                color: Color(0xFF000000),
-                fontWeight: FontWeight.bold,
-                fontsize: 20,
-                fontfamily: "bold"),
-            SizedBox(height: 10),
+            UiHelper.customImage(img: "Blinkit Onboarding Screen.png"),
+            const SizedBox(height: 10),
+
+            UiHelper.customImage(img: "image 10.png"),
+            const SizedBox(height: 10),
+
+            UiHelper.customText(
+              text: "India last min app",
+              color: const Color(0xFF000000),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              fontFamily: "bold",
+            ),
+
+            const SizedBox(height: 10),
+
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Container(
                 height: 200,
                 width: 350,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFFFFFFFF)),
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xFFFFFFFF),
+                ),
                 child: Column(
                   children: [
-                    SizedBox(height: 10),
-                    UiHelper.CustomText(
-                        text: "Avinash",
-                        color: Color(0xFF000000),
-                        fontWeight: FontWeight.w500,
-                        fontsize: 14),
-                    SizedBox(height: 5),
-                    UiHelper.CustomText(
-                        text: "87000566xx",
-                        color: Color(0xFF9c9c9c),
-                        fontWeight: FontWeight.bold,
-                        fontsize: 14,
-                        fontfamily: "bold"),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 10),
+
+                    UiHelper.customText(
+                      text: "Avinash",
+                      color: const Color(0xFF000000),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+
+                    const SizedBox(height: 5),
+
+                    UiHelper.customText(
+                      text: "87000566xx",
+                      color: const Color(0xFF9C9C9C),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      fontFamily: "bold",
+                    ),
+
+                    const SizedBox(height: 5),
+
                     SizedBox(
-                        height: 48,
-                        width: 295,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFE23744),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
-                            )
+                      height: 48,
+                      width: 295,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFE23744),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              UiHelper.CustomText(
-                                  text: "Login with",
-                                  color: Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w500,
-                                  fontsize: 14),
-                              SizedBox(width: 5),
-                              UiHelper.CustomImage(img: "image 9.png")
-                            ],
-                          ),
-                        )),
-                    SizedBox(height: 8),
-                    UiHelper.CustomText(
-                        text: "Access your saved address from zomato automatically!",
-                        color: Color(0xFF9c9c9c),
-                        fontWeight: FontWeight.normal,
-                        fontsize: 10,
-                        fontfamily: "bold"),
-                    SizedBox(height: 16),
-                    UiHelper.CustomText(
-                        text: "or login with phone number",
-                        color: Color(0xFF269237),
-                        fontWeight: FontWeight.normal,
-                        fontsize: 14),
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            UiHelper.customText(
+                              text: "Login with",
+                              color: const Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                            const SizedBox(width: 5),
+                            UiHelper.customImage(img: "image 9.png"),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    UiHelper.customText(
+                      text:
+                      "Access your saved address from zomato automatically!",
+                      color: const Color(0xFF9C9C9C),
+                      fontWeight: FontWeight.normal,
+                      fontSize: 10,
+                      fontFamily: "bold",
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    UiHelper.customText(
+                      text: "or login with phone number",
+                      color: const Color(0xFF269237),
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

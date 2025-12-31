@@ -1,26 +1,28 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UiHelper {
-  static CustomImage({required String img}) {
-    return Image.asset("assets/images/$img");
+  static Widget customImage({required String img}) {
+    return Image.asset(
+      "assets/images/$img",
+      fit: BoxFit.contain,
+    );
   }
 
-  static CustomText(
-      {required String text,
-      required Color color,
-      required FontWeight fontWeight,
-      String? fontfamily,
-      required double fontsize}) {
+  static Widget customText({
+    required String text,
+    required Color color,
+    required FontWeight fontWeight,
+    String? fontFamily,
+    required double fontSize,
+  }) {
     return Text(
       text,
       style: TextStyle(
-          fontSize: fontsize,
-          fontFamily: fontfamily ?? "regular",
-          fontWeight: fontWeight,
-          color: color),
+        fontSize: fontSize,
+        fontFamily: fontFamily ?? "regular",
+        fontWeight: fontWeight,
+        color: color,
+      ),
     );
   }
 }
