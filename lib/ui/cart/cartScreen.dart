@@ -28,7 +28,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
-    var addressController = Provider.of<AddressController>(context);
+    var addressController = Get.find<AddressController>();
     // print("cart items Cart Screen ${jsonEncode(cartController.items)}");
     // print("cart Data title");
     // print("cart Data CartScreen ${jsonEncode(cartController.items)}");

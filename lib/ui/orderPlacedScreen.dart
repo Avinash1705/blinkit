@@ -33,7 +33,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
   @override
   Widget build(BuildContext context) {
     var cartController = Provider.of<CartController>(context);
-    var printController = Provider.of<Printcontroller>(context);
+    var printController = Provider.of<PrintController>(context);
     print("cartController items in order placed screen ${jsonEncode(cartController.items)}");
     for(int i=0;i<cartController.itemCount;i++){
       CartItem item = cartController.items.values.elementAt(i);

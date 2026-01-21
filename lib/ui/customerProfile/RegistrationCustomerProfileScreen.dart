@@ -27,23 +27,14 @@ class _CustomerProfilePageState
 
   Future<bool> _requestPermission(ImageSource source) async {
     if (source == ImageSource.camera) {
-      return await Permission.camera.request().isGranted;
-    } else {
-      if (Platform.isAndroid) {
-        if (await Permission.storage.isGranted ||
-            await Permission.photos.isGranted ||
-            await Permission.mediaLibrary.isGranted) {
-          return true;
-        }
-
-        if (await Permission.photos.request().isGranted ||
-            await Permission.storage.request().isGranted) {
-          return true;
-        }
-      }
-      return false;
+      final status = await Permission.camera.request();
+      return status.isGranted;
     }
+
+    // For gallery → NO permission required
+    return true;
   }
+
 
   Future<void> _pickImage(ImageSource source) async {
     bool granted = await _requestPermission(source);
@@ -123,7 +114,7 @@ class _CustomerProfilePageState
                   const SizedBox(height: 16),
 
                   // Location Field (Custom Widget)
-                  LocationWidget(locationController: _locationController,nearcolor: Colors.white,),
+                  LocationWidget(locationController: _locationController, nearColor: Colors.white,),
                   const SizedBox(height: 16),
 
                   // Phone Field

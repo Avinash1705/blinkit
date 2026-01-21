@@ -10,25 +10,23 @@ import '../venderModels/OrderPlacedModel.dart';
 
 class VenderOrdersController {
 
-
-
-  // Add your methods and properties here
-  // For example, you might have methods to fetch orders, update order status, etc.
-
-   late OrderPlacedModel orderPlacedModel ;
-  Future<OrderPlacedModel> fetchOrders(String tableName) async{
-    // Logic to fetch orders from the database or API
+  Future<OrderPlacedModel?> fetchOrders(String tableName) async {
     print("table name in fetch orders $tableName");
     String url = "${ApiConstants.getOrderedPlaced}?tableName=$tableName";
-  try{
-    var result =await http.get(Uri.parse(url));
-    print("Response from server: ${result.body}");
-     orderPlacedModel = OrderPlacedModel.fromJson(jsonDecode(result.body));
-  }
-  catch(e) {
-    print("Error fetching orders: $e");
-    // Handle the error appropriately, maybe show a message to the user
-  }
-  return orderPlacedModel;
+
+    try {
+      final result = await http.get(Uri.parse(url));
+      print("Response from server: ${result.body}");
+
+      if (result.statusCode == 200) {
+        return OrderPlacedModel.fromJson(jsonDecode(result.body));
+      } else {
+        print("❌ Server error: ${result.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      print("❌ Error fetching orders: $e");
+      return null;
+    }
   }
 }

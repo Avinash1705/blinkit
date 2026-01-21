@@ -12,16 +12,29 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
+// Read current values
+def currentVersionCode = (localProperties.getProperty("VERSION_CODE") ?: "1").toInteger()
+def currentVersionName = localProperties.getProperty("VERSION_NAME") ?: "1.0.0"
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+// ---- AUTO INCREMENT LOGIC ----
 
+// versionCode → +1
+def newVersionCode = currentVersionCode + 1
+
+// versionName → increment PATCH (1.0.X)
+def parts = currentVersionName.split("\\.")
+def major = parts[0].toInteger()
+def minor = parts[1].toInteger()
+def patch = parts[2].toInteger() + 1
+
+def newVersionName = "${major}.${minor}.${patch}"
+
+// Save back automatically
+localProperties.setProperty("VERSION_CODE", newVersionCode.toString())
+localProperties.setProperty("VERSION_NAME", newVersionName)
+localPropertiesFile.withWriter { writer ->
+    localProperties.store(writer, null)
+}
 android {
     namespace "com.luffy1705.fluxkart"
 //    compileSdk flutter.compileSdkVersion
@@ -43,7 +56,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.luffy1705.fluxkart"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
@@ -51,27 +63,26 @@ android {
 //        targetSdkVersion flutter.targetSdkVersion
         minSdkVersion 24
         targetSdkVersion 36
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode newVersionCode
+        versionName newVersionName
     }
 
     signingConfigs {
         release {
-            if (project.hasProperty('KEYSTORE_PASSWORD')) {
-                storeFile file(System.getenv('KEYSTORE_FILE') ?: rootProject.file('upload-keystore.jks'))
-                storePassword System.getenv('KEYSTORE_PASSWORD') ?: (project.findProperty('storePassword') ?: 'avinash@123')
-                keyAlias System.getenv('KEY_ALIAS') ?: (project.findProperty('keyAlias') ?: 'upload')
-                keyPassword System.getenv('KEY_PASSWORD') ?: (project.findProperty('keyPassword') ?: 'avinash@123')
-            } else {
+            release {
                 def keystorePropertiesFile = rootProject.file("key.properties")
                 def keystoreProperties = new Properties()
-                if (keystorePropertiesFile.exists()) {
-                    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-                    storeFile file(keystoreProperties['storeFile'])
-                    storePassword keystoreProperties['storePassword']
-                    keyAlias keystoreProperties['keyAlias']
-                    keyPassword keystoreProperties['keyPassword']
+
+                if (!keystorePropertiesFile.exists()) {
+                    throw new GradleException("key.properties file not found for release signing")
                 }
+
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
             }
         }
     }
@@ -81,6 +92,22 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def appName = "FluxKart"
+            def buildType = variant.buildType.name   // debug / release
+            def versionName = variant.versionName
+
+            // Optional flavor name
+            def flavorName = variant.flavorName
+            if (flavorName == null || flavorName.isEmpty()) {
+                flavorName = "default"
+            }
+
+            outputFileName = "${appName}-${flavorName}-${buildType}-${versionName}.apk"
+        }
+    }
+
 }
 
 flutter {

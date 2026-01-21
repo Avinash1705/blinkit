@@ -25,7 +25,7 @@ import 'EditAddedProductPage.dart';
 import 'categoryDropdown.dart';
 
 class VendorDashboard extends StatelessWidget {
-  late venderData.Data vendorDetails;
+  venderData.Data vendorDetails;
 
   VendorDashboard({super.key, required this.vendorDetails});
 
@@ -204,7 +204,7 @@ class MyProductsPage extends StatefulWidget {
 }
 
 class _MyProductsPage extends State<MyProductsPage> {
-  late List<venderSpecificProductsModelData.Data>
+   List<venderSpecificProductsModelData.Data>
       venderSpecificProductsModelList = [];
 
   @override
@@ -306,69 +306,83 @@ class VenderOrdersPage extends StatefulWidget {
 }
 
 class _VenderOrdersPageState extends State<VenderOrdersPage> {
-  List<orderPlacedModelData.Data>? orderPlacedModelList = [];
+  List<orderPlacedModelData.Data> orderPlacedModelList = [];
+  bool isLoading = true;
 
   @override
   void initState() {
-    VenderOrdersController().fetchOrders(widget.tableName).then((value) {
+    super.initState();
+
+    VenderOrdersController()
+        .fetchOrders(widget.tableName)
+        .then((value) {
+      if (!mounted) return;
       setState(() {
-        print("Fetched orders: ${jsonEncode(value.data)}");
-        orderPlacedModelList = value.data;
+        orderPlacedModelList = value?.data ?? [];
+        isLoading = false;
       });
     }).catchError((error) {
+      if (!mounted) return;
+      setState(() => isLoading = false);
       Get.snackbar("Error", "Failed to fetch orders: $error");
     });
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
+    // print("orderPlacedModelList ${jsonEncode(orderPlacedModelList)}");
     return Scaffold(
-      body: orderPlacedModelList == null ||
-              orderPlacedModelList!.isEmpty
-          ? SizedBox(
-              child: Center(
-                child: Text("No orders found",
-                    style: TextStyle(fontSize: 20, color: Colors.red)),
-              ),
-            )
+      appBar: AppBar(title: Text("Order Sold")),
+      body: isLoading
+          ? const Center(
+        child: CircularProgressIndicator(),
+      )
+          : orderPlacedModelList == null ||
+          orderPlacedModelList!.isEmpty
+          ? const Center(
+        child: Text(
+          "No orders found",
+          style: TextStyle(fontSize: 20, color: Colors.red),
+        ),
+      )
           : ListView.builder(
-              itemCount: orderPlacedModelList!.length,
-              itemBuilder: (context, index) {
-                if (orderPlacedModelList == null ||
-                    orderPlacedModelList!.isEmpty) {
-                  return const Center(child: Text("No orders found"));
-                }
-                final product = orderPlacedModelList![index];
-                return Card(
-                  margin: EdgeInsets.all(20),
-                  color: Colors.greenAccent,
-                  child: ListTile(
-                    // leading: Image.network(product.itemImg ?? '',
-                    //     width: 50, height: 50, fit: BoxFit.cover),
-                    leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: UiHelper.CustomImageNetworkSubCategory(
-                          img: product.itemImg.toString()),
-                    ),
-                    title: Text(product.itemName ?? 'No Name'),
-                    subtitle: Text(
-                        'Price: ${product.price ?? 'N/A'}\nDescription: ${product.itemDescription ?? 'No Description'}'
-                        ''
-                        '\nNew Price: ${product.newPrice ?? 'New Price'}\nQuantity: ${product.quantity ?? '0'}\nWeight: ${product.weight ?? 'Weight'}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        // Implement delete logic here
-                        Get.snackbar("Delete",
-                            "Delete functionality not implemented yet");
-                      },
-                    ),
-                  ),
-                );
-              }),
+        itemCount: orderPlacedModelList!.length,
+        itemBuilder: (context, index) {
+          final product = orderPlacedModelList![index];
+
+          return Card(
+            margin: const EdgeInsets.all(20),
+            color: Colors.greenAccent,
+            child: ListTile(
+              leading: SizedBox(
+                width: 50,
+                height: 50,
+                child: UiHelper.CustomImageNetworkSubCategory(
+                  img: product.itemImg.toString(),
+                ),
+              ),
+              title: Text(product.itemName ?? 'No Name'),
+              subtitle: Text(
+                'Price: ${product.price ?? 'N/A'}\n'
+                    'Description: ${product.itemDescription ?? 'No Description'}\n'
+                    'New Price: ${product.newPrice ?? 'N/A'}\n'
+                    'Quantity: ${product.quantity ?? '0'}\n'
+                    'Weight: ${product.weight ?? 'N/A'}',
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  Get.snackbar(
+                    "Delete",
+                    "Delete functionality not implemented yet",
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
     );
+
   }
 }

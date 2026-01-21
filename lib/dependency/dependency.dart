@@ -6,6 +6,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:get_storage/get_storage.dart';
 
+import '../controllers/addressController.dart';
+import '../controllers/cartController.dart';
 import '../controllers/loginCustomerController.dart';
 import '../domain/AppConstant.dart';
 import '../ui/category/searchController.dart';
@@ -14,7 +16,9 @@ Future<void> init() async {
   // await GetStorage.init();
   // localNotification();
 
-  Get.lazyPut(() => SearchController());
+  Get.lazyPut(() => SearchController(), fenix: true);
+  Get.lazyPut(() => AddressController(), fenix: true);
+  Get.lazyPut(() => CartController(), fenix: true);
   // Get.lazyPut(() => LoginCustomerController());
 
   // await Firebase.initializeApp();

@@ -67,7 +67,8 @@ class _AddressInputFormState extends State<AddressInputForm> {
 
   @override
   Widget build(BuildContext context) {
-    var addressController = Provider.of<AddressController>(context);
+    // var addressController = Provider.of<AddressController>(context);
+    var addressController = Get.find<AddressController>();
     final prefs =  SharedPreferences.getInstance();
 
     return Scaffold(
@@ -91,13 +92,12 @@ class _AddressInputFormState extends State<AddressInputForm> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LocationWidget(locationController: _locationController,nearcolor: Colors.black),
+            LocationWidget(locationController: _locationController,nearColor: Colors.black),
             SizedBox(height: 30,),
 
             ElevatedButton.icon(
               onPressed: () async{
-                widget.onAddressSaved(_locationController.text);
-               addressController.saveUserLocationData(_locationController.text);
+              await addressController.saveUserLocationData(_locationController.text);
 
                 InteractiveToast.slide(context,
                     title: Text("Updated"),
@@ -106,6 +106,7 @@ class _AddressInputFormState extends State<AddressInputForm> {
                     ));
                 Future.delayed(Duration(seconds: 1), () {
                   print("updatedAdd address btn ${_locationController.text}");
+                  widget.onAddressSaved(_locationController.text.trim());
                   Get.back();
                 });
               },

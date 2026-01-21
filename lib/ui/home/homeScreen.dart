@@ -301,7 +301,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: allSubcategory == null
                   ? const CircularProgressIndicator()
                   : ListView.builder(
-                      itemCount: allSubcategory!.length,
+                      itemCount: 10,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -394,55 +394,55 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 width: 20,
               ),
-              UiHelper.CustomText(
-                  text: "Grocery & Kichen",
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontsize: 14,
-                  fontfamily: "bold")
+              // UiHelper.CustomText(
+              //     text: "Grocery & Kichen",
+              //     color: Colors.black,
+              //     fontWeight: FontWeight.bold,
+              //     fontsize: 14,
+              //     fontfamily: "bold")
             ],
           ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: InkWell(
-                        onTap: () => Get.to(Subcategory(
-                          categoryName:
-                              grocerykitchen[index]["text"].toString(),
-                        )),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 78,
-                              width: 71,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color(0xFFD9EBEB)),
-                              child: UiHelper.CustomImage(
-                                  img: grocerykitchen[index]["img"].toString()),
-                            ),
-                            UiHelper.CustomText(
-                                text: grocerykitchen[index]["text"].toString(),
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontsize: 10)
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                itemCount: grocerykitchen.length,
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-          ),
+          // Expanded(
+          //   flex: 2,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 20),
+          //     child: ListView.builder(
+          //       itemBuilder: (context, index) {
+          //         return Padding(
+          //           padding: const EdgeInsets.all(8.0),
+          //           child: SingleChildScrollView(
+          //             child: InkWell(
+          //               onTap: () => Get.to(Subcategory(
+          //                 categoryName:
+          //                     grocerykitchen[index]["text"].toString(),
+          //               )),
+          //               child: Column(
+          //                 children: [
+          //                   Container(
+          //                     height: 78,
+          //                     width: 71,
+          //                     decoration: BoxDecoration(
+          //                         borderRadius: BorderRadius.circular(10),
+          //                         color: Color(0xFFD9EBEB)),
+          //                     child: UiHelper.CustomImage(
+          //                         img: grocerykitchen[index]["img"].toString()),
+          //                   ),
+          //                   UiHelper.CustomText(
+          //                       text: grocerykitchen[index]["text"].toString(),
+          //                       color: Colors.black,
+          //                       fontWeight: FontWeight.normal,
+          //                       fontsize: 10)
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //       itemCount: grocerykitchen.length,
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

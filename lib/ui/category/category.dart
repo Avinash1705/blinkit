@@ -376,38 +376,38 @@ class _CategoryState extends State<Category> {
               SizedBox(
                 width: 20,
               ),
-              UiHelper.CustomText(
-                  text: "Household Essentials",
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontsize: 14,
-                  fontfamily: "bold")
+              // UiHelper.CustomText(
+              //     text: "Household Essentials",
+              //     color: Colors.black,
+              //     fontWeight: FontWeight.bold,
+              //     fontsize: 14,
+              //     fontfamily: "bold")
             ],
           ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 78,
-                      width: 71,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFFD9EBEB)),
-                      child: UiHelper.CustomImage(
-                          img: houseHoldUtentials[index]["img"].toString()),
-                    ),
-                  );
-                },
-                itemCount: houseHoldUtentials.length,
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-          ),
+          // Expanded(
+          //   flex: 2,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 20),
+          //     child: ListView.builder(
+          //       itemBuilder: (context, index) {
+          //         return Padding(
+          //           padding: const EdgeInsets.all(8.0),
+          //           child: Container(
+          //             height: 78,
+          //             width: 71,
+          //             decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(10),
+          //                 color: Color(0xFFD9EBEB)),
+          //             child: UiHelper.CustomImage(
+          //                 img: houseHoldUtentials[index]["img"].toString()),
+          //           ),
+          //         );
+          //       },
+          //       itemCount: houseHoldUtentials.length,
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

@@ -25,24 +25,14 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
 
   Future<bool> _requestPermission(ImageSource source) async {
     if (source == ImageSource.camera) {
-      return await Permission.camera.request().isGranted;
-    } else {
-      if (Platform.isAndroid) {
-        if (await Permission.storage.isGranted ||
-            await Permission.photos.isGranted ||
-            await Permission.mediaLibrary.isGranted) {
-          return true;
-        }
-
-        // Android 13+ specific
-        if (await Permission.photos.request().isGranted ||
-            await Permission.storage.request().isGranted) {
-          return true;
-        }
-      }
-      return false;
+      final status = await Permission.camera.request();
+      return status.isGranted;
     }
+
+    // For gallery → NO permission required
+    return true;
   }
+
   //permission handling is not needed here as we are not using camera or gallery
   Future<void> _pickImage(ImageSource source) async {
     bool granted = await _requestPermission(source);

@@ -15,63 +15,76 @@ import 'package:swiggy/model/cartModel.dart';
 import '../domain/ApiConstants.dart';
 import '../model/customerOrderResponseModel.dart';
 
-class Printcontroller extends ChangeNotifier {
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+
+
+class PrintController extends ChangeNotifier {
+  /// ---------------------------
+  /// EXISTING FIELDS (KEPT)
+  /// ---------------------------
+
   List<CartItem> listItem = [];
   List<List<CartItem>> totalListItem = [];
-  AddressController addressController = AddressController();
+  AddressController addressController = Get.find<AddressController>();
   late CustomerOrderResponseModel customerOrderResponse;
 
+  /// ---------------------------
+  /// FIXED STATE (NO .obs)
+  /// ---------------------------
 
-  /*get orders */
-  var ordersByDay = <String, List<Map<String, dynamic>>>{}.obs;
-  var isLoading = false.obs;
+  Map<String, List<Map<String, dynamic>>> ordersByDay = {};
+  bool isLoading = false;
+
+  /// ---------------------------
+  /// ADD TRANSACTION (UNCHANGED LOGIC)
+  /// ---------------------------
+
   void addTransition(Map<String, CartItem> items) {
+    listItem.clear();
 
-
-    for (CartItem tt in items.values) {
-      listItem.add(tt);
+    for (CartItem item in items.values) {
+      listItem.add(item);
     }
-    print("tansition added ${jsonEncode(listItem)}");
+
+    debugPrint("transaction added ${jsonEncode(listItem)}");
 
     totalListItem.add(List<CartItem>.from(listItem));
-    print("tansition added total ${jsonEncode(totalListItem)}");
-    print("tansition addreess ${addressController.updatedAddress.value}");
-    // print("tansition addreess1 ${addressController.getUpdatedAddress()}");
+    debugPrint("transaction total ${jsonEncode(totalListItem)}");
+    debugPrint("transaction address ${addressController.updatedAddress}");
+
     placeOrder(
-      customerPhone: AppConstant.phone, // Replace with actual phone number
-      customerName: AppConstant.customer_name, // Replace with actual customer name
-      customerLocation: AppConstant.location, // Use the updated address
-      cartItems: listItem, // Pass the current list of cart items
+      customerPhone: AppConstant.phone,
+      customerName: AppConstant.customer_name,
+      customerLocation: AppConstant.location,
+      cartItems: listItem,
     ).then((response) {
-      // Handle the response from the placeOrder method
-      print("kkkkkOrder response: $response");
+      debugPrint("✅ Order response: $response");
     }).catchError((error) {
-      // Handle any errors that occur during the order placement
-      print("kkkkkError placing order: $error");
+      debugPrint("❌ Error placing order: $error");
     });
-    // Clear the list after placing the order
+
     listItem.clear();
-    // Replace with actual filter values
-   notifyListeners();
+    notifyListeners();
   }
 
+  /// ---------------------------
+  /// UPDATE EXISTING QUANTITY (KEPT)
+  /// ---------------------------
 
-
-/*Existing quantity update in api and
-    * make a list of items which has been ordered later using phone filter show to specific vender */
   void updateExistingQuantity() {
-//   id basis existingQuantity update
-//     print("updateExistingQuantity ${jsonEncode(listItem)}");
     for (CartItem item in listItem) {
-      if (item.existingQuantity == null) {
-        item.existingQuantity = 0; // Set default value if null
-      }
-      else {
-        item.existingQuantity = item.existingQuantity! - item.quantity;
-      }
-      // Call your API to update the existing quantity here
+      final existing = item.existingQuantity ?? 0;
+      item.existingQuantity = existing - item.quantity;
     }
+    notifyListeners();
   }
+
+  /// ---------------------------
+  /// PLACE ORDER API (KEPT)
+  /// ---------------------------
 
   Future<String> placeOrder({
     required String customerPhone,
@@ -82,9 +95,9 @@ class Printcontroller extends ChangeNotifier {
     final url = Uri.parse(ApiConstants.customersPlacedOrder);
 
     final body = {
-      "customer_phone": AppConstant.phone,
-      "customer_name": AppConstant.customer_name,
-      "customer_location": AppConstant.location,
+      "customer_phone": customerPhone,
+      "customer_name": customerName,
+      "customer_location": customerLocation,
       "cartItems": cartItems.map((e) => e.toJson()).toList(),
     };
 
@@ -94,59 +107,65 @@ class Printcontroller extends ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(body),
       );
-      print("Response pritn: ${response.body}");
+
+      debugPrint("Response: ${response.body}");
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data["success"] == true) {
-          print("✅ Order placed successfully. Order ID: ${data['order_id']}");
-            return response.body;
+          return response.body;
         } else {
-          print("❌ Failed: ${data['message']}");
+          throw Exception(data["message"]);
         }
       } else {
-        print("❌ Server error: ${response.statusCode}");
+        throw Exception("Server error: ${response.statusCode}");
       }
     } catch (e) {
-      print("❌ Error placing order: $e");
+      debugPrint("❌ Error placing order: $e");
+      rethrow;
     }
-    return "Error placing order";
   }
 
-  Future<void> fetchOrders(String filterName,String filterPhone) async {
-    isLoading.value = true;
+  /// ---------------------------
+  /// FETCH ORDERS (FIXED)
+  /// ---------------------------
+
+  Future<void> fetchOrders(String filterName, String filterPhone) async {
+    isLoading = true;
+    notifyListeners();
+
     try {
-      var url = Uri.parse(ApiConstants.getAllCustomerOrders); // change to your server URL
-      var response = await http.get(url);
+      final url = Uri.parse(ApiConstants.getAllCustomerOrders);
+      final response = await http.get(url);
 
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-
-        if (data["success"] == true) {
-          // store grouped orders
-          ordersByDay.value =  Map<String, List<dynamic>>.from(data["orders"])
-              .map((key, value) {
-            // Filter orders for this date
-            final filteredList = List<Map<String, dynamic>>.from(value).where((order) {
-              return order["customer_name"] == filterName &&
-                  order["customer_phone"] == filterPhone;
-            }).toList();
-
-            return MapEntry(key, filteredList);
-          })
-          // Remove empty dates
-            ..removeWhere((key, value) => value.isEmpty);
-        } else {
-          Get.snackbar("Error", data["message"] ?? "No orders found");
-        }
-      } else {
-        Get.snackbar("Error", "Server error: ${response.statusCode}");
+      if (response.statusCode != 200) {
+        throw Exception("Server error: ${response.statusCode}");
       }
+
+      final data = jsonDecode(response.body);
+
+      if (data["success"] != true) {
+        throw Exception(data["message"] ?? "No orders found");
+      }
+
+      ordersByDay =
+      Map<String, List<dynamic>>.from(data["orders"]).map((key, value) {
+        final filteredList =
+        List<Map<String, dynamic>>.from(value).where((order) {
+          return order["customer_name"] == filterName &&
+              order["customer_phone"] == filterPhone;
+        }).toList();
+
+        return MapEntry(key, filteredList);
+      })
+        ..removeWhere((_, value) => value.isEmpty);
     } catch (e) {
-      Get.snackbar("Error", "Failed to load orders: $e");
+      debugPrint("❌ Fetch orders error: $e");
+      ordersByDay.clear();
     } finally {
-      isLoading.value = false;
+      isLoading = false;
+      notifyListeners();
     }
   }
-
-
 }
+

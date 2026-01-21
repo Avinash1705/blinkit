@@ -10,147 +10,145 @@ import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
 import '../../controllers/checkoutController.dart';
 
-class CheckoutScreen extends StatefulWidget {
-  @override
-  State<CheckoutScreen> createState() => _CheckoutScreenState();
-}
-
-class _CheckoutScreenState extends State<CheckoutScreen> {
-  String localAddress = '';
-  AddressController addressController = AddressController();
-
-  // void loadPrefs() async {
-  //
-  //   final prefs = await SharedPreferences.getInstance();
-  //  setState(() {
-  //    localAddress = prefs.getString('location') ?? "No Address Found";
-  //    print("updatedAdd bottom load $localAddress");
-  //    print("locAddress ${localAddress}");
-  //  });
-  //   // try {
-  //   //
-  //   //
-  //   // } catch (e) {
-  //   //   localAddress = e.toString();
-  //   // }
-  // }
-
-  @override
-  initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-     
-    });
-  }
-
- @override
-  void didUpdateWidget(covariant CheckoutScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
+class CheckoutScreen extends StatelessWidget {
+  final AddressController addressController = Get.find<AddressController>();
 
   @override
   Widget build(BuildContext context) {
-    var cartController = Provider.of<CartController>(context);
-    // var addressController = Provider.of<AddressController>(context);
-    print("addressController updatedAddress: ${addressController.updatedAddress.value}");
+    final cartController = Provider.of<CartController>(context);
 
-    // addressController.saveLocData();
-    print("update ");
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
+          /// LEFT SECTION
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                 width: 200,
-                child: Obx(() => Text(addressController.updatedAddress.value,
-                    // overflow: TextOverflow.ellipsis,
-                    // maxLines: 1,
+                child: Obx(
+                      () => Text(
+                    addressController.updatedAddress.value.isEmpty
+                        ? "No address added"
+                        : addressController.updatedAddress.value,
                     softWrap: true,
-                    style: TextStyle(fontSize: 14, color: Colors.grey))),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
               ),
-              SizedBox(
-                height: 20,
+
+              const SizedBox(height: 20),
+
+              const Text(
+                "Total",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
-              Text("Total", style: TextStyle(fontSize: 14, color: Colors.grey)),
-              Text("${cartController.totalAmount}",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+              Text(
+                "₹${cartController.totalAmount}",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
+
+          /// RIGHT SECTION
           Column(
             children: [
               InkWell(
                 onTap: () {
-                  Get.to(AddressInputForm(onAddressSaved: (String address) {
-                    addressController.saveUserLocationData(address);
-                    print("on bottomCheckout $address");
-                  },));
-                },
-                child: Text("change",
-                    style: TextStyle(fontSize: 14, color: Colors.green)),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              cartController.itemCount == 0
-                  ? ElevatedButton(
-                      onPressed: () {
-                        // Get.off(OrderPlacedScreen());
-                        InteractiveToast.popError(context,
-                            title: Text("Please Add Items"),
-                            toastSetting: PopupToastSetting(
-                                toastAlignment: Alignment.center,
-                                displayDuration: Duration(seconds: 1)));
+                  Get.to(
+                    AddressInputForm(
+                      onAddressSaved: (String address) {
+                        addressController.updatedAddress.value = address;
+                        Get.back();
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text("Checkout", style: TextStyle(fontSize: 16)),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        showDialog(context: context, builder: (context) => AlertDialog(
-                          title: const Text("Confirm Order"),
-                            content: const Text("Are you sure you want to place this order?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(), // Close dialog
-                              child: const Text("Cancel"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close dialog
-                                Get.off(OrderPlacedScreen()); // Navigate
-                              },
-                              child: const Text("Yes"),
-                            ),
-                          ],
-                        ));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text("Checkout", style: TextStyle(fontSize: 16)),
                     ),
+                  );
+                },
+                child: const Text(
+                  "change",
+                  style: TextStyle(fontSize: 14, color: Colors.green),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              /// ✅ CHECKOUT BUTTON (REACTIVE)
+              Obx(() {
+                final bool hasItems = cartController.itemCount > 0;
+                final bool hasAddress =
+                    addressController.updatedAddress.value.trim().isNotEmpty;
+
+                final bool canCheckout = hasItems && hasAddress;
+
+                return ElevatedButton(
+                  onPressed: canCheckout
+                      ? () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Confirm Order"),
+                        content: const Text(
+                            "Are you sure you want to place this order?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(context).pop(),
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Get.off(OrderPlacedScreen());
+                            },
+                            child: const Text("Yes"),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                      : () {
+                    InteractiveToast.popError(
+                      context,
+                      title: const Text(
+                          "Please add items & delivery address"),
+                      toastSetting: const PopupToastSetting(
+                        toastAlignment: Alignment.center,
+                        displayDuration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    canCheckout ? Colors.green : Colors.grey,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    "Checkout",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              }),
             ],
           ),
         ],
