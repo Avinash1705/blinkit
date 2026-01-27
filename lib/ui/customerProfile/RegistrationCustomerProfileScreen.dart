@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 
 import '../../controllers/customerRegistrationController.dart';
 import '../widgets/compressedImgFile.dart';
@@ -25,35 +25,33 @@ class _CustomerProfilePageState
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      final status = await Permission.camera.request();
-      return status.isGranted;
-    }
-
-    // For gallery → NO permission required
-    return true;
-  }
+  // Future<bool> _requestPermission(ImageSource source) async {
+  //   if (source == ImageSource.camera) {
+  //     final status = await Permission.camera.request();
+  //     return status.isGranted;
+  //   }
+  //
+  //   // For gallery → NO permission required
+  //   return true;
+  // }
 
 
   Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Permission denied')),
-      );
-      return;
-    }
+    try {
+      final pickedFile = await _picker.pickImage(source: source);
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      XFile? compressed = await compressImage(File(pickedFile.path));
-      File? comp = File(compressed!.path);
-      setState(() {
-        _image = comp;
-      });
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to pick image')),
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

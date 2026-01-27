@@ -26,7 +26,7 @@ class UiHelper {
   //Sub category image
   static CustomImageNetworkShop({required String img}) {
 
-    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/shop/$img",fit: BoxFit.cover,);
+    return Image.network("${ApiConstants.ssl}://${ApiConstants.ip}/fluxKart/img/shop/$img",fit: BoxFit.cover,width: 70,height: 70,);
   }
   //Profile  image
   static CustomImageNetworkCustomerProfile({required String img}) {

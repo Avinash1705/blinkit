@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import '../../vender/ui/categoryDropdown.dart';
 import '../../vender/venderModels/GetVenderResponseModel.dart' as venderData;
 import '../../vender/controller/addItemsController.dart';
@@ -43,33 +43,32 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
     });
     print("Selected in parent: $value");
   }
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      final status = await Permission.camera.request();
-      return status.isGranted;
-    }
-
-    // For gallery → NO permission required
-    return true;
-  }
-
+  // Future<bool> _requestPermission(ImageSource source) async {
+  //   if (source == ImageSource.camera) {
+  //     final status = await Permission.camera.request();
+  //     return status.isGranted;
+  //   }
+  //
+  //   // For gallery → NO permission required
+  //   return true;
+  // }
 
   Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Permission denied')),
-      );
-      return;
-    }
+    try {
+      final pickedFile = await _picker.pickImage(source: source);
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to pick image')),
+      );
     }
   }
+
   @override
   void dispose() {
     // uniqueIdController.dispose();

@@ -7,8 +7,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../../ui/login/loginScreen.dart';
 import '../../ui/widgets/ImagePickerBoth.dart';
@@ -20,7 +18,7 @@ import '../venderModels/GetVenderResponseModel.dart' as venderData;
 import '../venderModels/OrderPlacedModel.dart' as orderPlacedModelData;
 import '../venderModels/SalesYearDataModel.dart';
 import '../venderModels/VenderSpecificProductsModel.dart'
-    as venderSpecificProductsModelData;
+as venderSpecificProductsModelData;
 import 'EditAddedProductPage.dart';
 import 'categoryDropdown.dart';
 
@@ -48,117 +46,176 @@ class VendorDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     print("${vendorDetails.venderId} Dashboard ${jsonEncode(vendorDetails)}");
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            '${vendorDetails.venderName} Dashboard ${vendorDetails.valid}'),
-        backgroundColor: Colors.deepPurple,
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.deepPurple,
-              ),
-              child: Text(
-                'Vendor Panel',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.add_box),
-              title: const Text('Add Product'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          AddProductPage(vendorDetail: vendorDetails),
-                    ));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.store),
-              title: const Text('My Products'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => MyProductsPage(
-                              phone: vendorDetails.phone.toString(),
-                            )));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('Orders'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          VenderOrdersPage(tableName: ApiConstants.orderTableFormat(vendorDetails.phone.toString())),
-                    ));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                // Implement logout
-                Get.off(LoginScreen());
-              },
-            ),
-          ],
+        appBar: AppBar(
+          title: Text(
+              '${vendorDetails.venderName} Dashboard ${vendorDetails.valid}'),
+          backgroundColor: Colors.deepPurple,
         ),
-      ),
-      body: int.parse(vendorDetails.valid.toString()) == 0
-          ? SubscriptionScreen(vendorDetails)
-          : SingleChildScrollView(
-              child: Expanded(
-              child: Column(children: [
-                Center(
-                    child: SfCircularChart(
-                        title: ChartTitle(text: 'Sales by sales person'),
-                        legend: Legend(isVisible: true),
-                        series: <PieSeries<PieData, String>>[
-                      PieSeries<PieData, String>(
-                          explode: true,
-                          explodeIndex: 0,
-                          dataSource: piedata,
-                          xValueMapper: (PieData data, _) => data.xData,
-                          yValueMapper: (PieData data, _) => data.yData,
-                          dataLabelMapper: (PieData data, _) => data.text,
-                          dataLabelSettings:
-                              DataLabelSettings(isVisible: true)),
-                    ])),
-                SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  // Chart title
-                  title: ChartTitle(text: 'Half yearly sales analysis'),
-                  // Enable legend
-                  legend: Legend(isVisible: true),
-                  // Enable tooltip
-                  tooltipBehavior: TooltipBehavior(enable: true),
-                  series: <CartesianSeries<SalesData, String>>[
-                    LineSeries<SalesData, String>(
-                      dataSource: data,
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales,
-                      name: 'Sales',
-                      // Enable data label
-                      dataLabelSettings: DataLabelSettings(isVisible: true),
-                    ),
-                  ],
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple,
                 ),
-              ]),
-            )),
-    );
+                child: Text(
+                  'Vendor Panel',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.add_box),
+                title: const Text('Add Product'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            AddProductPage(vendorDetail: vendorDetails),
+                      ));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.store),
+                title: const Text('My Products'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              MyProductsPage(
+                                phone: vendorDetails.phone.toString(),
+                              )));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.shopping_cart),
+                title: const Text('Orders'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            VenderOrdersPage(
+                                tableName: ApiConstants.orderTableFormat(
+                                    vendorDetails.phone.toString())),
+                      ));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {
+                  // Implement logout
+                  Get.off(LoginScreen());
+                },
+              ),
+            ],
+          ),
+        ),
+        body: int.parse(vendorDetails.valid.toString()) == 0
+            ? SubscriptionScreen(vendorDetails)
+            : Center(
+              child: SingleChildScrollView(
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    // mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Vendor Image
+                      CircleAvatar(
+                        radius: 45,
+                        backgroundColor: Colors.grey.shade200,
+                        child: ClipOval(
+                          child: UiHelper.CustomImageNetworkShop(
+                            img: (vendorDetails.shop_img != null &&
+                                vendorDetails.shop_img!.isNotEmpty)
+                                ? vendorDetails.shop_img!
+                                : "https://via.placeholder.com/300x300.png?text=Shop",
+                          ),
+                        ),
+                      ),
+                      //
+
+                      const SizedBox(height: 12),
+
+                      // Vendor Name
+                      Text(
+                        vendorDetails.venderName ?? "Vendor",
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 6),
+
+                      // Active Status
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 10,
+                            color: int.parse(vendorDetails.valid ?? "0") == 1
+                                ? Colors.green
+                                : Colors.red,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                           int.parse( vendorDetails.valid ?? "0") == 1 ? "Active" : "Inactive",
+                            style: TextStyle(
+                              color: int.parse( vendorDetails.valid ?? "0") == 1
+                                  ? Colors.green
+                                  : Colors.red,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const Divider(height: 30),
+
+                      _infoRow(Icons.phone, vendorDetails.phone),
+                      _infoRow(Icons.numbers, vendorDetails.venderId),
+                      _infoRow(Icons.location_on, vendorDetails.location),
+                      _infoRow(Icons.store, vendorDetails.shopName),
+                    ],
+                  ),
+                ),
+              )
+                      ),
+            ));
   }
+}
+
+Widget _infoRow(IconData icon, String? value) {
+  if (value == null || value.isEmpty) return const SizedBox();
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      children: [
+        Icon(icon, size: 18, color: Colors.grey.shade700),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 // Placeholder Pages
@@ -173,16 +230,8 @@ class AddProductPage extends StatefulWidget {
 }
 
 class _AddProductPageState extends State<AddProductPage> {
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(title: const Text("Add Product")),
       body: Padding(
@@ -204,22 +253,24 @@ class MyProductsPage extends StatefulWidget {
 }
 
 class _MyProductsPage extends State<MyProductsPage> {
-   List<venderSpecificProductsModelData.Data>
-      venderSpecificProductsModelList = [];
+  List<venderSpecificProductsModelData.Data> venderSpecificProductsModelList =
+  [];
 
   @override
   void initState() {
     print("Fetching vendor categories");
     getVendorCategories(widget.phone)
-        .then((value) => {
-              setState(() {
-                // print("check1 ${widget.phone}");
-                // print("check2 ${value}");
-                venderSpecificProductsModelList = value.data!;
-                print(
-                    "Fetched vendor categories: ${jsonEncode(venderSpecificProductsModelList)}");
-              })
-            })
+        .then((value) =>
+    {
+      setState(() {
+        // print("check1 ${widget.phone}");
+        // print("check2 ${value}");
+        venderSpecificProductsModelList = value.data!;
+        print(
+            "Fetched vendor categories: ${jsonEncode(
+                venderSpecificProductsModelList)}");
+      })
+    })
         .catchError((error) {
       Get.snackbar("Error", "Failed to fetch vendor products: $error");
     });
@@ -232,14 +283,17 @@ class _MyProductsPage extends State<MyProductsPage> {
     // You would fetch and display vendor products here
     return Scaffold(
       appBar: AppBar(title: const Text("My Products")),
-      body: venderSpecificProductsModelList.isEmpty?SizedBox(
+      body: venderSpecificProductsModelList.isEmpty
+          ? SizedBox(
         child: Center(
           child: Text("No products found \n  for this vendor",
               style: TextStyle(fontSize: 20, color: Colors.red)),
         ),
-      ):ListView.builder(
+      )
+          : ListView.builder(
         itemBuilder: (context, index) {
-          print("new Sdata ${jsonEncode(venderSpecificProductsModelList)}");
+          print(
+              "new Sdata ${jsonEncode(venderSpecificProductsModelList)}");
           final product = venderSpecificProductsModelList[index];
           return Card(
             child: ListTile(
@@ -248,34 +302,40 @@ class _MyProductsPage extends State<MyProductsPage> {
               leading: UiHelper.CustomImageNetworkSubCategory(
                   img: product.itemImg.toString()),
               title: Text(product.itemName ?? 'No Name'),
-                subtitle: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(color: Colors.black, fontSize: 16), // default style
-                    children: [
-                      const TextSpan(text: 'Price: '),
-                      TextSpan(
-                        text: '${product.price ?? 'N/A'}\n',
-                        style: const TextStyle(color: Colors.green), // ✅ value color
-                      ),
-                      const TextSpan(text: 'Description: '),
-                      TextSpan(
-                        text: '${product.itemDescription ?? 'No Description'}\n',
-                        style: const TextStyle(color: Colors.blue), // ✅ value color
-                      ),
-
-                      const TextSpan(text: 'Weight: '),
-                      TextSpan(
-                        text: '${product.weight ?? 'Weight'} \n',
-                        style: const TextStyle(color: Colors.red), // ✅ value color
-                      ),
-                      const TextSpan(text: 'Quantity: '),
-                      TextSpan(
-                        text: '${product.quantity ?? '0'}\n',
-                        style: const TextStyle(color: Colors.purple), // ✅ value color
-                      ),
-                    ],
-                  ),
+              subtitle: RichText(
+                text: TextSpan(
+                  style:
+                  const TextStyle(color: Colors.black, fontSize: 16),
+                  // default style
+                  children: [
+                    const TextSpan(text: 'Price: '),
+                    TextSpan(
+                      text: '${product.price ?? 'N/A'}\n',
+                      style: const TextStyle(
+                          color: Colors.green), // ✅ value color
+                    ),
+                    const TextSpan(text: 'Description: '),
+                    TextSpan(
+                      text:
+                      '${product.itemDescription ?? 'No Description'}\n',
+                      style: const TextStyle(
+                          color: Colors.blue), // ✅ value color
+                    ),
+                    const TextSpan(text: 'Weight: '),
+                    TextSpan(
+                      text: '${product.weight ?? 'Weight'} \n',
+                      style: const TextStyle(
+                          color: Colors.red), // ✅ value color
+                    ),
+                    const TextSpan(text: 'Quantity: '),
+                    TextSpan(
+                      text: '${product.quantity ?? '0'}\n',
+                      style: const TextStyle(
+                          color: Colors.purple), // ✅ value color
+                    ),
+                  ],
                 ),
+              ),
               trailing: IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
@@ -283,8 +343,8 @@ class _MyProductsPage extends State<MyProductsPage> {
                   Get.to(EditProductPage(
                     product: product,
                   ));
-                  Get.snackbar(
-                      "Delete", "Delete functionality not implemented yet");
+                  Get.snackbar("Delete",
+                      "Delete functionality not implemented yet");
                 },
               ),
             ),
@@ -313,9 +373,7 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
   void initState() {
     super.initState();
 
-    VenderOrdersController()
-        .fetchOrders(widget.tableName)
-        .then((value) {
+    VenderOrdersController().fetchOrders(widget.tableName).then((value) {
       if (!mounted) return;
       setState(() {
         orderPlacedModelList = value?.data ?? [];
@@ -337,8 +395,7 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
           ? const Center(
         child: CircularProgressIndicator(),
       )
-          : orderPlacedModelList == null ||
-          orderPlacedModelList!.isEmpty
+          : orderPlacedModelList == null || orderPlacedModelList!.isEmpty
           ? const Center(
         child: Text(
           "No orders found",
@@ -364,7 +421,8 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
               title: Text(product.itemName ?? 'No Name'),
               subtitle: Text(
                 'Price: ${product.price ?? 'N/A'}\n'
-                    'Description: ${product.itemDescription ?? 'No Description'}\n'
+                    'Description: ${product.itemDescription ??
+                    'No Description'}\n'
                     'New Price: ${product.newPrice ?? 'N/A'}\n'
                     'Quantity: ${product.quantity ?? '0'}\n'
                     'Weight: ${product.weight ?? 'N/A'}',
@@ -383,6 +441,5 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
         },
       ),
     );
-
   }
 }

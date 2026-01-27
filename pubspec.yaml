@@ -19,14 +19,14 @@ dependencies:
   provider: ^6.1.5
   flutter_sliding_toast: any
   shared_preferences: ^2.2.3
-  syncfusion_flutter_charts: any
+#  syncfusion_flutter_charts: any
 #  get_storage: any
   image_picker: ^1.1.2
-  permission_handler: ^12.0.1
+#  permission_handler: ^12.0.1
 #  multi_image_picker_view: ^3.0.0
 #  flutter_plugin_android_lifecycle: ^2.0.17
-  geolocator: ^14.0.2
-  geocoding: ^3.0.0
+#  geolocator: ^14.0.2
+#  geocoding: ^3.0.0
   flutter_image_compress: ^2.4.0
 
 dev_dependencies:

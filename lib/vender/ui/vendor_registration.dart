@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import '../controller/vender_register_controller.dart';
 
 
@@ -23,33 +23,33 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
     super.dispose();
   }
 
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      final status = await Permission.camera.request();
-      return status.isGranted;
-    }
-
-    // For gallery → NO permission required
-    return true;
-  }
+  // Future<bool> _requestPermission(ImageSource source) async {
+  //   if (source == ImageSource.camera) {
+  //     final status = await Permission.camera.request();
+  //     return status.isGranted;
+  //   }
+  //
+  //   // For gallery → NO permission required
+  //   return true;
+  // }
 
   //permission handling is not needed here as we are not using camera or gallery
   Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Permission denied')),
-      );
-      return;
-    }
+    try {
+      final pickedFile = await _picker.pickImage(source: source);
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to pick image')),
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

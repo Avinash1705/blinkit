@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:swiggy/domain/ApiConstants.dart';
 
 class ImagePickerWithPermission extends StatefulWidget {
@@ -15,33 +15,33 @@ class _ImagePickerWithPermissionState extends State<ImagePickerWithPermission> {
   final ImagePicker _picker = ImagePicker();
   ImagePickerController imagePickerController = ImagePickerController();
   TextEditingController nameController = TextEditingController();
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      final status = await Permission.camera.request();
-      return status.isGranted;
-    }
-
-    // For gallery → NO permission required
-    return true;
-  }
+  // Future<bool> _requestPermission(ImageSource source) async {
+  //   if (source == ImageSource.camera) {
+  //     final status = await Permission.camera.request();
+  //     return status.isGranted;
+  //   }
+  //
+  //   // For gallery → NO permission required
+  //   return true;
+  // }
 
 
   Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Permission denied')),
-      );
-      return;
-    }
+    try {
+      final pickedFile = await _picker.pickImage(source: source);
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to pick image')),
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
