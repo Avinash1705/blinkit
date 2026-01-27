@@ -27,7 +27,8 @@ dependencies:
 #  flutter_plugin_android_lifecycle: ^2.0.17
 #  geolocator: ^14.0.2
 #  geocoding: ^3.0.0
-  flutter_image_compress: ^2.4.0
+#  flutter_image_compress: ^2.4.0
+  flutter_image_compress: ^2.3.0
 
 dev_dependencies:
   flutter_test:
