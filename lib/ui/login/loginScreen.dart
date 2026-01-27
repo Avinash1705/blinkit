@@ -10,6 +10,8 @@ import 'package:swiggy/ui/login/loginScreenStatic.dart';
 import 'package:swiggy/ui/print/printScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
+import '../customerProfile/CustomerLoginRegistrationScreen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -75,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
                             onPressed: () {
-                              Get.to(LoginCustomerProfileScreen());
+                              Get.to(CustomerLoginRegistrationScreen());
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
