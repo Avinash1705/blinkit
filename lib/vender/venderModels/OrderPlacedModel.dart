@@ -1,0 +1,84 @@
+class OrderPlacedModel {
+  String? status;
+  int? code;
+  int? count;
+  List<Data>? data;
+
+  OrderPlacedModel({this.status, this.code, this.count, this.data});
+
+  OrderPlacedModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    code = json['code'];
+    count = json['count'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['code'] = this.code;
+    data['count'] = this.count;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
+  String? categoryId;
+  String? itemName;
+  String? itemImg;
+  String? phone;
+  String? id;
+  String? price;
+  String? itemDescription;
+  String? newPrice;
+  String? weight;
+  String? quantity;
+
+  Data(
+      {this.categoryId,
+        this.itemName,
+        this.itemImg,
+        this.phone,
+        this.id,
+        this.price,
+        this.itemDescription,
+        this.newPrice,
+        this.weight,
+        this.quantity});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    categoryId = json['category_id'];
+    itemName = json['item_name'];
+    itemImg = json['item_img'];
+    phone = json['phone'];
+    id = json['id'];
+    price = json['price'];
+    itemDescription = json['item_description'];
+    newPrice = json['new_price'];
+    weight = json['weight'];
+    quantity = json['quantity'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['category_id'] = this.categoryId;
+    data['item_name'] = this.itemName;
+    data['item_img'] = this.itemImg;
+    data['phone'] = this.phone;
+    data['id'] = this.id;
+    data['price'] = this.price;
+    data['item_description'] = this.itemDescription;
+    data['new_price'] = this.newPrice;
+    data['weight'] = this.weight;
+    data['quantity'] = this.quantity;
+    return data;
+  }
+}

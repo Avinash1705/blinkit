@@ -3,6 +3,13 @@ allprojects {
         google()
         mavenCentral()
     }
+    buildscript {
+        ext.kotlin_version = '1.9.0'  // ✅ Use at least 1.9.0
+        dependencies {
+            classpath 'com.android.tools.build:gradle:8.2.2' // ✅ AGP 8.2 or newer
+            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        }
+    }
 }
 
 rootProject.buildDir = '../build'
@@ -16,3 +23,4 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
