@@ -15,155 +15,189 @@ import '../category/filteredListScreen.dart';
 
 class CustomAppBar extends StatefulWidget {
   final List<allVenders.Data>? allVenderData;
+  final TextEditingController controller;
 
-  CustomAppBar(
-      {super.key,
-      required TextEditingController controller,
-      this.allVenderData});
+  const CustomAppBar({
+    super.key,
+    required this.controller,
+    this.allVenderData,
+  });
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  TextEditingController controller = TextEditingController();
-  final _locationController = TextEditingController();
+  final TextEditingController _locationController =
+  TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation(_locationController);
+    _getCurrentLocation();
   }
+
+  @override
+  void dispose() {
+    _locationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+
+        /// HEADER
         Container(
           height: 190,
           width: double.infinity,
-          color: Color(0xfff7Cb45),
+          color: const Color(0xfff7Cb45),
           child: Column(
             children: [
-              SizedBox(
-                height: 30,
-              ),
+
+              const SizedBox(height: 30),
+
               Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "FluxKart",
-                      color: Color(0xFF000000),
-                      fontWeight: FontWeight.bold,
-                      fontsize: 15,
-                      fontfamily: "bold")
+                children: const [
+                  SizedBox(width: 20),
+                  Text("FluxKart",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15)),
                 ],
               ),
+
               Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  UiHelper.CustomText(
-                      text: "15 minutes",
-                      color: Color(0xFF000000),
-                      fontWeight: FontWeight.bold,
-                      fontsize: 20,
-                      fontfamily: "bold")
+                children: const [
+                  SizedBox(width: 20),
+                  Text("15 minutes",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20)),
                 ],
               ),
+
               Row(
                 children: [
-                  SizedBox(
-                    width: 20,
+                  const SizedBox(width: 20),
+
+                  Expanded(
+                    child: Text(
+                      _locationController.text.isEmpty
+                          ? "Fetching location..."
+                          : "HOME — ${_locationController.text}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
-                 Flexible(child:  UiHelper.CustomText(
-                     text: "HOME-${_locationController.text}",
-                     color: Color(0xFF000000),
-                     fontWeight: FontWeight.bold,
-                     fontsize: 14,
-                     fontfamily: "bold")),
-                  UiHelper.CustomText(
-                      text: AppConstant.location,
-                      color: Color(0xFF000000),
-                      fontWeight: FontWeight.bold,
-                      fontsize: 14,
-                      fontfamily: "bold")
                 ],
               ),
+
             ],
           ),
         ),
+
+        /// PROFILE AVATAR
         Positioned(
           right: 20,
           bottom: 100,
           child: CircleAvatar(
-              radius: 14,
-              backgroundImage: AppConstant.customer_profile == null
-                  ? AssetImage("assets/images/user.png")
-                  : UiHelper.CustomImageNetworkCustomerProfile(
-                      img: AppConstant.customer_profile)),
+            radius: 14,
+            backgroundImage:
+            AppConstant.customer_profile == null
+                ? const AssetImage(
+                "assets/images/user.png")
+                : NetworkImage(
+              AppConstant.customer_profile!,
+            ) as ImageProvider,
+          ),
         ),
+
+        /// SEARCH BAR
         Positioned(
-            bottom: 30,
-            left: 20,
-            child: InkWell(
-              onTap: () {
-                Get.to(CustomSearchAppBar(allVenderData: widget.allVenderData));
-              },
-              child: IgnorePointer(
-                child: UiHelper.CustomTextField(controller: controller),
-              ),
-            ))
+          bottom: 30,
+          left: 20,
+          right: 20,
+          child: InkWell(
+            onTap: () {
+              Get.to(() => CustomSearchAppBar(
+                  allVenderData:
+                  widget.allVenderData));
+            },
+            child: IgnorePointer(
+              child: UiHelper.CustomTextField(
+                  controller: widget.controller),
+            ),
+          ),
+        ),
       ],
     );
   }
-  Future<void> _getCurrentLocation(locationController) async {
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Location services are disabled.")),
-      );
-      return;
-    }
-
-    // Request permission
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Location permission denied.")),
-        );
+  /// ✅ Production-safe location
+  Future<void> _getCurrentLocation() async {
+    try {
+      if (!await Geolocator.isLocationServiceEnabled()) {
+        _snack("Enable location services");
         return;
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Location permission permanently denied.")),
+      var permission =
+      await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission =
+        await Geolocator.requestPermission();
+      }
+
+      if (permission ==
+          LocationPermission.deniedForever) {
+        _snack("Location permission denied");
+        return;
+      }
+
+      final pos =
+      await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.medium,
+        timeLimit: const Duration(seconds: 15),
       );
-      return;
+
+      final placemarks =
+      await placemarkFromCoordinates(
+          pos.latitude, pos.longitude);
+
+      if (placemarks.isEmpty) return;
+
+      final p = placemarks.first;
+
+      final address = [
+        p.locality,
+        p.administrativeArea,
+        p.country
+      ].whereType<String>().join(", ");
+
+      if (!mounted) return;
+
+      setState(() {
+        _locationController.text = address;
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print("Location error: $e");
+      }
     }
+  }
 
-    // ✅ Get current position
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-// ✅ Convert coordinates to address
-    List<Placemark> placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    Placemark place = placemarks[0];
-    String address =
-        "${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
-
-    // ✅ Update controller
-    setState(() {
-      locationController.text = address;
-    });
+  void _snack(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(msg)));
   }
 }
+

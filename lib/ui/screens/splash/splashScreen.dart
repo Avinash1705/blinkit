@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     getCustomerId().then((value) {
       print("checking value in init state ${jsonEncode(value)}");
-        Get.to(value != null  ?VendorDashboard(vendorDetails: value): BottomNavScreen(index: 0));
+        Get.offAll(value != null  ?VendorDashboard(vendorDetails: value): BottomNavScreen(index: 0));
       // if (value != null) {
       //   vendorDetails = value ;
       //   print("Customer ID in splash: ${jsonEncode(value)}");

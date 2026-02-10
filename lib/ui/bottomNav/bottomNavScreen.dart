@@ -99,7 +99,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           },
         ),
         floatingActionButton: Visibility(
-          visible: _cartController.getItemCount() != 0,
+          visible: _cartController.getItemCount() != 0 && currentIndex != 2,
           child: FloatingActionButton(
             onPressed: () {
               Get.to(CartScreen());

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -100,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (value != null && value.data != null && value.data!.isNotEmpty) {
         setState(() {
           dataLoaded = value;
+          AppConstant.paymentUser = dataLoaded.data![0].paymentUser!;
+          print("Jon ${AppConstant.paymentUser}");
+          print("Jon2 ${jsonEncode(dataLoaded.data)}");
         });
       } else {
         print("API returned null or empty data");
@@ -155,7 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: Colors.black,
                           child: CircleAvatar(
                               radius: 14,
-                              backgroundImage: AppConstant.customer_profile == null
+                              backgroundImage: AppConstant.customer_profile ==
+                                      null
                                   ? AssetImage("assets/images/user.png")
                                   : UiHelper.CustomImageNetworkCustomerProfile(
                                       img: AppConstant.customer_profile)),
@@ -165,7 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   //     bottom: 30,
                   //     left: 20,
                   //     child: UiHelper.CustomTextField(controller: controller)),
-
                 ],
               ),
               Divider(
@@ -187,11 +192,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         dataLoaded.data == null || dataLoaded.data!.isEmpty
                             ? Center(child: CircularProgressIndicator())
                             : UiHelper.CustomText(
-                            text: dataLoaded.data![0].appName ?? "Sale",
-                            color: Color(0xFFffffff),
-                            fontWeight: FontWeight.bold,
-                            fontsize: 20,
-                            fontfamily: "bold"),
+                                text: dataLoaded.data![0].appName ?? "Sale",
+                                color: Color(0xFFffffff),
+                                fontWeight: FontWeight.bold,
+                                fontsize: 20,
+                                fontfamily: "bold"),
                         // UiHelper.CustomImage(img: "image 55.png"),
                         UiHelper.CustomImage(img: "image 61.png"),
                       ],
@@ -218,12 +223,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         UiHelper.CustomText(
                                             // text: data[index]["text"].toString(),
-                                            text: data[index]["text"].toString(),
+                                            text:
+                                                data[index]["text"].toString(),
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             fontsize: 10),
-                                        UiHelper.CustomImage(
-                                            img: data[index]["img"].toString())
+                                       InkWell(onTap: ()=> {
+                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Unavailable"),duration: Duration(seconds: 1),))
+                                       },
+                                       child:  UiHelper.CustomImage(
+                                           img: data[index]["img"].toString()))
                                       ],
                                     ),
                                   ),
@@ -249,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return Padding(
-                                padding: const EdgeInsets.all(6.0),
+                                padding: const EdgeInsets.all(12.0),
                                 child: Container(
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
@@ -274,28 +283,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                       SizedBox(height: 5),
                                       Row(
                                         children: [
-                                          UiHelper.CustomImage(img: "timer 4.png"),
+                                          // UiHelper.CustomImage(
+                                          //     img: "timer 4.png"),
                                           SizedBox(width: 5),
                                           UiHelper.CustomText(
-                                              text: "17 min",
-                                              color: Color(0xff9c9c9c),
-                                              fontWeight: FontWeight.normal,
-                                              fontsize: 10)
+                                              text: "₹ ${allSubcategory![index].price.toString()}",
+                                              color: Color(0xff000000),
+                                              fontWeight: FontWeight.bold,
+                                              fontsize: 15)
                                         ],
                                       ),
                                       Row(
                                         children: [
-                                          UiHelper.CustomText(
-                                              // text: "₹ ${Random().nextInt(10)}",
-                                              text:
-                                                  "₹ ${allSubcategory![index].price.toString()}",
-                                              color: Color(0xff000000),
-                                              fontWeight: FontWeight.bold,
-                                              fontsize: 15),
+                                          // UiHelper.CustomText(
+                                          //     // text: "₹ ${Random().nextInt(10)}",
+                                          //     text:
+                                          //         "₹ ${allSubcategory![index].price.toString()}",
+                                          //     color: Color(0xff000000),
+                                          //     fontWeight: FontWeight.bold,
+                                          //     fontsize: 15),
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          UiHelper.CustomButton(() {
+                                          allSubcategory![index].quantity == 0.toString()? Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red.shade100,
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            child: Text(
+                                              "Out of Stock",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ):UiHelper.CustomButton(() {
                                             cartController.addItem(
                                                 allSubcategory![index]
                                                     .id
@@ -306,11 +329,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 allSubcategory![index]
                                                     .itemImg
                                                     .toString(),
-                                                double.parse(allSubcategory![index]
-                                                    .price
-                                                    .toString()),
+                                                double.parse(
+                                                    allSubcategory![index]
+                                                        .price
+                                                        .toString()),
                                                 0);
-                                            InteractiveToast.popSuccess(context,
+                                            InteractiveToast.popSuccess(
                                                 title: Text(
                                                     "${allSubcategory![index].itemName.toString()} "),
                                                 toastSetting: PopupToastSetting(

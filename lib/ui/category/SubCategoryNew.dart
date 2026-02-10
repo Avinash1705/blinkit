@@ -245,7 +245,6 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
                         availableQty,
                       );
                       InteractiveToast.pop(
-                        context,
                         title: Text("${item.itemName} added"),
                       );
                     },

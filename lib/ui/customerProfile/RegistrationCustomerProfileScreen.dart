@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 
 import '../../controllers/customerRegistrationController.dart';
 import '../widgets/compressedImgFile.dart';
@@ -25,43 +25,31 @@ class _CustomerProfilePageState
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      return await Permission.camera.request().isGranted;
-    } else {
-      if (Platform.isAndroid) {
-        if (await Permission.storage.isGranted ||
-            await Permission.photos.isGranted ||
-            await Permission.mediaLibrary.isGranted) {
-          return true;
-        }
-
-        if (await Permission.photos.request().isGranted ||
-            await Permission.storage.request().isGranted) {
-          return true;
-        }
-      }
-      return false;
-    }
-  }
 
   Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Permission denied')),
+    try {
+      final picked = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
       );
-      return;
-    }
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
-      XFile? compressed = await compressImage(File(pickedFile.path));
-      File? comp = File(compressed!.path);
+      if (picked == null) {
+        showSnack("No image selected");
+        return;
+      }
+
       setState(() {
-        _image = comp;
+        _image = File(picked.path);
       });
+
+    } catch (e) {
+      showSnack("Permission denied or error");
     }
+  }
+  void showSnack(String message) {
+    ScaffoldMessenger.of(context ).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override

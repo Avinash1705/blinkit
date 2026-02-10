@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:swiggy/domain/ApiConstants.dart';
 
 class ImagePickerWithPermission extends StatefulWidget {
@@ -15,43 +15,34 @@ class _ImagePickerWithPermissionState extends State<ImagePickerWithPermission> {
   final ImagePicker _picker = ImagePicker();
   ImagePickerController imagePickerController = ImagePickerController();
   TextEditingController nameController = TextEditingController();
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      return await Permission.camera.request().isGranted;
-    } else {
-      if (Platform.isAndroid) {
-        if (await Permission.storage.isGranted ||
-            await Permission.photos.isGranted ||
-            await Permission.mediaLibrary.isGranted) {
-          return true;
-        }
 
-        // Android 13+ specific
-        if (await Permission.photos.request().isGranted ||
-            await Permission.storage.request().isGranted) {
-          return true;
-        }
-      }
-      return false;
-    }
-  }
 
   Future<void> _pickImage(ImageSource source) async {
-    bool granted = await _requestPermission(source);
-    if (!granted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Permission denied')),
+    try {
+      final picked = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
       );
-      return;
-    }
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
+      if (picked == null) {
+        showSnack("No image selected");
+        return;
+      }
+
       setState(() {
-        _image = File(pickedFile.path);
+        _image = File(picked.path);
       });
+
+    } catch (e) {
+      showSnack("Permission denied or error");
     }
   }
+  void showSnack(String message) {
+    ScaffoldMessenger.of(context ).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {

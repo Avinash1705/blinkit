@@ -41,7 +41,9 @@ class ApiConstants {
 
   //secretKeys
   static String secretKey = "$ssl://$ip/fluxKart/apis/getSecretKeyApi/getConfig.php";
+  //razorPay webhook
 
+ static String orderStatusByRazorPay =  "https://avitechly.com/fluxKart/apis/razorpay_webhook/order_status.php";
   //Order table Format name
   static  String orderTableFormat(String tableName){
     return "orders_$tableName";

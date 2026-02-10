@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/controllers/cartController.dart';
 // import 'package:get_storage/get_storage.dart';
 
@@ -25,6 +26,7 @@ Future<void> init() async {
 
   Get.lazyPut(() => SearchController());
   Get.lazyPut(() => CartController());
+  Get.lazyPut(() => AddressController());
 
   requestNotificationPermission();
   initNotifications();

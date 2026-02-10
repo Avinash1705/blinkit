@@ -35,18 +35,21 @@ class AppDetailModel {
 class Data {
   String? appName;
   String? appIcon;
+  String? paymentUser;
 
   Data({this.appName, this.appIcon});
 
   Data.fromJson(Map<String, dynamic> json) {
     appName = json['app_name'];
     appIcon = json['app_icon'];
+    paymentUser = json['paymentUser'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['app_name'] = this.appName;
     data['app_icon'] = this.appIcon;
+    data['paymentUser'] = this.paymentUser;
     return data;
   }
 }

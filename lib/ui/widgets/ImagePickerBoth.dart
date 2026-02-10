@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../vender/ui/categoryDropdown.dart';
 import '../../vender/controller/addItemsController.dart';
@@ -42,30 +41,32 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
     selectedCategory = value;
   }
 
-  // ---------------- PERMISSIONS ----------------
-  Future<bool> _requestPermission(ImageSource source) async {
-    if (source == ImageSource.camera) {
-      return await Permission.camera.request().isGranted;
-    } else {
-      return await Permission.photos.request().isGranted ||
-          await Permission.storage.request().isGranted;
-    }
-  }
 
   // ---------------- IMAGE PICK ----------------
   Future<void> _pickImage(ImageSource source) async {
-    final granted = await _requestPermission(source);
-    if (!granted) {
-      Get.snackbar("Permission", "Permission denied");
-      return;
-    }
+    try {
+      final picked = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
+      );
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
+      if (picked == null) {
+        showSnack("No image selected");
+        return;
+      }
+
       setState(() {
-        _image = File(pickedFile.path);
+        _image = File(picked.path);
       });
+
+    } catch (e) {
+      showSnack("Permission denied or error");
     }
+  }
+  void showSnack(String message) {
+    ScaffoldMessenger.of(context ).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   // ---------------- SUBMIT ----------------

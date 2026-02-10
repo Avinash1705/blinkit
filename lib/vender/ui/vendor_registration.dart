@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 
 import '../controller/vender_register_controller.dart';
@@ -28,42 +27,29 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    PermissionStatus status;
-
-    if (source == ImageSource.camera) {
-      status = await Permission.camera.request();
-    } else {
-      if (Platform.isAndroid) {
-        if (await Permission.photos.isGranted ||
-            await Permission.storage.isGranted) {
-          status = PermissionStatus.granted;
-        } else {
-          // Android 13+ prefers photos
-          status = await Permission.photos.request();
-          if (!status.isGranted) {
-            status = await Permission.storage.request();
-          }
-        }
-      } else {
-        // iOS
-        status = await Permission.photos.request();
-      }
-    }
-
-    if (!status.isGranted) {
-      Get.snackbar(
-        "Permission denied",
-        "Please allow gallery permission from settings",
+    try {
+      final picked = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
       );
-      return;
-    }
 
-    final pickedFile = await _picker.pickImage(source: source);
-    if (pickedFile != null) {
+      if (picked == null) {
+        showSnack("No image selected");
+        return;
+      }
+
       setState(() {
-        _image = File(pickedFile.path);
+        _image = File(picked.path);
       });
+
+    } catch (e) {
+      showSnack("Permission denied or error");
     }
+  }
+  void showSnack(String message) {
+    ScaffoldMessenger.of(context ).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
 

@@ -1,229 +1,271 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sliding_toast/flutter_sliding_toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swiggy/domain/AppConstant.dart';
+
 import 'package:swiggy/pay/RazorpayPaymentScreen.dart';
 import 'package:swiggy/ui/address/addressScreen.dart';
-import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
-import 'package:swiggy/ui/login/roleBasedLogin/PhoneNumberPage.dart';
 import 'package:swiggy/ui/orderPlacedScreen.dart';
+import 'package:swiggy/ui/login/roleBasedLogin/PhoneNumberPage.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../controllers/addressController.dart';
 import '../../controllers/cartController.dart';
-import '../../controllers/checkoutController.dart';
-import '../../dependency/dependency.dart';
+import '../../pay/PaymentCheckingScreen.dart';
+import '../../pay/razoryPayment.dart';
 import '../../testMyCode/OtpFrontendMsg91.dart';
-import '../../testMyCode/OtpMsg91.dart';
 
 class CheckoutScreen extends StatefulWidget {
+  const CheckoutScreen({super.key});
+
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  String localAddress = '';
-  AddressController addressController = AddressController();
   bool loggedIn = false;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      loggedIn = await isUserLoggedIn();
-      print("loggedIn: $loggedIn");
-      setState(() {}); // Refresh UI after checking login status
-    });
+    _checkLogin();
   }
 
-  @override
-  void didUpdateWidget(covariant CheckoutScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
+  Future<void> _checkLogin() async {
+    loggedIn = await isUserLoggedIn();
+    if (mounted) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    var cartController = Provider.of<CartController>(context);
-    // var addressController = Provider.of<AddressController>(context);
-    print(
-        "addressController updatedAddress: ${addressController.updatedAddress.value}");
-    // default selected
-    // addressController.saveLocData();
-    print("update ");
+    final cartController = context.watch<CartController>();
+    final addressController = context.watch<AddressController>();
+
+    final hasItems = cartController.itemCount > 0;
+    final address = addressController.updatedAddress.value.trim();
+    final hasAddress = address.isNotEmpty;
+
+    final canCheckout = hasItems && hasAddress && loggedIn;
+    print("chking orderIDNEw ${AppConstant.phone}");
     return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(top: BorderSide(color: Colors.grey.shade300)),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4)
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
+          /// LEFT SIDE — ADDRESS + TOTAL
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+
               SizedBox(
                 width: 200,
-                child: Obx(() => Text(addressController.updatedAddress.value,
-                    // overflow: TextOverflow.ellipsis,
-                    // maxLines: 1,
-                    softWrap: true,
-                    style: TextStyle(fontSize: 14, color: Colors.grey))),
+                child: Obx(() {
+                  final addr =
+                  addressController.updatedAddress.value.trim();
+                  return Text(
+                    addr.isEmpty
+                        ? "No delivery address selected"
+                        : addr,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 14, color: Colors.grey),
+                  );
+                }),
               ),
-              SizedBox(
-                height: 20,
+
+              const SizedBox(height: 12),
+
+              const Text("Total",
+                  style: TextStyle(fontSize: 14, color: Colors.grey)),
+
+              Text(
+                "₹ ${cartController.totalAmount}",
+                style: const TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              Text("Total", style: TextStyle(fontSize: 14, color: Colors.grey)),
-              Text("${cartController.totalAmount}",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ],
           ),
+
+          /// RIGHT SIDE — ACTIONS
           Column(
             children: [
+
+              /// Change address
               InkWell(
                 onTap: () {
-                  Get.to(AddressInputForm(
-                    onAddressSaved: (String address) {
-                      addressController.saveUserLocationData(address);
-                      print("on bottomCheckout $address");
-                    },
-                  ));
-                },
-                child: Text("change",
-                    style: TextStyle(fontSize: 14, color: Colors.green)),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              cartController.itemCount == 0
-                  ? ElevatedButton(
-                      onPressed: () {
-                        // Get.off(OrderPlacedScreen());
-                        InteractiveToast.popError(context,
-                            title: Text("Please Add Items"),
-                            toastSetting: PopupToastSetting(
-                                toastAlignment: Alignment.center,
-                                displayDuration: Duration(seconds: 1)));
+                  Get.to(
+                    AddressInputForm(
+                      onAddressSaved: (addr) {
+                        addressController
+                            .saveUserLocationData(addr);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                      ),
-                      child: Text("Checkout", style: TextStyle(fontSize: 16)),
-                    )
-                  : loggedIn
-                      ? ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                String _selectedPayment =
-                                    "online"; // local state for dialog
+                    ),
+                  );
+                },
+                child: const Text(
+                  "change",
+                  style: TextStyle(
+                      fontSize: 14, color: Colors.green),
+                ),
+              ),
 
-                                return StatefulBuilder(
-                                  builder: (context, setState) {
-                                    return AlertDialog(
-                                      title: const Text("Confirm Order"),
-                                      insetPadding: const EdgeInsets.symmetric(
-                                          horizontal: 40,
-                                          vertical: 24), // reduce width
-                                      content: SizedBox(
-                                        height: 170,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                              "Are you sure you want to place this order?",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            // Radio buttons
-                                            RadioListTile<String>(
-                                              title:
-                                                  const Text("Online Payment"),
-                                              value: "online",
-                                              groupValue: _selectedPayment,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _selectedPayment = value!;
-                                                });
-                                              },
-                                            ),
-                                            RadioListTile<String>(
-                                              title: const Text(
-                                                  "Cash on Delivery"),
-                                              value: "cod",
-                                              groupValue: _selectedPayment,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _selectedPayment = value!;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      actions:   [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(),
-                                          child: const Text("Cancel"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            print("Selected Payment: $_selectedPayment");
-                                            if(_selectedPayment == "online"){
-                                              // Navigate to Razorpay payment screen
-                                              Get.off(RazorpayPaymentScreen(cartController.totalAmount));
-                                              // Get.off(CashfreePaymentPage());
-                                            } else {
-                                              // Handle Cash on Delivery order placement
-                                              Get.off(OrderPlacedScreen());
-                                            }
-                                            // Navigator.of(context).pop();
-                                            // Get.off(OrderPlacedScreen()); // Navigate
-                                          },
-                                          child: const Text("Yes"),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          child: const Text("Checkout",
-                              style: TextStyle(fontSize: 16)),
-                        )
-                      : ElevatedButton(
-                          onPressed: () =>
-                              Get.off(PhoneMsg91UI()),
-                          child: Text("Login to buy")),
+              const SizedBox(height: 16),
+
+              /// CHECKOUT BUTTON
+              ElevatedButton(
+                onPressed: () async {
+
+                  /// 🔐 LOGIN FIRST — always allowed
+                  if (!loggedIn) {
+                    await Get.to(PhoneMsg91UI());
+                    _checkLogin(); // refresh login state if you have it
+                    return;
+                  }
+
+                  /// 🛒 CART CHECK
+                  if (!hasItems) {
+                    _toast("Please add items to cart");
+                    return;
+                  }
+
+                  /// 📍 ADDRESS CHECK
+                  if (!hasAddress) {
+                    _toast("Please select delivery address");
+                    return;
+                  }
+
+                  /// ✅ ALL GOOD
+                  _showCheckoutDialog(cartController);
+                },
+
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // ALWAYS GREEN
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+
+                child: Text(
+                  loggedIn ? "Checkout" : "Login to buy",
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+
             ],
           ),
         ],
       ),
     );
   }
+
+  /// ✅ Toast helper
+  void _toast(String msg) {
+    InteractiveToast.popError(
+      title: Text(msg),
+      toastSetting: const PopupToastSetting(
+        toastAlignment: Alignment.center,
+        displayDuration: Duration(seconds: 1),
+      ),
+    );
+  }
+
+  /// ✅ Checkout dialog
+  void _showCheckoutDialog(CartController cartController) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        String selected = "online";
+
+        return StatefulBuilder(
+          builder: (_, setState) {
+            return AlertDialog(
+              title: const Text("Confirm Order"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+                  const Text(
+                    "Are you sure you want to place this order?",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold),
+                  ),
+
+                  RadioListTile(
+                    title:
+                    const Text("Online Payment"),
+                    value: "online",
+                    groupValue: selected,
+                    onChanged: (v) =>
+                        setState(() => selected = v!),
+                  ),
+
+                  RadioListTile(
+                    title:
+                    const Text("Cash on Delivery"),
+                    value: "cod",
+                    groupValue: selected,
+                    onChanged: (v) =>
+                        setState(() => selected = v!),
+                  ),
+                ],
+              ),
+              actions: [
+
+                TextButton(
+                  onPressed: Get.back,
+                  child: const Text("Cancel"),
+                ),
+
+                TextButton(
+                  onPressed: () async {
+                    if (selected == "online") {
+                      // Get.off(
+                      //   RazorpayPaymentScreen(
+                      //     cartController.totalAmount,
+                      //   ),
+                      // );
+                      await openPayment();
+
+                      Get.to(
+                        PaymentCheckingScreen(
+                            phoneNumber: AppConstant.phone, // the pay_xxx id you already have
+                            expectedAmount:cartController.totalAmount
+                        ),
+                      );
+
+                    } else {
+                      Get.off(OrderPlacedScreen());
+                    }
+                  },
+                  child: const Text("Yes"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
+
+/// ✅ Login check
 Future<bool> isUserLoggedIn() async {
   final prefs = await SharedPreferences.getInstance();
-  loadUserData(prefs); // Your existing function
   return prefs.containsKey('customer_id');
 }

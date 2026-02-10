@@ -1,101 +1,153 @@
+import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationWidget extends StatefulWidget {
-   TextEditingController locationController;
-   Color nearcolor;
-   LocationWidget({super.key,required this.locationController,required this.nearcolor});
+  final TextEditingController locationController;
+  final Color nearcolor;
+
+  const LocationWidget({
+    super.key,
+    required this.locationController,
+    required this.nearcolor,
+  });
 
   @override
   State<LocationWidget> createState() => _LocationState();
 }
 
 class _LocationState extends State<LocationWidget> {
-  String? _location;
-  String _address = "Fetching location...";
+  bool _loading = false;
 
-  // ✅ Get location from GPS
   Future<void> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    if (_loading) return;
 
-    // Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Location services are disabled.")),
-      );
-      return;
-    }
+    setState(() => _loading = true);
 
-    // Request permission
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Location permission denied.")),
-        );
+    try {
+      /// 1️⃣ Check service enabled
+      if (!await Geolocator.isLocationServiceEnabled()) {
+        _showSnack("Please enable location services");
+        await Geolocator.openLocationSettings();
         return;
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Location permission permanently denied.")),
+      /// 2️⃣ Permission flow
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.denied) {
+        _showSnack("Location permission denied");
+        return;
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        _showSnack("Permission permanently denied. Open settings.");
+        await Geolocator.openAppSettings();
+        return;
+      }
+
+      /// 3️⃣ Get position with timeout
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.medium,
+      ).timeout(const Duration(seconds: 12));
+
+      /// 4️⃣ Reverse geocode
+      final placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
       );
-      return;
+
+      if (placemarks.isEmpty) {
+        _showSnack("Unable to fetch address");
+        return;
+      }
+
+      final p = placemarks.first;
+
+      final address = [
+        p.name,
+        p.subLocality,
+        p.locality,
+        p.administrativeArea,
+        p.country
+      ].where((e) => e != null && e.isNotEmpty).join(", ");
+
+      if (!mounted) return;
+
+      widget.locationController.text = address;
     }
 
-    // ✅ Get current position
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-// ✅ Convert coordinates to address
-    List<Placemark> placemarks =
-    await placemarkFromCoordinates(position.latitude, position.longitude);
+    on TimeoutException {
+      _showSnack("Location request timed out");
+    }
 
-    Placemark place = placemarks[0];
-    String address =
-        "${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+    catch (e) {
+      _showSnack("Failed to get location");
+    }
 
-    // ✅ Update controller
-    setState(() {
-      widget.locationController.text = address;
-
-    });
+    finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
+
+  void _showSnack(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(msg)));
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("test color ${widget.nearcolor}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Current Location "),
-        SizedBox(height: 30,),
+        const Text("Current Location"),
+        const SizedBox(height: 20),
+
         TextFormField(
           controller: widget.locationController,
-          style: TextStyle(color: widget.nearcolor??Colors.white),
+          style: TextStyle(color: widget.nearcolor),
+
           decoration: InputDecoration(
-            // prefixIcon: Icon(Icons.place, color: Colors.white),
-            labelText: "Place ",
-            labelStyle: TextStyle(color: widget.nearcolor??Colors.white),
+            labelText: "Place",
+            labelStyle: TextStyle(color: widget.nearcolor),
+
             hintText: "Edit current location",
-            hintStyle: TextStyle(color: widget.nearcolor.withOpacity(0.9)??Colors.white70),
+            hintStyle: TextStyle(
+              color: widget.nearcolor.withOpacity(0.8),
+            ),
+
             filled: true,
-            fillColor: widget.nearcolor.withOpacity(0.2),
-            suffixIcon: InkWell(onTap:  _getCurrentLocation,child: const Icon(Icons.place, color: Colors.red)),
+            fillColor: widget.nearcolor.withOpacity(0.15),
+
+            suffixIcon: _loading
+                ? const Padding(
+              padding: EdgeInsets.all(12),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+                : IconButton(
+              icon: const Icon(Icons.my_location, color: Colors.red),
+              onPressed: _getCurrentLocation,
+            ),
+
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide.none,
             ),
           ),
-          validator: (value) => value == null || value.isEmpty
-              ? "Enter location"
-              : null,
+
+          validator: (value) =>
+          value == null || value.isEmpty ? "Enter location" : null,
         ),
       ],
     );

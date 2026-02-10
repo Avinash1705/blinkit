@@ -14,6 +14,7 @@ class AppConstant {
   static  String customer_id = "";
   static  String customer_name = "";
   static  String phone = "";
+  static  String email = "arawat696@gmail.com";
   static  String location = "";
   static  String customer_profile = "";
   static  String vendorDetails = "vendorKey";
@@ -22,4 +23,5 @@ class AppConstant {
   static  String msgAuthKey = "";
   static  String msgWidgetKey = "";
   static  String razrorPayLiveKey = "";
+  static  String paymentUser = "https://razorpay.me/@avinashrawat";
 }
