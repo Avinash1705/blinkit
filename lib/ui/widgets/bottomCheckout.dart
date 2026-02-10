@@ -16,6 +16,7 @@ import '../../controllers/cartController.dart';
 import '../../pay/PaymentCheckingScreen.dart';
 import '../../pay/razoryPayment.dart';
 import '../../testMyCode/OtpFrontendMsg91.dart';
+import '../cart/showCODReviewDialog.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -44,8 +45,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final addressController = context.watch<AddressController>();
 
     final hasItems = cartController.itemCount > 0;
-    final address = addressController.updatedAddress.value.trim();
-    final hasAddress = address.isNotEmpty;
+
+    final hasAddress = addressController.updatedAddress.isNotEmpty;
 
     final canCheckout = hasItems && hasAddress && loggedIn;
     print("chking orderIDNEw ${AppConstant.phone}");
@@ -71,19 +72,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
               SizedBox(
                 width: 200,
-                child: Obx(() {
-                  final addr =
-                  addressController.updatedAddress.value.trim();
-                  return Text(
-                    addr.isEmpty
-                        ? "No delivery address selected"
-                        : addr,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 14, color: Colors.grey),
-                  );
-                }),
+                child: Text(
+                  addressController.updatedAddress.isEmpty
+                      ? "No address added"
+                      : addressController.updatedAddress,
+                )
               ),
 
               const SizedBox(height: 12),
@@ -127,7 +120,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               /// CHECKOUT BUTTON
               ElevatedButton(
                 onPressed: () async {
-
+                  print("loggedIn = $loggedIn");
+                  print("hasItems = $hasItems");
+                  print("hasAddress = $hasAddress");
                   /// 🔐 LOGIN FIRST — always allowed
                   if (!loggedIn) {
                     await Get.to(PhoneMsg91UI());
@@ -175,13 +170,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   /// ✅ Toast helper
   void _toast(String msg) {
-    InteractiveToast.popError(
-      title: Text(msg),
-      toastSetting: const PopupToastSetting(
-        toastAlignment: Alignment.center,
-        displayDuration: Duration(seconds: 1),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        duration: const Duration(seconds: 1),
       ),
     );
+
   }
 
   /// ✅ Checkout dialog
@@ -234,11 +229,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 TextButton(
                   onPressed: () async {
                     if (selected == "online") {
-                      // Get.off(
-                      //   RazorpayPaymentScreen(
-                      //     cartController.totalAmount,
-                      //   ),
-                      // );
                       await openPayment();
 
                       Get.to(
@@ -249,7 +239,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       );
 
                     } else {
-                      Get.off(OrderPlacedScreen());
+                      showCODReviewDialog(cartController);
                     }
                   },
                   child: const Text("Yes"),

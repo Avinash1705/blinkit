@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,160 +11,172 @@ class PaymentCheckingScreen extends StatefulWidget {
   final String phoneNumber;
   final double expectedAmount;
 
-  const PaymentCheckingScreen({super.key, required this.phoneNumber, required  this.expectedAmount});
+  const PaymentCheckingScreen({
+    super.key,
+    required this.phoneNumber,
+    required this.expectedAmount,
+  });
 
   @override
-  State<PaymentCheckingScreen> createState() => _PaymentCheckingScreenState();
+  State<PaymentCheckingScreen> createState() =>
+      _PaymentCheckingScreenState();
 }
 
-class _PaymentCheckingScreenState extends State<PaymentCheckingScreen> {
-  double paidAmount  = 0.0;
+class _PaymentCheckingScreenState
+    extends State<PaymentCheckingScreen> {
+
+  double paidAmount = 0.0;
+  bool _checking = false;
+
   @override
   void initState() {
     super.initState();
+    print("PaymentCheckingScreen opened");
     verifyLoop();
   }
 
-  bool _checking = false;
+  /// =========================
+  /// PAYMENT VERIFY LOOP
+  /// =========================
 
   Future<void> verifyLoop() async {
+    try {
+      if (_checking) return;
+      _checking = true;
 
-    if (_checking) return;
-    _checking = true;
+      for (int i = 0; i < 8; i++) {
 
-    for (int i = 0; i < 8; i++) {
+        print("Polling attempt $i");
 
-      final data = await checkPayment();
+        final data = await checkPayment();
+        print("API DATA = $data");
 
-      final status = data["status"];
-       paidAmount =
-      (data["paid_total"] ?? 0).toDouble();
+        final status = data["status"];
 
-      // ✅ success — SUM reached
-      if (paidAmount >= widget.expectedAmount) {
-        _checking = false;
-        Get.offAll(() => const OrderPlacedScreen());
-        return;
+        /// ✅ SAFE PARSE (string/num safe)
+        paidAmount = double.tryParse(
+          (data["paid_total"] ?? 0).toString(),
+        ) ?? 0.0;
+
+        print("Paid = $paidAmount  Expected = ${widget.expectedAmount}");
+
+        /// ✅ SUCCESS
+        if (paidAmount >= widget.expectedAmount) {
+          _checking = false;
+
+          if (mounted) {
+            Get.offAll(() => const OrderPlacedScreen());
+          }
+          return;
+        }
+
+        /// ❌ FAILED STATUS
+        if (status == "failed") {
+          _checking = false;
+          Get.snackbar(
+            "Payment Failed",
+            "Transaction failed",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          Get.back();
+          return;
+        }
+
+        /// ⏳ wait before next poll
+        await Future.delayed(
+          const Duration(seconds: 3),
+        );
       }
 
-      // ❌ explicit failed event (rare but safe)
-      if (status == "failed") {
-        _checking = false;
-        Get.snackbar("Payment Failed", "Transaction failed");
-        Get.back();
-        return;
-      }
+      _checking = false;
 
-      await Future.delayed(const Duration(seconds: 3));
-    }
+      /// 🔻 UNDERPAID → retry dialog
+      final diff = widget.expectedAmount - paidAmount;
 
-    _checking = false;
+      Get.dialog(
+        AlertDialog(
+          title: const Text("Amount Pending"),
+          content: Text(
+            "You paid ₹${paidAmount.toStringAsFixed(2)}\n"
+                "Please pay ₹${diff.toStringAsFixed(2)} more.",
+          ),
+          actions: [
 
-    // 🔻 Underpaid after polling window → show retry dialog
-    final diff = widget.expectedAmount - paidAmount;
+            /// 🔁 Retry
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                await openPayment();
+                verifyLoop();
+              },
+              child: const Text("Retry Payment"),
+            ),
 
-    Get.dialog(
-      AlertDialog(
-        title: const Text("Amount Pending"),
-        content: Text(
-          "You paid ₹${paidAmount.toStringAsFixed(2)}\n"
-              "Please pay ₹${diff.toStringAsFixed(2)} more.",
+            /// ❌ Cancel
+            TextButton(
+              onPressed: () {
+                Get.back();
+                Get.back();
+              },
+              child: const Text("Cancel"),
+            ),
+          ],
         ),
-        actions: [
+        barrierDismissible: false,
+      );
 
-          // 🔁 Retry
-          TextButton(
-            onPressed: () async {
-              Get.back();
+    } catch (e) {
+      print("VERIFY LOOP ERROR = $e");
+      _checking = false;
 
-              await openPayment();   // open razorpay.me again
-
-              verifyLoop();          // restart polling
-            },
-            child: const Text("Retry Payment"),
-          ),
-
-          // ❌ Cancel
-          TextButton(
-            onPressed: () {
-              Get.back();
-              Get.back();
-            },
-            child: const Text("Cancel"),
-          ),
-        ],
-      ),
-      barrierDismissible: false,
-    );
+      Get.snackbar(
+        "Error",
+        "Payment check failed",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
-
-  /* Future<void> verifyLoop() async {
-    for (int i = 0; i < 8; i++) {
-
-      final status = await checkPaid();
-
-      if (status == "paid") {
-        Get.offAll(() => const OrderPlacedScreen());
-        return;
-      }
-
-      if (status == "failed") {
-        Get.snackbar(
-          "Payment Failed",
-          "Transaction failed",
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        Get.back();
-        return;
-      }
-
-      await Future.delayed(const Duration(seconds: 3));
-    }
-
-    // timeout
-    Get.snackbar(
-      "Payment",
-      "Payment not confirmed yet. Please retry.",
-      snackPosition: SnackPosition.BOTTOM,
-    );
-
-    Get.back();
-  }*/
+  /// =========================
+  /// API CALL
+  /// =========================
 
   Future<Map<String, dynamic>> checkPayment() async {
 
+    /// normalize phone for your DB (+91 format)
+    final phone = widget.phoneNumber.startsWith("+91")
+        ? widget.phoneNumber
+        : "+91${widget.phoneNumber}";
+
     final uri = Uri.parse(
-        ApiConstants.orderStatusByRazorPay
+      ApiConstants.orderStatusByRazorPay,
     ).replace(queryParameters: {
-      "phone": widget.phoneNumber,
+      "phone": phone,
     });
 
     final r = await http.get(uri);
 
+    print("HTTP STATUS = ${r.statusCode}");
+    print("HTTP BODY = ${r.body}");
+
     if (r.statusCode != 200) {
-      return {"status": "error"};
+      return {"status": "error", "paid_total": 0};
     }
 
     return jsonDecode(r.body);
   }
 
-/*  Future<bool> checkPaid() async {
-    final url = "${ApiConstants.orderStatusByRazorPay}"
-        "?phone=${widget.orderId}";
-
-    final r = await http.get(Uri.parse(url));
-    final data = jsonDecode(r.body);
-    print("checkmYPay ${r}");
-    return data["paid"] == true;
-  }*/
+  /// =========================
+  /// UI
+  /// =========================
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment:
+          MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 20),

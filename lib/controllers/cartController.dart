@@ -50,35 +50,55 @@ class CartController with ChangeNotifier {
     notifyListeners();
   }
   //added from homescreen so need all fields
-  void addItem(String productId, String title, String img, double price,
-      int? existingQuantity) {
+  void addItem(
+      String productId,
+      String title,
+      String img,
+      double price,
+      int? existingQuantity,
+      ) {
+    final maxQty = existingQuantity ?? 0;
 
     if (_items.containsKey(productId)) {
+      final current = _items[productId]!;
+
+      /// ✅ stock check inside controller
+      if (current.quantity >= maxQty) {
+        print("Stock limit reached");
+        return;
+      }
+
       _items.update(
         productId,
             (existing) => CartItem(
-          productId: productId,
+          productId: existing.productId,
           title: existing.title,
           img: existing.img,
           quantity: existing.quantity + 1,
           price: existing.price,
-          existingQuantity: existingQuantity,
+          existingQuantity: maxQty,
         ),
       );
-    }
-    else {
+    } else {
+      /// first add
+      if (maxQty == 0) {
+        print("No stock available");
+        return;
+      }
+
       _items.putIfAbsent(
         productId,
             () => CartItem(
-            productId: productId,
-            title: title,
-            img: img,
-            quantity: 1,
-            price: price,
-            existingQuantity: existingQuantity),
+          productId: productId,
+          title: title,
+          img: img,
+          quantity: 1,
+          price: price,
+          existingQuantity: maxQty,
+        ),
       );
     }
-    print("cart item added ${jsonEncode(_items)}");
+
     notifyListeners();
   }
 

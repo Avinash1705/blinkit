@@ -1,39 +1,33 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:swiggy/controllers/addressController.dart';
 import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/model/cartModel.dart';
 import '../domain/ApiConstants.dart';
 
 class Printcontroller extends ChangeNotifier {
-  /// Temporary cart items before clearing
+
   List<CartItem> listItem = [];
 
-  /// Stores orders grouped by date for UI
-  Map<String, List<Map<String, dynamic>>> ordersByDay = {};
+  /// ✅ NEW STRUCTURE
+  /// date → orderId → items
+  Map<String, Map<String, List<Map<String, dynamic>>>> ordersByDay = {};
 
   bool isLoading = false;
 
-  AddressController addressController = AddressController();
-
   // ------------------------------------------------------------
-  // ADD TRANSITION (called from OrderPlacedScreen)
+  // ADD TRANSITION
   // ------------------------------------------------------------
-  Future<void> addTransition(Map<String, CartItem> items) async {
-    print("🔥 addTransition started");
 
-    listItem.clear();
-    for (CartItem item in items.values) {
-      listItem.add(item);
-    }
+  Future<void> addTransition(Map<String, CartItem> items,
+      {required String address}) async {
 
-    print("🧾 Items to be saved as order: ${jsonEncode(listItem)}");
+    listItem = items.values.toList();
 
     await placeOrder(
       customerPhone: AppConstant.phone,
       customerName: AppConstant.customer_name,
-      customerLocation: addressController.updatedAddress.value.toString(),
+      customerLocation: address,
       cartItems: listItem,
     );
 
@@ -41,24 +35,16 @@ class Printcontroller extends ChangeNotifier {
   }
 
   // ------------------------------------------------------------
-  // UPDATE LOCAL EXISTING QUANTITY
+  // PLACE ORDER
   // ------------------------------------------------------------
-  Future<void> updateExistingQuantity() async {
-    for (CartItem item in listItem) {
-      item.existingQuantity =
-          (item.existingQuantity ?? 0) - item.quantity;
-    }
-  }
 
-  // ------------------------------------------------------------
-  // PLACE ORDER API
-  // ------------------------------------------------------------
   Future<String> placeOrder({
     required String customerPhone,
     required String customerName,
     required String customerLocation,
     required List<CartItem> cartItems,
   }) async {
+
     final url = Uri.parse(ApiConstants.customersPlacedOrder);
 
     final body = {
@@ -68,8 +54,6 @@ class Printcontroller extends ChangeNotifier {
       "cartItems": cartItems.map((e) => e.toJson()).toList(),
     };
 
-    print("📦 Sending order data: ${jsonEncode(body)}");
-
     try {
       final response = await http.post(
         url,
@@ -77,75 +61,81 @@ class Printcontroller extends ChangeNotifier {
         body: jsonEncode(body),
       );
 
-      print("🔵 Order API Response: ${response.body}");
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
         if (data["success"] == true) {
-          print("✅ Order placed successfully. Order ID: ${data['order_id']}");
-          return response.body;
+          print("✅ Order placed: ${data['order_id']}");
+          return data['order_id'].toString();
         }
       }
     } catch (e) {
-      print("❌ Order placement failed: $e");
+      print("❌ placeOrder error $e");
     }
 
-    return "Order placement failed";
+    return "";
   }
+  Future<void> updateExistingQuantity() async { for (CartItem item in listItem) { item.existingQuantity = (item.existingQuantity ?? 0) - item.quantity; } }
+  // ------------------------------------------------------------
+  // FETCH + GROUP ORDERS
+  // ------------------------------------------------------------
 
-  // ------------------------------------------------------------
-  // FETCH ORDERS FOR PRINTSCREEN (Grouped by Dates)
-  // ------------------------------------------------------------
-  Future<void> fetchOrders(String customerName, String phone) async {
-    print("📥 Fetching orders for $phone");
+  Future<void> fetchOrders(
+      String customerName,
+      String phone,
+      ) async {
+
+    isLoading = true;
+    notifyListeners();
 
     try {
-      isLoading = true;
-      notifyListeners();
-
       final url = Uri.parse(ApiConstants.getAllCustomerOrders);
+
       final response = await http.post(url, body: {
         "phone": phone,
         "customer_name": customerName,
       });
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        print("📥 API raw orders: ${jsonEncode(data)}");
-
-        if (data["success"] == true) {
-          Map<String, dynamic> rawOrders = data["orders"];
-          Map<String, List<Map<String, dynamic>>> filtered = {};
-
-          rawOrders.forEach((date, list) {
-            List<Map<String, dynamic>> orderList =
-            List<Map<String, dynamic>>.from(list);
-
-            List<Map<String, dynamic>> matchedOrders = orderList
-                .where((order) =>
-            order["customer_phone"].toString().trim() ==
-                phone.trim())
-                .toList();
-
-            if (matchedOrders.isNotEmpty) {
-              filtered[date] = matchedOrders;
-            }
-          });
-
-          ordersByDay = filtered;
-          print("📅 Filtered orders: $filtered");
-        } else {
-          ordersByDay = {};
-          print("❌ No orders found on server");
-        }
-      } else {
+      if (response.statusCode != 200) {
         ordersByDay = {};
-        print("❌ Server error: ${response.statusCode}");
+        return;
       }
+
+      final data = jsonDecode(response.body);
+
+      if (data["success"] != true) {
+        ordersByDay = {};
+        return;
+      }
+
+      Map<String, dynamic> raw = data["orders"];
+
+      /// ✅ GROUP BY DATE → ORDER_ID → ITEMS
+      Map<String, Map<String, List<Map<String, dynamic>>>> grouped = {};
+
+      raw.forEach((date, list) {
+
+        final orderList =
+        List<Map<String, dynamic>>.from(list);
+
+        for (var o in orderList) {
+
+          final orderId =
+              o["order_id"]?.toString() ?? "UNKNOWN";
+
+          grouped.putIfAbsent(date, () => {});
+          grouped[date]!.putIfAbsent(orderId, () => []);
+          grouped[date]![orderId]!.add(o);
+        }
+      });
+
+      ordersByDay = grouped;
+
+      print("📅 GROUPED ORDERS = $ordersByDay");
+
     } catch (e) {
+      print("❌ fetchOrders error $e");
       ordersByDay = {};
-      print("❌ Error fetching orders: $e");
     } finally {
       isLoading = false;
       notifyListeners();

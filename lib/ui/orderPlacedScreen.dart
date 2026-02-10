@@ -7,6 +7,7 @@ import 'package:swiggy/controllers/notificationSendController.dart';
 import 'package:swiggy/controllers/printController.dart';
 import 'package:swiggy/model/cartModel.dart';
 import 'package:swiggy/vender/controller/AllVenderController.dart';
+import '../controllers/addressController.dart';
 import '../controllers/checkoutController.dart';
 import '../vender/venderModels/GetVenderResponseModel.dart';
 import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
@@ -99,7 +100,7 @@ class _OrderPlacedScreenState extends State<OrderPlacedScreen> {
     print("✔ Qty Updates Finished");
 
     // 3️⃣ Update local print history
-    printController.addTransition(cartController.items);
+    printController.addTransition(cartController.items, address: context.read<AddressController>().updatedAddress);
     await printController.updateExistingQuantity();
 
     print("✔ PrintController Updated");

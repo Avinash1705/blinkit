@@ -4,19 +4,35 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AddressController extends ChangeNotifier {
 
-  RxString updatedAddress = "".obs;
-   Future<void> saveUserLocationData(String location) async {
+  String _updatedAddress = "";
+
+  String get updatedAddress => _updatedAddress;
+
+  /// SAVE ADDRESS
+  Future<void> saveUserLocationData(String location) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString('location', location);
-    updatedAddress.value = prefs.getString('location') ?? "No Address Found";
-    print("updatedAdd saveUserLoc ${prefs.getString('location')}");
+
+    _updatedAddress = location;
+
+    notifyListeners(); // ✅ REQUIRED
+    print("Saved address = $location");
   }
 
-  getUpdatedAddress() async {
+  /// LOAD ADDRESS (call on app start)
+  Future<void> loadAddress() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('location');
+
+    _updatedAddress =
+        prefs.getString('location') ?? "";
+
+    notifyListeners(); // ✅ REQUIRED
   }
 }
+

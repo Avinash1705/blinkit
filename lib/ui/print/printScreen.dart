@@ -48,9 +48,12 @@ class _PrintScreenState extends State<PrintScreen> {
             ? const Center(child: Text("No orders found"))
 
             : ListView(
-          children: printController.ordersByDay.entries.map((entry) {
-            String date = entry.key;
-            List<Map<String, dynamic>> orders = entry.value;
+          children: printController.ordersByDay.entries
+              .map((dateEntry) {
+
+            String date = dateEntry.key;
+            Map<String, List<Map<String, dynamic>>> ordersMap =
+                dateEntry.value;
 
             return ExpansionTile(
               title: Text(
@@ -60,43 +63,111 @@ class _PrintScreenState extends State<PrintScreen> {
                   fontSize: 18,
                 ),
               ),
-              children: orders.map((order) {
-                return  Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                  child: ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: SizedBox(
-                        width: 55,
-                        height: 55,
-                        child: order["item_img"] != null &&
-                            order["item_img"].toString().isNotEmpty
-                            ? UiHelper.CustomImageNetworkSubCategory(img: order['item_img'])
-                            : const Icon(Icons.image, size: 40),
+
+              /// 🔽 ORDERS INSIDE DATE
+              children: ordersMap.entries.map((orderEntry) {
+
+                String orderId = orderEntry.key;
+                List<Map<String, dynamic>> items =
+                    orderEntry.value;
+
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ExpansionTile(
+
+                    title: Text(
+                      "🧾 Order $orderId",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    title: Text(
-                      order["item_name"] ?? order["customer_name"] ?? "Unknown",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(order["customer_location"] ?? "No address"),
-                        const SizedBox(height: 4),
-                        Text(
-                          "Qty: ${order["item_quantity"]}",
-                          style: const TextStyle(color: Colors.grey),
+
+                    children: [
+
+                      /// 🛒 ITEMS
+                      ...items.map((order) {
+
+                        return ListTile(
+                          leading: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: order["item_img"] != null &&
+                                order["item_img"]
+                                    .toString()
+                                    .isNotEmpty
+                                ? UiHelper
+                                .CustomImageNetworkSubCategory(
+                                img: order[
+                                "item_img"])
+                                : const Icon(
+                                Icons.image),
+                          ),
+
+                          title: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment
+                                .spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  order["item_name"] ??
+                                      "Item",
+                                ),
+                              ),
+                              Text(
+                                "×${order["item_quantity"]}",
+                                style: const TextStyle(
+                                    fontWeight:
+                                    FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        );
+
+                      }),
+
+                      const Divider(),
+
+                      /// 📍 ADDRESS (once per order)
+                      Padding(
+                        padding:
+                        const EdgeInsets.all(12),
+                        child: Row(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              size: 18,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                items.first[
+                                "customer_location"] ??
+                                    "No address",
+                                style:
+                                const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
 
               }).toList(),
             );
+
           }).toList(),
         ),
+
+
       ),
     );
   }

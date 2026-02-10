@@ -37,7 +37,7 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => CartController()),
-      ChangeNotifierProvider(create: (_) => AddressController()),
+      ChangeNotifierProvider(create: (_) => AddressController()..loadAddress()),
       ChangeNotifierProvider(create: (_) => Printcontroller()),
       ChangeNotifierProvider(create: (_) => ConfigController())
     ],
