@@ -18,6 +18,7 @@ as allVenders;
 import '../../vender/controller/AllVenderController.dart';
 import '../../vender/venderModels/GetVenderResponseModel.dart';
 import '../cart/cartScreen.dart';
+import '../widgets/detailPage.dart';
 import '../widgets/uihelper.dart';
 
 class SubCategoryNew extends StatefulWidget {
@@ -190,7 +191,9 @@ class _SubCategoryNewState extends State<SubCategoryNew> {
       color: availableQty > 0 ? Colors.white : Colors.grey.shade200,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: availableQty > 0 ? () {} : null,
+        onTap: availableQty > 0 ? () {
+          Get.to(DetailPage(item: item));
+        } : null,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(

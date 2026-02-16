@@ -230,19 +230,15 @@ class DetailPage extends StatelessWidget {
                   )
                 ],
               ),
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: item.quantity == "0"
-                      ? null
-                      : () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Added to cart")),
-                    );
-                  },
-                  child: InkWell(
-                    onTap: () {
+              child: InkWell(
 
+                child: SizedBox(
+                  height: 50,
+
+                  child: ElevatedButton(
+                    onPressed: () {
+                      item.quantity == "0"
+                          ? null:
                       cartController.addItem(
                         item.id.toString(),
                         item.itemName.toString(),
