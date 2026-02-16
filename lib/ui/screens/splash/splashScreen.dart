@@ -28,21 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
     getCustomerId().then((value) {
       print("checking value in init state ${jsonEncode(value)}");
         Get.offAll(value != null  ?VendorDashboard(vendorDetails: value): BottomNavScreen(index: 0));
-      // if (value != null) {
-      //   vendorDetails = value ;
-      //   print("Customer ID in splash: ${jsonEncode(value)}");
-      //   print("Vendor ID in splash: ${vendorDetails.venderId}");
-      //   Get.to(value != null  ?VendorDashboard(vendorDetails: vendorDetails): BottomNavScreen(index: 0));
-      // }
-      // else {
-      //   print("Customer ID in splash: ERROR ${value}");
-      //   print("Vendor ID in splash: is null");
-      //   Get.to(LoginScreen());
-      // }
     });
-    // Timer(Duration(seconds: 2),() {
-    //   Get.to(vendorDetails.venderId![0] == 'v'?VendorDashboard(vendorDetails: vendorDetails): BottomNavScreen(index: 0));
-    // });
+
     super.initState();
   }
 
@@ -54,19 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (jsonString == null) return null;
     Map<String, dynamic> jsonMap = jsonDecode(jsonString);
     return venderData.Data.fromJson(jsonMap);
-    print("Customer ID in splash: ${AppConstant.customer_id}");
   }
-  // Get VendorDetails
-  // static Future<VendorDetails?> getVendor() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String? jsonString = prefs.getString(vendorKey);
-  //
-  //   if (jsonString == null) return null;
-  //
-  //   Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-  //   return VendorDetails.fromJson(jsonMap);
-  // }
-
 
   @override
   Widget build(BuildContext context) {

@@ -74,4 +74,18 @@ class Data {
     data['fcm_token'] = this.fcm_token;
     return data;
   }
+/*  // ✅ Mock / Fake data factory
+  factory Data.mock() {
+    return Data(
+      venderName: "Demo Vendor",
+      venderId: "V001",
+      shopName: "FluxKart Demo Shop",
+      phone: "9999999999",
+      location: "Delhi",
+      valid: "1",
+
+      fcm_token: "demo_token",
+      pincode: "110001",
+    );
+  }*/
 }

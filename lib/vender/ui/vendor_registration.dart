@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 
+import '../../ui/widgets/locationWidget.dart';
 import '../controller/vender_register_controller.dart';
 
 class VendorRegistrationPage extends StatefulWidget {
   const VendorRegistrationPage({super.key});
 
   @override
-  State<VendorRegistrationPage> createState() =>
-      _VendorRegistrationPageState();
+  State<VendorRegistrationPage> createState() => _VendorRegistrationPageState();
 }
 
 class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
@@ -41,17 +41,16 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
       setState(() {
         _image = File(picked.path);
       });
-
     } catch (e) {
       showSnack("Permission denied or error");
     }
   }
+
   void showSnack(String message) {
-    ScaffoldMessenger.of(context ).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
-
 
   Future<void> _onRegisterPressed() async {
     if (_image == null) {
@@ -77,97 +76,192 @@ class _VendorRegistrationPageState extends State<VendorRegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Vendor Registration')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: controller.formKey,
-          child: ListView(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => _pickImage(ImageSource.gallery),
-                    child: const Text('Pick from Gallery'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _pickImage(ImageSource.camera),
-                    child: const Text('Take Photo'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-
-              _image == null
-                  ? const Text('No image selected')
-                  : Column(
-                children: [
-                  Image.file(_image!, height: 200),
-                  const SizedBox(height: 6),
-                  Text(
-                    _image!.path.split('/').last,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              TextFormField(
-                controller: controller.nameController,
-                decoration:
-                const InputDecoration(labelText: 'Vendor Name'),
-                validator: (v) =>
-                v!.isEmpty ? 'Enter Vendor Name' : null,
-              ),
-
-              TextFormField(
-                controller: controller.shopNameController,
-                decoration:
-                const InputDecoration(labelText: 'Shop Name'),
-                validator: (v) =>
-                v!.isEmpty ? 'Enter Shop Name' : null,
-              ),
-
-              TextFormField(
-                controller: controller.phoneController,
-                keyboardType: TextInputType.phone,
-                maxLength: 10,
-                decoration:
-                const InputDecoration(labelText: 'Phone'),
-                validator: (v) =>
-                v!.length != 10 ? 'Enter 10-digit phone' : null,
-              ),
-
-              TextFormField(
-                controller: controller.locationController,
-                decoration:
-                const InputDecoration(labelText: 'Location'),
-                validator: (v) =>
-                v!.isEmpty ? 'Enter Location' : null,
-              ),
-
-              TextFormField(
-                controller: controller.pincodeController,
-                keyboardType: TextInputType.number,
-                maxLength: 6,
-                decoration:
-                const InputDecoration(labelText: 'PinCode'),
-                validator: (v) =>
-                v!.isEmpty ? 'Enter PinCode' : null,
-              ),
-
-              const SizedBox(height: 24),
-
-              ElevatedButton(
-                onPressed: _onRegisterPressed,
-                child: const Text('Register Vendor'),
-              ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text("Vendor Registration"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF7F9CF5),
+              Color(0xFFB39DDB),
             ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Form(
+            key: controller.formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(20),
+              children: [
+
+                /// 🖼 IMAGE PICKER AVATAR
+                Center(
+                  child: GestureDetector(
+                    onTap: _showImageSheet,
+                    child: CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.white.withOpacity(0.25),
+                      backgroundImage:
+                      _image != null ? FileImage(_image!) : null,
+                      child: _image == null
+                          ? const Icon(Icons.camera_alt,
+                          size: 40, color: Colors.white)
+                          : null,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                /// 📦 FORM CARD
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.18),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+
+                      _styledField(
+                        controller.nameController,
+                        "Vendor Name",
+                        Icons.person,
+                      ),
+
+                      _styledField(
+                        controller.shopNameController,
+                        "Shop Name",
+                        Icons.store,
+                      ),
+
+                      _styledField(
+                        controller.phoneController,
+                        "Phone",
+                        Icons.phone,
+                        keyboard: TextInputType.phone,
+                        maxLength: 10,
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      /// 📍 YOUR EXISTING LOCATION WIDGET
+                      LocationWidget(
+                        locationController:
+                        controller.locationController,
+                        pincodeController:
+                        controller.pincodeController,
+                        nearcolor: Colors.white,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _styledField(
+                        controller.pincodeController,
+                        "Pincode",
+                        Icons.pin_drop,
+                        keyboard: TextInputType.number,
+                        maxLength: 6,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      /// 🚀 REGISTER BUTTON
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _onRegisterPressed,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.deepPurple,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text(
+                            "Register Vendor",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+  Widget _styledField(
+      TextEditingController controller,
+      String label,
+      IconData icon, {
+        TextInputType keyboard = TextInputType.text,
+        int? maxLength,
+      }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: keyboard,
+        maxLength: maxLength,
+        style: const TextStyle(color: Colors.white),
+        validator: (v) => v!.isEmpty ? "Enter $label" : null,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: Colors.white),
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.2),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+    );
+  }
+  void _showImageSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+        BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => Wrap(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.photo),
+            title: const Text("Gallery"),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.gallery);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.camera),
+            title: const Text("Camera"),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.camera);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
 }

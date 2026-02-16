@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swiggy/domain/ApiConstants.dart';
 import 'package:swiggy/domain/AppConstant.dart';
-import 'package:swiggy/ui/customerProfile/CustomerLoginRegistrationScreen.dart';
 
 import '../ui/bottomNav/bottomNavScreen.dart';
 import '../ui/customerProfile/RegistrationCustomerProfileScreen.dart';

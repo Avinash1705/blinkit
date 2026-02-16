@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'package:swiggy/controllers/addressController.dart';
+import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import '../bottomNav/bottomNavScreen.dart';
 import '../widgets/locationWidget.dart';
@@ -23,12 +24,14 @@ class AddressInputForm extends StatefulWidget {
 class _AddressInputFormState extends State<AddressInputForm> {
   final _formKey = GlobalKey<FormState>();
   final _locationController = TextEditingController();
+  final _pinController = TextEditingController();
 
   bool _saving = false;
 
   @override
   void dispose() {
     _locationController.dispose();
+    _pinController.dispose();
     super.dispose();
   }
 
@@ -75,6 +78,8 @@ class _AddressInputFormState extends State<AddressInputForm> {
 
   @override
   Widget build(BuildContext context) {
+    //customer add update
+    AppConstant.pin = _pinController.text;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -105,6 +110,7 @@ class _AddressInputFormState extends State<AddressInputForm> {
               /// 📍 Location Widget
               LocationWidget(
                 locationController: _locationController,
+                pincodeController: _pinController,
                 nearcolor: Colors.black,
               ),
 

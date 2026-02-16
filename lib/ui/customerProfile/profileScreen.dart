@@ -50,9 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ? Icon(Icons.person, size: 60, color: Colors.white)
                         : UiHelper.CustomImageNetworkCustomerProfile(
                             img: AppConstant.customer_profile),
-                    // child: Icon(Icons.person, size: 60, color: Colors.white),
-                  //   child: UiHelper.CustomImageNetworkCustomerProfile(
-                  //       img: customer_profile),
+
                   ),
                   const SizedBox(height: 20),
                   Card(

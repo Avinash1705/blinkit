@@ -6,11 +6,13 @@ import 'package:geolocator/geolocator.dart';
 
 class LocationWidget extends StatefulWidget {
   final TextEditingController locationController;
+  final TextEditingController? pincodeController;
   final Color nearcolor;
 
-  const LocationWidget({
+   LocationWidget({
     super.key,
     required this.locationController,
+     this.pincodeController,
     required this.nearcolor,
   });
 
@@ -69,7 +71,8 @@ class _LocationState extends State<LocationWidget> {
       }
 
       final p = placemarks.first;
-
+      /*pincode */
+      widget.pincodeController?.text = p.postalCode??"226022";
       final address = [
         p.name,
         p.subLocality,

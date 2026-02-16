@@ -18,11 +18,13 @@ import 'package:swiggy/testMyCode/PhoneAuthFlow.dart';
 import 'package:swiggy/testMyCode/OtpMsg91.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
+import 'package:swiggy/ui/customerProfile/RegistrationCustomerProfileScreen.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
 import 'package:swiggy/ui/login/roleBasedLogin/PhoneNumberPage.dart';
 import 'package:swiggy/ui/login/roleBasedLogin/RoleSelectionPage.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/vender/ui/vender_dashboard.dart';
+import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart';
 import 'PhoneAuthScreen.dart';
 import 'controllers/appSecretKey/getAppSecretKeyController.dart';
 import 'controllers/notificationSendController.dart';
@@ -30,10 +32,12 @@ import 'dependency/dependency.dart';
 import 'domain/AppConstant.dart';
 import 'firebase_options.dart';
 import '2factorOpt/otpScreen.dart';
+import 'model/GetCategoriesResponseModel.dart' as vendeRegisterResponseModel;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   init();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => CartController()),
@@ -126,7 +130,10 @@ class MyApp extends StatelessWidget {
                 // Show the correct screen based on login status
                 // return PhoneMsg91UI();
                 // return OtpMsg91();
+
                 return const SplashScreen();
+
+                // return VendorDashboard(vendorDetails: Data.mock())  ;
                 // return RegistrationCustomerProfilePage();
                 // return const PhoneAuthFlow();    // no
                 // return  OtpScreen();
@@ -150,8 +157,8 @@ class MyApp extends StatelessWidget {
   Future<bool> isUserLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     loadUserData(prefs); // Your existing function
-    // print("loginDetail ${prefs.getString('customer_id')}");
-    // print("loginDetail ven${prefs.getString(AppConstant.vendorDetails)}");
+
+    print("loc near ${AppConstant.location}");
     return prefs.containsKey('customer_id')|| prefs.containsKey(AppConstant.vendorDetails);
   }
 

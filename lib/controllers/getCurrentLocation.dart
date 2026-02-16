@@ -2,7 +2,7 @@
 // import 'package:geocoding/geocoding.dart';
 // import 'package:geolocator/geolocator.dart';
 //
-// Future<void> _getCurrentLocation() async {
+// Future<void> getCurrentLocation() async {
 //   bool serviceEnabled;
 //   LocationPermission permission;
 //

@@ -71,6 +71,9 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
 
   // ---------------- SUBMIT ----------------
   Future<void> _submitProduct() async {
+/*    print("add product $selectedCategory");
+    print("add product222  ${descController.text.toString()}");
+    print("add product item name  ${nameController.text.toString()}");*/
     if (_image == null ||
         selectedCategory == null ||
         priceController.text.isEmpty ||
@@ -83,7 +86,8 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
 
     try {
       final response = await AddItemsController.addItem(
-        widget.vendorDetail.venderId.toString(),
+        // widget.vendorDetail.venderId.toString(),
+        selectedCategory.toString(),
         nameController.text.trim(),
         widget.vendorDetail.phone.toString(),
         descController.text.trim(),
@@ -126,6 +130,10 @@ class _ImagepickerBothState extends State<ImagepickerBoth> {
             children: [
               CategoryDropdown(onSelected: handleSelection),
 
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Item name'),
+              ),
               TextField(
                 controller: priceController,
                 keyboardType:

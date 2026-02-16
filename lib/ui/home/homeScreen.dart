@@ -15,6 +15,7 @@ import '../../domain/appConsatant.dart';
 import '../../model/appDetails.dart';
 import '../category/subCategory.dart';
 import '../customerProfile/profileScreen.dart';
+import '../widgets/detailPage.dart';
 import '../widgets/sliderWithImages.dart';
 import '../widgets/uihelper.dart';
 import '../../model/GetSubCategoryModel.dart' as mySubcategory;
@@ -29,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController controller = TextEditingController();
 
+  //temp to show ui
   var data = [
     {"img": "image 50.png", "text": "Lights, Diyas \n & Candles"},
     {"img": "image 51.png", "text": "Diwali \n Gifts"},
@@ -38,52 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     {"img": "image 53.png", "text": "Home \n & Living"},
   ];
 
-  var categroy = [
-    {
-      "id": 1,
-      "price": 101,
-      "img": "image 54.png",
-      "text": "Golden Glass\n Wooden Lid Candle (Oudh)"
-    },
-    {
-      "id": 2,
-      "price": 102,
-      "img": "image 57.png",
-      "text": "Royal Gulab Jamun\n By Bikano\n"
-    },
-    {
-      "id": 3,
-      "price": 103,
-      "img": "image 63.png",
-      "text": "Applicances \n & Gadgets\n"
-    },
-    {
-      "id": 4,
-      "price": 104,
-      "img": "image 63.png",
-      "text": "Bikaji Bhujia\n \n"
-    },
-    {
-      "id": 5,
-      "price": 105,
-      "img": "image 63.png",
-      "text": "Golden Glass\n Wooden Lid Candle (Oudh)"
-    },
-    {
-      "id": 6,
-      "price": 106,
-      "img": "image 63.png",
-      "text": "Golden Glass\n Wooden Lid Candle (Oudh)"
-    },
-  ];
-
-  var grocerykitchen = [
-    {"img": "image 41.png", "text": "Vegetables & \nFruits"},
-    {"img": "image 42.png", "text": "Atta, Dal & \nRice"},
-    {"img": "image 43.png", "text": "Oil, Ghee & \nMasala"},
-    {"img": "image 44 (1).png", "text": "Dairy, Bread & \nMilk"},
-    {"img": "image 45 (1).png", "text": "Biscuits & \nBakery"}
-  ];
 
   // var appDetailController = Get.put(AppDetails());
   late AppDetailModel dataLoaded;
@@ -129,9 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
     double _currentValue = 50;
     final cartController =
         Provider.of<CartController>(context); // 👈 Access the model
-    // print("homeScreen ${cartController.getProfileImg().then((value) => {
-    //       print("profile img $value")
-    //     })}");
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
@@ -267,104 +220,99 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             return Padding(
                                 padding: const EdgeInsets.all(12.0),
-                                child: Container(
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                          height: 78,
-                                          child: UiHelper
-                                              .CustomImageNetworkSubCategory(
+                                child: InkWell( onTap: () => Get.to(DetailPage(item: allSubcategory![index])),
+                                  child: Container(
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                            height: 78,
+                                            child: Hero(tag: allSubcategory![index].id.toString(),
+                                              child: UiHelper
+                                                  .CustomImageNetworkSubCategory(
                                                   img: allSubcategory![index]
                                                       .itemImg
                                                       .toString())),
-                                      SizedBox(height: 5),
-                                      UiHelper.CustomText(
-                                          text: allSubcategory![index]
-                                              .itemName
-                                              .toString(),
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontsize: 8),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        children: [
-                                          // UiHelper.CustomImage(
-                                          //     img: "timer 4.png"),
-                                          SizedBox(width: 5),
-                                          UiHelper.CustomText(
-                                              text:
-                                                  "₹ ${allSubcategory![index].price.toString()}",
-                                              color: Color(0xff000000),
-                                              fontWeight: FontWeight.bold,
-                                              fontsize: 15)
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          // UiHelper.CustomText(
-                                          //     // text: "₹ ${Random().nextInt(10)}",
-                                          //     text:
-                                          //         "₹ ${allSubcategory![index].price.toString()}",
-                                          //     color: Color(0xff000000),
-                                          //     fontWeight: FontWeight.bold,
-                                          //     fontsize: 15),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          allSubcategory![index].quantity ==
-                                                  0.toString()
-                                              ? Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 5,
-                                                      vertical: 5),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.red.shade100,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            6),
-                                                  ),
-                                                  child: Text(
-                                                    "Out of Stock",
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.normal,
+                                            ),
+                                        SizedBox(height: 5),
+                                        UiHelper.CustomText(
+                                            text: allSubcategory![index]
+                                                .itemName
+                                                .toString(),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontsize: 8),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 5),
+                                            UiHelper.CustomText(
+                                                text:
+                                                    "₹ ${allSubcategory![index].price.toString()}",
+                                                color: Color(0xff000000),
+                                                fontWeight: FontWeight.bold,
+                                                fontsize: 15)
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            allSubcategory![index].quantity ==
+                                                    0.toString()
+                                                ? Container(
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal: 5,
+                                                        vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.red.shade100,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              6),
                                                     ),
-                                                  ),
-                                                )
-                                              : UiHelper.CustomButton(() {
-                                                  final item =
-                                                      allSubcategory![index];
-
-                                                  cartController.addItem(
-                                                    item.id.toString(),
-                                                    item.itemName.toString(),
-                                                    item.itemImg.toString(),
-                                                    double.parse(
-                                                        item.price.toString()),
-                                                    int.tryParse(item.quantity
-                                                            .toString()) ??
-                                                        0, // ✅ real stock
-                                                  );
-
-                                                  InteractiveToast.popSuccess(
-                                                    title: Text(item.itemName
-                                                        .toString()),
-                                                    toastSetting:
-                                                        const PopupToastSetting(
-                                                      toastAlignment: Alignment
-                                                          .bottomCenter,
-                                                      displayDuration:
-                                                          Duration(seconds: 1),
+                                                    child: Text(
+                                                      "Out of Stock",
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
                                                     ),
-                                                  );
-                                                })
-                                        ],
-                                      ),
-                                    ],
+                                                  )
+                                                : UiHelper.CustomButton(() {
+                                                    final item =
+                                                        allSubcategory![index];
+                                  
+                                                    cartController.addItem(
+                                                      item.id.toString(),
+                                                      item.itemName.toString(),
+                                                      item.itemImg.toString(),
+                                                      double.parse(
+                                                          item.price.toString()),
+                                                      int.tryParse(item.quantity
+                                                              .toString()) ??
+                                                          0, // ✅ real stock
+                                                    );
+                                  
+                                                    InteractiveToast.popSuccess(
+                                                      title: Text(item.itemName
+                                                          .toString()),
+                                                      toastSetting:
+                                                          const PopupToastSetting(
+                                                        toastAlignment: Alignment
+                                                            .bottomCenter,
+                                                        displayDuration:
+                                                            Duration(seconds: 1),
+                                                      ),
+                                                    );
+                                                  })
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ));
                           }),

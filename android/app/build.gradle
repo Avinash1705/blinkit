@@ -109,6 +109,10 @@ android {
 //                debugSymbolLevel 'NONE'
 //            }
         }
+        debug {
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+        }
     }
     android.applicationVariants.all { variant ->
         variant.outputs.all { output ->

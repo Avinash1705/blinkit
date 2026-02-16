@@ -1,23 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" >
-<!--    for 13+-->
-<!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>-->
+    <!--    for 13+-->
+    <!--    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>-->
     <uses-permission android:name="android.permission.INTERNET" />
     <!--Image Picker-->
     <uses-permission android:name="android.permission.CAMERA"/>
-<!--    <uses-permission android:name="android.permission.READ_EXTE RNAL_STORAGE" android:maxSdkVersion="32" />-->
-<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
-<!--    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>-->
+    <!--    <uses-permission android:name="android.permission.READ_EXTE RNAL_STORAGE" android:maxSdkVersion="32" />-->
+    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+    <!--    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>-->
     <!--Location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-<!--    for 10+-->
-<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
+    <!--    for 10+-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
     <!--run time permission for android 13+-->
-<!--    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />-->
+    <!--    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />-->
 
 
     <application
-        android:label="Fluxkart"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="false">
@@ -37,9 +37,9 @@
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
                 android:value="simple_channel" />
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"
+                />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

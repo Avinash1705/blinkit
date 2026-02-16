@@ -34,7 +34,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    getCurrentLocation();
   }
 
   @override
@@ -141,7 +141,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   }
 
   /// ✅ Production-safe location
-  Future<void> _getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       if (!await Geolocator.isLocationServiceEnabled()) {
         _snack("Enable location services");

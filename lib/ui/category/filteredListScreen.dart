@@ -8,6 +8,8 @@ import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
 as allVenders;
 
 import '../../model/GetCategoriesResponseModel.dart';
+
+import '../../vender/controller/VendorDistanceController.dart';
 import 'SubCategoryNew.dart';
 
 class CustomSearchAppBar extends StatefulWidget {
@@ -23,18 +25,29 @@ class CustomSearchAppBar extends StatefulWidget {
 
 class _CustomAppBarState extends State<CustomSearchAppBar> {
   final TextEditingController _searchController = TextEditingController();
+  // VendorDistanceController vendorDistanceController = Get.put(VendorDistanceController());
   List<allVenders.Data> filteredVendors = [];
+
   Data1 data1 = Data1.withValues(
       categoryName: "categoryName", categoryImg: "categoryImg", id: "id");
   @override
   void initState() {
     super.initState();
+    print("Lets check ${AppConstant.pin}");
+
+
     filteredVendors = widget.allVenderData ?? [];
     _searchController.addListener(_filterVendors);
+    // vendorDistanceController.preloadDistanceCache(
+    //   customerAddress: AppConstant.location,
+    //   vendors: filteredVendors,
+    // );
   }
 
+
   void _filterVendors() {
-    const int targetPin = 226021;
+     int targetPin = int.parse(AppConstant.pin);
+
     final query = _searchController.text.toLowerCase().trim();
 
     setState(() {
@@ -98,6 +111,7 @@ class _CustomAppBarState extends State<CustomSearchAppBar> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: "Search for vendors, shops...",
+
                     prefixIcon: const Icon(Icons.search, color: Colors.grey),
                     filled: true,
                     fillColor: const Color(0xfff2f2f2),
@@ -112,6 +126,8 @@ class _CustomAppBarState extends State<CustomSearchAppBar> {
               ),
             ],
           ),
+
+
           // 🧾 FILTERED VENDOR LIST
           Expanded(
             child: filteredVendors.isEmpty
@@ -143,8 +159,22 @@ class _CustomAppBarState extends State<CustomSearchAppBar> {
                           fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     subtitle: Text(vendor.shopName ?? "Shop Name"),
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded,
-                        size: 16, color: Colors.grey),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                        /*  Text(
+                              vendorDistanceController.distanceCache[ vendor.phone ?? vendor.shopName ?? ""] ?? "-- km",
+                            style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                          ),*/
+                          Icon(Icons.arrow_forward_ios_rounded,
+                              size: 14, color: Colors.grey),
+                        ],
+                      ),
+
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content:
@@ -154,8 +184,8 @@ class _CustomAppBarState extends State<CustomSearchAppBar> {
                       ));
                       Get.to(SubCategoryNew(
                         data: Data1.withValues(
-                          id: widget.allVenderData![index].phone.toString(),
-                          categoryName: widget.allVenderData![index]
+                          id: vendor.phone.toString(),
+                          categoryName: vendor
                               .shopName
                               .toString(),
                         ),

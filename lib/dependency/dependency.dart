@@ -16,6 +16,7 @@ import '../domain/ApiConstants.dart';
 import '../domain/AppConstant.dart';
 import '../services/notify.dart';
 import '../ui/category/searchController.dart';
+import '../vender/controller/VendorDistanceController.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -27,6 +28,7 @@ Future<void> init() async {
   Get.lazyPut(() => SearchController());
   Get.lazyPut(() => CartController());
   Get.lazyPut(() => AddressController());
+  // Get.lazyPut(() => VendorDistanceController());
 
   requestNotificationPermission();
   initNotifications();
