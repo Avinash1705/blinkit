@@ -13,6 +13,7 @@ import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/ui/SubscriptionService.dart';
+import 'package:swiggy/vender/ui/quickAddProduct.dart';
 
 // import 'package:syncfusion_flutter_charts/charts.dart';
 // import 'package:syncfusion_flutter_charts/sparkcharts.dart';
@@ -20,7 +21,7 @@ import 'package:swiggy/vender/ui/SubscriptionService.dart';
 import '../../domain/appConsatant.dart';
 import '../../ui/bottomNav/bottomNavScreen.dart';
 import '../../ui/login/loginScreen.dart';
-import '../../ui/widgets/ImagePickerBoth.dart';
+import '../../ui/widgets/AddProduct.dart';
 import '../controller/VenderOrdersController.dart';
 import '../controller/VenderSpecificProductsController.dart';
 import '../controller/addItemsController.dart';
@@ -378,11 +379,18 @@ class _AddProductPageState extends State<AddProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Product")),
+      appBar: AppBar(
+        title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+          Text("Add Product"),
+          ElevatedButton(
+              onPressed: () => Get.to(() => QuickAddProduct(widget.vendorDetail)),
+              child: Text("Quick Add"))
+        ]),
+      ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
-            child: ImagepickerBoth(widget.vendorDetail),
+            child: AddProduct(widget.vendorDetail),
           )),
     );
   }
@@ -592,10 +600,10 @@ class _VenderOrdersPageState extends State<VenderOrdersPage> {
             ),
             subtitle: Text(
               'Price: ${product.price ?? 'N/A'}'
-                  '\nNew Price: ${product.newPrice ?? 'N/A'}'
-                  '\nQuantity: ${product.quantity ?? '0'}'
-                  '\nWeight: ${product.weight ?? 'N/A'}'
-                  '\nDescription: ${product.itemDescription ?? 'No Description'}',
+              '\nNew Price: ${product.newPrice ?? 'N/A'}'
+              '\nQuantity: ${product.quantity ?? '0'}'
+              '\nWeight: ${product.weight ?? 'N/A'}'
+              '\nDescription: ${product.itemDescription ?? 'No Description'}',
             ),
             trailing: IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),

@@ -113,10 +113,11 @@ android {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
         }
+
     }
     android.applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            def appName = "FluxKart"
+            def appName = "Aadishree"
             def buildType = variant.buildType.name   // debug / release
             def versionName = variant.versionName
 

@@ -10,16 +10,16 @@ import '../../vender/ui/categoryDropdown.dart';
 import '../../vender/controller/addItemsController.dart';
 import '../../vender/venderModels/GetVenderResponseModel.dart' as venderData;
 
-class ImagepickerBoth extends StatefulWidget {
+class AddProduct extends StatefulWidget {
   final venderData.Data vendorDetail;
 
-  const ImagepickerBoth(this.vendorDetail, {super.key});
+  const AddProduct(this.vendorDetail, {super.key});
 
   @override
-  State<ImagepickerBoth> createState() => _ImagepickerBothState();
+  State<AddProduct> createState() => _ImagepickerBothState();
 }
 
-class _ImagepickerBothState extends State<ImagepickerBoth> {
+class _ImagepickerBothState extends State<AddProduct> {
   final ImagePicker _picker = ImagePicker();
 
   File? _image;

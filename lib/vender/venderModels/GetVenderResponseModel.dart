@@ -74,7 +74,7 @@ class Data {
     data['fcm_token'] = this.fcm_token;
     return data;
   }
-/*  // ✅ Mock / Fake data factory
+  // ✅ Mock / Fake data factory
   factory Data.mock() {
     return Data(
       venderName: "Demo Vendor",
@@ -87,5 +87,5 @@ class Data {
       fcm_token: "demo_token",
       pincode: "110001",
     );
-  }*/
+  }
 }

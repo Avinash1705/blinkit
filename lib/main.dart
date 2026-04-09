@@ -17,6 +17,7 @@ import 'package:swiggy/testMyCode/OtpFrontendMsg91.dart';
 import 'package:swiggy/testMyCode/PhoneAuthFlow.dart';
 import 'package:swiggy/testMyCode/OtpMsg91.dart';
 import 'package:swiggy/ui/bottomNav/bottomNavScreen.dart';
+import 'package:swiggy/ui/chatbot/ChatScreen.dart';
 import 'package:swiggy/ui/customerProfile/LoginCustomerProfileScreen.dart';
 import 'package:swiggy/ui/customerProfile/RegistrationCustomerProfileScreen.dart';
 import 'package:swiggy/ui/login/loginScreen.dart';
@@ -36,6 +37,9 @@ import 'model/GetCategoriesResponseModel.dart' as vendeRegisterResponseModel;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   init();
 
   runApp(MultiProvider(
@@ -130,7 +134,8 @@ class MyApp extends StatelessWidget {
                 // Show the correct screen based on login status
                 // return PhoneMsg91UI();
                 // return OtpMsg91();
-
+                // return AddProductPage(vendorDetail: Data.mock());
+                // return ChatScreen();
                 return const SplashScreen();
 
                 // return VendorDashboard(vendorDetails: Data.mock())  ;

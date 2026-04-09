@@ -38,6 +38,8 @@ class ApiConstants {
   // Message 91 send api
   static String sendOtpMsg91 = "$ssl://$ip/fluxKart/apis/msg91/send-otp.php";
   static String verifyOtpMsg91 = "$ssl://$ip/fluxKart/apis/msg91/verify-otp.php";
+  //open ai
+  static String aiChat = "$ssl://$ip/fluxKart/apis/openai/chat.php";
 
   //secretKeys
   static String secretKey = "$ssl://$ip/fluxKart/apis/getSecretKeyApi/getConfig.php";

@@ -14,6 +14,7 @@ import '../../testMyCode/OtpFrontendMsg91.dart';
 import '../../testMyCode/OtpMsg91.dart';
 import '../cart/cartScreen.dart';
 import '../category/category.dart';
+import '../chatbot/ChatScreen.dart';
 import '../home/homeScreen.dart';
 import '../login/loginScreenStatic.dart';
 import '../login/roleBasedLogin/verifyOtpMsg91.dart';
@@ -124,16 +125,17 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 24),
                 ),
               ),
-              // InkWell( onTap: () => Get.off(StaticLoginScreen()),
-              //   child: const ListTile(
-              //     leading: Icon(Icons.login),
-              //     title: Text("Sign in as Vendor"),
-              //   ),
-              // ),
+
               InkWell( onTap: () => Get.off(PhoneMsg91UI()),
                 child: const ListTile(
                   leading: Icon(Icons.login),
                   title: Text("Login in as"),
+                ),
+              ),
+              InkWell( onTap: () => Get.to(ChatScreen()),
+                child: const ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text("Support"),
                 ),
               ),
             ],
