@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,9 @@ import 'package:swiggy/domain/AppConstant.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 import 'package:swiggy/vender/venderModels/GetVenderResponseModel.dart'
     as allVenders;
+import '../../controllers/appDetails/appDetails.dart';
 import '../../controllers/cartController.dart';
+import '../../model/appDetails.dart';
 import '../category/filteredListScreen.dart';
 
 class CustomAppBar extends StatefulWidget {
@@ -30,10 +34,26 @@ class CustomAppBar extends StatefulWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   final TextEditingController _locationController =
   TextEditingController();
-
+  late AppDetailModel dataLoaded;
   @override
   void initState() {
     super.initState();
+    AppDetails.testApi().then((value) {
+      if (value != null && value.data != null && value.data!.isNotEmpty) {
+        setState(() {
+          dataLoaded = value;
+          AppConstant.paymentUser = dataLoaded.data![0].paymentUser!;
+          AppConstant.appName = dataLoaded.data![0].appName!;
+          print("Jon ${AppConstant.paymentUser}");
+          print("Jon2 ${dataLoaded.data![0].appName!}");
+        });
+      } else {
+        print("API returned null or empty data");
+      }
+    }).catchError((error) {
+      print("Error loading app details: $error");
+    });
+    print("cheking appname ${AppConstant.appName}");
     getCurrentLocation();
   }
 
@@ -59,10 +79,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
               const SizedBox(height: 30),
 
               Row(
-                children: const [
-                  SizedBox(width: 20),
-                  Text("FluxKart",
-                      style: TextStyle(
+                children: [
+                  const SizedBox(width: 20),
+                  Text(dataLoaded.data![0].appName!,
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15)),
                 ],

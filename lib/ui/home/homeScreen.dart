@@ -54,20 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Initialize dataLoaded with a default value
     dataLoaded = AppDetailModel();
 
-    AppDetails.testApi().then((value) {
-      if (value != null && value.data != null && value.data!.isNotEmpty) {
-        setState(() {
-          dataLoaded = value;
-          AppConstant.paymentUser = dataLoaded.data![0].paymentUser!;
-          print("Jon ${AppConstant.paymentUser}");
-          print("Jon2 ${jsonEncode(dataLoaded.data)}");
-        });
-      } else {
-        print("API returned null or empty data");
-      }
-    }).catchError((error) {
-      print("Error loading app details: $error");
-    });
+
 
     subCategoryController.fetchSubCategories().then((value) {
       if (value.data != null) {

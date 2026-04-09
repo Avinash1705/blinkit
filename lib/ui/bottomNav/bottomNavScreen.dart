@@ -8,8 +8,11 @@ import 'package:swiggy/controllers/cartController.dart';
 import 'package:swiggy/ui/screens/splash/splashScreen.dart';
 import 'package:swiggy/ui/widgets/uihelper.dart';
 
+import '../../controllers/appDetails/appDetails.dart';
 import '../../controllers/loginCustomerController.dart';
+import '../../domain/AppConstant.dart';
 import '../../domain/appConsatant.dart';
+import '../../model/appDetails.dart';
 import '../../testMyCode/OtpFrontendMsg91.dart';
 import '../../testMyCode/OtpMsg91.dart';
 import '../cart/cartScreen.dart';
@@ -32,7 +35,7 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   late int currentIndex ;
   // CartController _cartController = Get.find<CartController>();
-
+  late AppDetailModel dataLoaded;
   List<Widget> pages = [
     HomeScreen(),
     Category(),
@@ -42,6 +45,22 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 @override
   void initState() {
    currentIndex = widget.index;
+   // Initialize dataLoaded with a default value
+   dataLoaded = AppDetailModel();
+
+   AppDetails.testApi().then((value) {
+     if (value != null && value.data != null && value.data!.isNotEmpty) {
+       setState(() {
+         dataLoaded = value;
+         AppConstant.paymentUser = dataLoaded.data![0].paymentUser!;
+         AppConstant.appName = dataLoaded.data![0].appName!;
+       });
+     } else {
+       print("API returned null or empty data");
+     }
+   }).catchError((error) {
+     print("Error loading app details: $error");
+   });
     super.initState();
   }
   Future<bool> _onWillPop(BuildContext context) async {
@@ -73,7 +92,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.yellowAppColor.withOpacity(0.9),
-          title: const Text("FluxKart"), // or dynamic title per tab
+          title:  Text(dataLoaded.data == null ? "Loading":dataLoaded.data![0].appName.toString()), // or dynamic title per tab
         ),
         body: IndexedStack(
           index: currentIndex,
