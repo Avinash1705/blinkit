@@ -19,10 +19,10 @@ class _BasicImageSliderState extends State<BasicImageSlider> {
 
 
   final List<String> imageList = [
-    'assets/images/slider/sppons.jpg',
-    'assets/images/slider/cup.jpg',
-    'assets/images/slider/kaddu.jpg',
-    'assets/images/slider/spoon.jpg',
+    // 'assets/images/slider/sppons.jpg',
+    // 'assets/images/slider/cup.jpg',
+    // 'assets/images/slider/kaddu.jpg',
+    'assets/images/slider/banner_sare.jpg',
   ];
 
   @override
